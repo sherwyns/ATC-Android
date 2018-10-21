@@ -1,13 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@android:color/background_light">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Vinoth Lenin" />
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_20dp"
+            android:layout_marginTop="@dimen/dimen_50dp"
+            android:drawablePadding="@dimen/dimen_10dp"
+            android:drawableStart="@drawable/ic_settings_black_24dp"
+            android:text="@string/settings"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_18" />
 
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_50dp"
+            android:layout_marginTop="@dimen/dimen_30dp"
+            android:text="@string/my_account"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="@dimen/dimen_80dp"
+            android:layout_marginStart="@dimen/dimen_40dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:background="@color/colorOrange" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_50dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:text="@string/help"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="@dimen/dimen_80dp"
+            android:layout_marginStart="@dimen/dimen_40dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:background="@color/colorOrange" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dimen_50dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_50dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:text="@string/about_us"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="@dimen/dimen_80dp"
+            android:layout_marginStart="@dimen/dimen_40dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:background="@color/colorOrange" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_50dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:text="@string/privacy_policy"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="@dimen/dimen_80dp"
+            android:layout_marginStart="@dimen/dimen_40dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:background="@color/colorOrange" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_50dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:text="@string/terms_conditions"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_16" />
+    </LinearLayout>
+</RelativeLayout>

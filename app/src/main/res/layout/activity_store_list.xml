@@ -5,7 +5,9 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".storeList.StoreListActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".storeList.StoreListActivity"
+    tools:openDrawer="start">
 
 
     <RelativeLayout
@@ -17,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentTop="true"
-            android:background="@color/colorPrimary"
-            app:titleTextColor="@android:color/white"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+            android:background="@android:color/white"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:titleTextColor="@android:color/white" />
 
         <FrameLayout
             android:id="@+id/content_frame"
@@ -33,22 +35,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="?android:attr/windowBackground"
-            app:menu="@menu/navigation" />
+            android:background="?android:attr/windowBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_search_black_24dp" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@mipmap/ic_launcher_round" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_favorite_border_black_24dp" />
+            </LinearLayout>
+        </android.support.design.widget.BottomNavigationView>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <include layout="@layout/drawer_menu_items_layout" />
-        </ScrollView>
+        <include layout="@layout/drawer_menu_items_layout" />
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

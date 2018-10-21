@@ -20,7 +20,7 @@ public class StoreListActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    /*private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
@@ -38,7 +38,7 @@ public class StoreListActivity extends AppCompatActivity {
             }
             return false;
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class StoreListActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+       // navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     @Override

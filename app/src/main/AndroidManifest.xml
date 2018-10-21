@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".storeList.StoreListActivity"
-            android:label="@string/title_activity_store_list"></activity>
+            android:label="@string/title_activity_store_list" />
+        <activity android:name=".base.BaseActivity"></activity>
     </application>
 
 </manifest>
