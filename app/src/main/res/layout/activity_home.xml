@@ -13,30 +13,37 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/dimen_250dp"
-            android:layout_height="@dimen/dimen_80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dimen_50dp" />
+            android:layout_marginTop="@dimen/dimen_50dp"
+            android:src="@drawable/splash_logo" />
 
-        <Button
-            style="@style/ButtonStyleTransparent"
+        <TextView
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_20dp"
             android:layout_marginStart="@dimen/dimen_20dp"
             android:layout_marginTop="@dimen/dimen_50dp"
+            android:background="@drawable/button_bg"
+            android:gravity="center"
+            android:padding="@dimen/dimen_10dp"
             android:text="@string/register"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_18" />
 
-        <Button
-            style="@style/ButtonStyleTransparent"
+        <TextView
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_20dp"
             android:layout_marginStart="@dimen/dimen_20dp"
             android:layout_marginTop="@dimen/dimen_20dp"
+            android:background="@drawable/button_bg"
+            android:gravity="center"
+            android:padding="@dimen/dimen_10dp"
             android:text="@string/login"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
@@ -51,13 +58,15 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_18" />
 
-        <Button
-            style="@style/ButtonStyle"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_20dp"
             android:layout_marginStart="@dimen/dimen_20dp"
             android:layout_marginTop="@dimen/dimen_20dp"
+            android:background="@drawable/button_bg_orange"
+            android:gravity="center"
+            android:padding="@dimen/dimen_10dp"
             android:text="@string/start_shopping"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
