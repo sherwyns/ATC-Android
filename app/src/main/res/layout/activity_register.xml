@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/screen_bg"
+    android:fitsSystemWindows="true"
     tools:context=".home.HomeActivity">
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,17 +32,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/login"
+                    android:text="@string/register"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/font_16" />
-
             </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dimen_20dp"
-                android:layout_marginStart="@dimen/dimen_20dp"
+                android:layout_marginEnd="@dimen/dimen_40dp"
+                android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_50dp"
                 android:background="@drawable/button_white_rounded_bg"
                 android:gravity="center"
@@ -50,7 +49,7 @@
                 android:paddingEnd="@dimen/dimen_10dp"
                 android:paddingStart="@dimen/dimen_10dp"
                 android:paddingTop="@dimen/dimen_15dp"
-                android:text="@string/login_with_facebook"
+                android:text="@string/register_with_facebook"
                 android:textAllCaps="false"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="@dimen/font_18" />
@@ -59,8 +58,8 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dimen_20dp"
-                android:layout_marginStart="@dimen/dimen_20dp"
+                android:layout_marginEnd="@dimen/dimen_40dp"
+                android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_white_rounded_bg"
                 android:gravity="center"
@@ -68,7 +67,7 @@
                 android:paddingEnd="@dimen/dimen_10dp"
                 android:paddingStart="@dimen/dimen_10dp"
                 android:paddingTop="@dimen/dimen_15dp"
-                android:text="@string/login_with_google"
+                android:text="@string/register_with_google"
                 android:textAllCaps="false"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="@dimen/font_18" />
@@ -85,8 +84,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dimen_20dp"
-                android:layout_marginStart="@dimen/dimen_20dp"
+                android:layout_marginEnd="@dimen/dimen_40dp"
+                android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_white_rounded_bg"
                 android:gravity="center"
@@ -102,12 +101,13 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dimen_20dp"
-                android:layout_marginStart="@dimen/dimen_20dp"
+                android:layout_marginEnd="@dimen/dimen_40dp"
+                android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_white_rounded_bg"
                 android:gravity="center"
-                android:hint="@string/password"
+                android:hint="@string/choose_password"
+                android:inputType="textPassword"
                 android:paddingBottom="@dimen/dimen_15dp"
                 android:paddingEnd="@dimen/dimen_10dp"
                 android:paddingStart="@dimen/dimen_10dp"
@@ -119,8 +119,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/dimen_20dp"
-                android:layout_marginStart="@dimen/dimen_20dp"
+                android:layout_marginEnd="@dimen/dimen_40dp"
+                android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_bg_orange"
                 android:gravity="center"
@@ -128,7 +128,7 @@
                 android:paddingEnd="@dimen/dimen_10dp"
                 android:paddingStart="@dimen/dimen_10dp"
                 android:paddingTop="@dimen/dimen_15dp"
-                android:text="@string/login"
+                android:text="@string/register"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/font_18" />
