@@ -37,6 +37,9 @@ ext {
     gsonVersion = '2.8.2'
     glideVersion = '4.8.0'
     leakCanaryVersion = '1.6.2'
+    okHttpVersion = '2.7.2'
+    okHttpLogginVersion = '3.11.0'
+    gsonConvertorVersion = '2.4.0'
 
 }
 dependencies {
@@ -54,6 +57,7 @@ dependencies {
     //RXJava and RxAndroid
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
 
     //Dagger
     implementation "com.google.dagger:dagger:$daggerVersion"
@@ -61,6 +65,11 @@ dependencies {
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$gsonConvertorVersion"
+
+    //OkHttp
+    implementation "com.squareup.okhttp:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpLogginVersion"
 
     //ButterKnife
     implementation "com.jakewharton:butterknife:$butterKnifeVersion"

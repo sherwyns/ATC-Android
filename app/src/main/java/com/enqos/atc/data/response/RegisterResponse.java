@@ -3,7 +3,7 @@ package com.enqos.atc.data.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterResponse {
+public class RegisterResponse extends BaseResponse {
     public String getUsername() {
         return username;
     }

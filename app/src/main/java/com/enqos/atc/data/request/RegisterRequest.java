@@ -3,7 +3,7 @@ package com.enqos.atc.data.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterRequest {
+public class RegisterRequest extends BaseRequest{
     @SerializedName("username")
     @Expose
     private String username;
