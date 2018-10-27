@@ -17,8 +17,6 @@ import javax.inject.Inject;
 
 public class LoginPresenter extends BasePresenter implements NetworkApiResponse {
     private LoginView loginView;
-    private String email;
-    private String password;
     private CreateApiRequest createApiRequest;
 
     @Inject
@@ -31,16 +29,15 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
     public void authenticateUser(String email, String password, LoginView loginView) {
 
         if (createApiRequest == null)
-            createApiRequest = new CreateApiRequest(this, (Context) getmMvpView());
+            createApiRequest = new CreateApiRequest(this);
 
         try {
             this.loginView = loginView;
             if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-
-                this.email = email;
-                this.password = password;
                 getmMvpView().showLoading();
                 createApiRequest.createLoginRequest(email, password);
+            } else {
+                loginView.showMessage("Please enter valid credential");
             }
         } catch (Exception e) {
 
@@ -52,7 +49,7 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
     public void onSuccess(BaseResponse response) {
         getmMvpView().hideLoading();
         LoginResponse loginResponse = (LoginResponse) response;
-
+        loginView.onValidUser();
         Log.i("*****", loginResponse.getUserId());
 
     }
@@ -60,24 +57,28 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
     @Override
     public void onFailure(String errorMessage, int requestCode, int statusCode) {
         getmMvpView().hideLoading();
+        loginView.showMessage(errorMessage);
         Log.i("*****", errorMessage);
     }
 
     @Override
     public void onTimeOut(int requestCode) {
         getmMvpView().hideLoading();
+        loginView.showMessage("TimeOut");
         Log.i("*****", "TimeOut");
     }
 
     @Override
     public void onNetworkError(int requestCode) {
         getmMvpView().hideLoading();
+        loginView.showMessage("Network Error");
         Log.i("*****", "NetworkError");
     }
 
     @Override
     public void onUnknownError(int requestCode, int statusCode, String errorMessage) {
         getmMvpView().hideLoading();
+        loginView.showMessage("Unknown error");
         Log.i("*****", "UnknownError");
     }
 }

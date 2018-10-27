@@ -7,6 +7,7 @@ import com.enqos.atc.di.AppComponent;
 import com.enqos.atc.di.AppModule;
 import com.enqos.atc.di.DaggerAppComponent;
 import com.enqos.atc.di.NetModule;
+import com.squareup.leakcanary.LeakCanary;
 
 public class AtcApplication extends Application {
 
@@ -17,7 +18,13 @@ public class AtcApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
         INSTANCE = this;
         injectDependencies(INSTANCE);
 

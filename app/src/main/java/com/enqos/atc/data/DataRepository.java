@@ -48,8 +48,6 @@ public class DataRepository extends BasePresenter {
 
     }
 
-    private final String unexpectedError = "There was an unexpected problem. Please try again. If the problem persists please contact customer support.";
-    private final int unexpectedErrorCode = 1111;
 
     @SuppressLint("CheckResult")
     public void registerUser(NetworkApiResponse networkApiResponse, RegisterRequest registerRequest) {
@@ -60,12 +58,10 @@ public class DataRepository extends BasePresenter {
                 .observeOn(mainThread)
                 .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, registerRequest.getRequestCode()), RegisterResponse.class))
                 .subscribe(response -> {
-                    if (response != null) {
-                        /*if (response.getMessage().equals(unexpectedError)) {
-                            networkApiResponse.onUnknownError(registerRequest.getRequestCode(), unexpectedErrorCode, unexpectedError);
-                        } else {
-                            networkApiResponse.onSuccess(response);
-                        }*/
+                    if (response.getError() != null) {
+                        networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                    } else {
+                        networkApiResponse.onSuccess(response);
                     }
 
                 }, error -> {

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.enqos.atc">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".base.AtcApplication"
         android:allowBackup="true"
@@ -25,13 +25,15 @@
             android:label="@string/title_activity_store_list" />
         <activity
             android:name=".login.LoginActivity"
-            android:theme="@style/AppThemeBlue" />
+            android:theme="@style/AppThemeBlue"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".home.HomeActivity"
             android:theme="@style/AppThemeBlue" />
         <activity
             android:name=".register.RegisterActivity"
-            android:theme="@style/AppThemeBlue" />
+            android:theme="@style/AppThemeBlue"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

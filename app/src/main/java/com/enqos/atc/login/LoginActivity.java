@@ -1,10 +1,10 @@
 package com.enqos.atc.login;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -15,16 +15,19 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class LoginActivity extends BaseActivity implements LoginView{
+public class LoginActivity extends BaseActivity implements LoginView {
 
     @BindView(R.id.et_email)
     EditText etEmail;
     @BindView(R.id.et_password)
     EditText etPassword;
+    @BindView(R.id.coordinate_layout)
+    CoordinatorLayout coordinatorLayout;
 
 
     @Inject
     LoginPresenter loginPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,9 +37,9 @@ public class LoginActivity extends BaseActivity implements LoginView{
     }
 
     @OnClick(R.id.login)
-    public void onClick(View view){
+    public void onClick(View view) {
 
-        loginPresenter.authenticateUser(etEmail.getText().toString(),etPassword.getText().toString(),this);
+        loginPresenter.authenticateUser(etEmail.getText().toString(), etPassword.getText().toString(), this);
 
     }
 
@@ -59,7 +62,7 @@ public class LoginActivity extends BaseActivity implements LoginView{
 
     @Override
     public void showMessage(String message) {
-
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
