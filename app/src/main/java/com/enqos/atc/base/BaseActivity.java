@@ -3,6 +3,9 @@ package com.enqos.atc.base;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -61,6 +64,13 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView 
             }
         }
 
+    }
+
+    public void replaceFragment(int id, Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(id, fragment);
+        fragmentTransaction.commit();
     }
 
     @NonNull

@@ -1,8 +1,12 @@
 package com.enqos.atc.storeList;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -14,7 +18,7 @@ import android.widget.TextView;
 
 import com.enqos.atc.R;
 
-public class StoreListActivity extends AppCompatActivity {
+public class StoreListActivity extends AppCompatActivity implements ShopListFragment.OnFragmentInteractionListener {
 
     private TextView mTextMessage;
     private DrawerLayout mDrawerLayout;
@@ -45,8 +49,15 @@ public class StoreListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_list);
         initViews();
+        replaceFragment(R.id.content_frame, ShopListFragment.newInstance("", ""));
 
+    }
 
+    public void replaceFragment(int id, Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(id, fragment);
+        fragmentTransaction.commit();
     }
 
     private void initViews() {
@@ -62,7 +73,7 @@ public class StoreListActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         BottomNavigationView navigation = findViewById(R.id.navigation);
-       // navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        // navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     @Override
@@ -74,5 +85,10 @@ public class StoreListActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

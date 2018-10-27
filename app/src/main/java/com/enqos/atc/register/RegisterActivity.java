@@ -1,5 +1,6 @@
 package com.enqos.atc.register;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.storeList.StoreListActivity;
 
 import javax.inject.Inject;
 
@@ -48,7 +50,6 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
 
     @OnClick(R.id.register)
     public void onRegister(View v) {
-
         registerPresenter.registerUser(etEmail.getText().toString(), etPassword.getText().toString(), this);
 
     }
@@ -67,6 +68,9 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
 
     @Override
     public void onRegisterUser() {
+        Intent intent = new Intent(this, StoreListActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 

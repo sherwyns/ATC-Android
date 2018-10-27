@@ -1,5 +1,6 @@
 package com.enqos.atc.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.storeList.StoreListActivity;
 
 import javax.inject.Inject;
 
@@ -67,7 +69,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void onValidUser() {
-
+        Intent intent = new Intent(this, StoreListActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
