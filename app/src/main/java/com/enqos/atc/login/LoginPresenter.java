@@ -45,12 +45,38 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
         }
     }
 
+    public void authenticateSocialUser(String email, String externalId, String provider, LoginView loginView) {
+
+        if (createApiRequest == null)
+            createApiRequest = new CreateApiRequest(this);
+
+        try {
+            this.loginView = loginView;
+            if (!TextUtils.isEmpty(email)) {
+                getmMvpView().showLoading();
+                createApiRequest.createSocialLoginRequest(email, externalId, provider);
+            } else {
+                loginView.showMessage("Please enter valid credential");
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public void showDialog() {
+        getmMvpView().showLoading();
+    }
+
+    public void hideDialog() {
+        getmMvpView().hideLoading();
+    }
+
     @Override
     public void onSuccess(BaseResponse response) {
         getmMvpView().hideLoading();
         LoginResponse loginResponse = (LoginResponse) response;
         loginView.onValidUser();
-        Log.i("*****", loginResponse.getUserId());
 
     }
 

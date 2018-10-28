@@ -70,9 +70,51 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
+    public void socialRegisterUser(NetworkApiResponse networkApiResponse, RegisterRequest registerRequest) {
+
+        Observable<RegisterResponse> registerResponse = retrofit.create(WebServiceApi.class).socialNetworkSignUp(registerRequest);
+
+        registerResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, registerRequest.getRequestCode()), RegisterResponse.class))
+                .subscribe(response -> {
+                    if (response.getError() != null) {
+                        networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                    } else {
+                        networkApiResponse.onSuccess(response);
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
     public void authenticateUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
 
         Observable<LoginResponse> loginResponse = retrofit.create(WebServiceApi.class).authenticate(loginRequest);
+
+        loginResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, loginRequest.getRequestCode()), LoginResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    public void authenticateSoicalUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
+
+        Observable<LoginResponse> loginResponse = retrofit.create(WebServiceApi.class).socialNetworkSignIn(loginRequest);
 
         loginResponse.subscribeOn(newThread)
                 .observeOn(mainThread)

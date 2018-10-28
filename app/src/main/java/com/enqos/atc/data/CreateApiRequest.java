@@ -20,6 +20,16 @@ public class CreateApiRequest {
         dataRepository.authenticateUser(networkApiResponse, loginInfo);
     }
 
+    public void createSocialLoginRequest(String email, String externalId, String provider) {
+        LoginRequest loginInfo = new LoginRequest(email, externalId, provider);
+        dataRepository.authenticateSoicalUser(networkApiResponse, loginInfo);
+    }
+
+    public void createSocialRegisterRequest(String email, String externalId, String provider) {
+        LoginRequest loginInfo = new LoginRequest(email, externalId, provider);
+        dataRepository.authenticateUser(networkApiResponse, loginInfo);
+    }
+
     public void createRegisterRequest(String email, String userPass) {
         RegisterRequest registerRequest = new RegisterRequest(email, email, userPass, true);
         dataRepository.registerUser(networkApiResponse, registerRequest);

@@ -16,4 +16,12 @@ public interface WebServiceApi {
 
     @POST("api/Users/login")
     Observable<LoginResponse> authenticate(@Body LoginRequest loginRequest);
+
+    @POST("api/socialUsers/signup")
+    Observable<RegisterResponse> socialNetworkSignUp(@Body RegisterRequest registerRequest);
+
+    @POST("api/socialUsers/signin")
+    Observable<LoginResponse> socialNetworkSignIn(@Body LoginRequest loginRequest);
+
+
 }

@@ -23,7 +23,7 @@
             android:elevation="2dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:title="Shops"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/black" />
 
         <FrameLayout
             android:id="@+id/content_frame"
