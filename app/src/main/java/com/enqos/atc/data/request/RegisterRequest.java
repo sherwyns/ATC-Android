@@ -3,7 +3,7 @@ package com.enqos.atc.data.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterRequest extends BaseRequest{
+public class RegisterRequest extends BaseRequest {
     @SerializedName("username")
     @Expose
     private String username;
@@ -16,6 +16,36 @@ public class RegisterRequest extends BaseRequest{
     @SerializedName("emailVerified")
     @Expose
     private boolean emailVerified;
+
+    public RegisterRequest(String username, String email, String externalid, String provider) {
+        this.username = username;
+        this.email = email;
+        this.provider = provider;
+        this.externalid = externalid;
+    }
+
+    @SerializedName("provider")
+    private String provider;
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getExternalid() {
+        return externalid;
+    }
+
+    public void setExternalid(String externalid) {
+        this.externalid = externalid;
+    }
+
+    @SerializedName("externalid")
+    private String externalid;
+
 
     public RegisterRequest(String username, String emaill, String password, boolean emailVerified) {
         this.username = username;

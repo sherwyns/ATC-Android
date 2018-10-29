@@ -2,9 +2,9 @@
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinate_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinate_layout"
     android:background="@drawable/screen_bg"
     android:fitsSystemWindows="true"
     tools:context=".home.HomeActivity">
@@ -28,6 +28,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/dimen_10dp"
                     android:src="@drawable/ic_keyboard_arrow_left_black_24dp" />
 
                 <TextView
@@ -95,13 +97,13 @@
                 android:background="@drawable/button_white_rounded_bg"
                 android:gravity="center"
                 android:hint="@string/with_your_email"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/dimen_15dp"
                 android:paddingEnd="@dimen/dimen_10dp"
-                android:maxLines="1"
                 android:paddingStart="@dimen/dimen_10dp"
                 android:paddingTop="@dimen/dimen_15dp"
-                android:textAllCaps="false"
                 android:singleLine="true"
+                android:textAllCaps="false"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/font_18" />
 
@@ -116,12 +118,12 @@
                 android:gravity="center"
                 android:hint="@string/choose_password"
                 android:inputType="textPassword"
+                android:maxLines="1"
                 android:paddingBottom="@dimen/dimen_15dp"
                 android:paddingEnd="@dimen/dimen_10dp"
                 android:paddingStart="@dimen/dimen_10dp"
-                android:singleLine="true"
-                android:maxLines="1"
                 android:paddingTop="@dimen/dimen_15dp"
+                android:singleLine="true"
                 android:textAllCaps="false"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/font_18" />

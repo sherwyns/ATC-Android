@@ -8,17 +8,30 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.storeList.StoreListActivity;
+import com.enqos.atc.utils.SharedPreferenceManager;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -33,8 +46,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     EditText etPassword;
     @BindView(R.id.coordinate_layout)
     CoordinatorLayout coordinatorLayout;
-
-
     @Inject
     LoginPresenter loginPresenter;
     private GoogleSignInClient mGoogleSignInClient;
@@ -50,9 +61,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+
     }
 
-    @OnClick({R.id.login, R.id.tv_google_login})
+    @OnClick({R.id.login, R.id.tv_google_login, R.id.tv_fb_login, R.id.back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login:
@@ -61,6 +73,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
             case R.id.tv_google_login:
                 loginPresenter.showDialog();
                 googleSignIn();
+                break;
+            case R.id.tv_fb_login:
+                Toast.makeText(this, "Next Release", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.back:
+                onBackPressed();
                 break;
         }
 
@@ -131,9 +149,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     private void updateUI(GoogleSignInAccount account) {
-
         if (account != null) {
-
             Log.i("*****", account.getEmail());
         }
     }

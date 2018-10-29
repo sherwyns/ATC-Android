@@ -26,8 +26,8 @@ public class CreateApiRequest {
     }
 
     public void createSocialRegisterRequest(String email, String externalId, String provider) {
-        LoginRequest loginInfo = new LoginRequest(email, externalId, provider);
-        dataRepository.authenticateUser(networkApiResponse, loginInfo);
+        RegisterRequest registerRequest = new RegisterRequest(email, email, externalId, provider);
+        dataRepository.socialRegisterUser(networkApiResponse, registerRequest);
     }
 
     public void createRegisterRequest(String email, String userPass) {

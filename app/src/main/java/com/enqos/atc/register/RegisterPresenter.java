@@ -44,6 +44,34 @@ public class RegisterPresenter extends BasePresenter implements NetworkApiRespon
 
     }
 
+    public void showDialog() {
+        getmMvpView().showLoading();
+    }
+
+    public void hideDialog() {
+        getmMvpView().hideLoading();
+    }
+
+    public void registerSocialUser(String email, String externalId, String provider, RegisterView registerView) {
+        this.registerView = registerView;
+        if (TextUtils.isEmpty(email)) {
+            registerView.showMessage("Please enter required inputs");
+        } else {
+            try {
+                getmMvpView().showLoading();
+                if (createApiRequest == null)
+                    createApiRequest = new CreateApiRequest(this);
+                createApiRequest.createSocialRegisterRequest(email, externalId, provider);
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
     @Override
     public void onSuccess(BaseResponse response) {
         getmMvpView().hideLoading();
