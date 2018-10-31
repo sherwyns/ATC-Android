@@ -14,40 +14,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.enqos.atc.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class StoreListActivity extends AppCompatActivity implements ShopListFragment.OnFragmentInteractionListener {
 
-    private TextView mTextMessage;
-    private DrawerLayout mDrawerLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
 
-
-    /*private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_list);
+        ButterKnife.bind(this);
         initViews();
         replaceFragment(R.id.content_frame, ShopListFragment.newInstance("", ""));
 
@@ -61,31 +51,26 @@ public class StoreListActivity extends AppCompatActivity implements ShopListFrag
     }
 
     private void initViews() {
-        mTextMessage = findViewById(R.id.message);
-
-        Toolbar mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        // navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    @OnClick({R.id.image_right, R.id.image_left})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.image_left:
+                drawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.image_right:
 
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+                break;
+
         }
-        return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onFragmentInteraction(Uri uri) {

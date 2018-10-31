@@ -21,53 +21,57 @@
             android:layout_alignParentTop="true"
             android:background="@android:color/white"
             android:elevation="2dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:title="Shops"
-            app:titleTextColor="@android:color/black" />
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+            <include layout="@layout/toolbar_layout" />
+        </android.support.v7.widget.Toolbar>
 
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/navigation"
+            android:layout_above="@+id/bottom_layout"
             android:layout_below="@+id/toolbar" />
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/navigation"
+        <LinearLayout
+            android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:layout_alignParentBottom="true"
-            android:background="?android:attr/windowBackground">
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_weight="1"
+                android:padding="@dimen/dimen_10dp"
+                android:src="@drawable/ic_search_black_24dp" />
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_search_black_24dp" />
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/semi_circle_bg"
+                android:elevation="2dp"
+                android:padding="@dimen/dimen_10dp"
+                android:src="@drawable/logohome" />
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@mipmap/ic_launcher_round" />
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_weight="1"
+                android:padding="@dimen/dimen_10dp"
+                android:src="@drawable/ic_favorite_border_black_24dp" />
+        </LinearLayout>
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_favorite_border_black_24dp" />
-            </LinearLayout>
-        </android.support.design.widget.BottomNavigationView>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

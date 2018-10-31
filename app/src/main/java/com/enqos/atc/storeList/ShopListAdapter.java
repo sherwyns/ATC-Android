@@ -39,7 +39,7 @@ public class ShopListAdapter extends BaseAdapter {
         }
 
         Glide.with(viewGroup.getContext()).load("https://www.excelsior.com.mt/wp-content/uploads/2011/03/spice-island-restaurant-Malta-1024x683.jpg")
-                .apply(new RequestOptions().override(250, 200).centerCrop()).into(viewHolder.imageView);
+                .apply(new RequestOptions().override(250, 150).centerCrop()).into(viewHolder.imageView);
         return view;
     }
 

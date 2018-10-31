@@ -5,7 +5,7 @@
     android:id="@+id/coordinate_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/screen_bg"
+    android:background="@drawable/login_bg"
     android:fitsSystemWindows="true"
     tools:context=".home.HomeActivity">
 
@@ -37,12 +37,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:fontFamily="sans-serif"
+                    android:letterSpacing="0.02"
                     android:text="@string/register"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/font_16" />
             </RelativeLayout>
 
-            <TextView
+            <RelativeLayout
                 android:id="@+id/tv_fb_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,17 +52,27 @@
                 android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_50dp"
                 android:background="@drawable/button_white_rounded_bg"
-                android:gravity="center"
                 android:paddingBottom="@dimen/dimen_15dp"
                 android:paddingEnd="@dimen/dimen_10dp"
                 android:paddingStart="@dimen/dimen_10dp"
-                android:paddingTop="@dimen/dimen_15dp"
-                android:text="@string/register_with_facebook"
-                android:textAllCaps="false"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textSize="@dimen/font_18" />
+                android:paddingTop="@dimen/dimen_15dp">
 
-            <TextView
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawablePadding="@dimen/dimen_10dp"
+                    android:drawableStart="@drawable/ic_facebook_icon"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="@string/register_with_facebook"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="@dimen/font_18" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/tv_google_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,21 +80,31 @@
                 android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_white_rounded_bg"
-                android:gravity="center"
                 android:paddingBottom="@dimen/dimen_15dp"
                 android:paddingEnd="@dimen/dimen_10dp"
                 android:paddingStart="@dimen/dimen_10dp"
-                android:paddingTop="@dimen/dimen_15dp"
-                android:text="@string/register_with_google"
-                android:textAllCaps="false"
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="@dimen/font_18" />
+                android:paddingTop="@dimen/dimen_15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawablePadding="@dimen/dimen_10dp"
+                    android:drawableStart="@drawable/ic_google_plus"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="@string/register_with_google"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorRed"
+                    android:textSize="@dimen/font_18" />
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_20dp"
+                android:fontFamily="sans-serif"
                 android:text="@string/or"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/font_18" />
@@ -95,6 +117,7 @@
                 android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_white_rounded_bg"
+                android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:hint="@string/with_your_email"
                 android:maxLines="1"
@@ -115,6 +138,7 @@
                 android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_white_rounded_bg"
+                android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:hint="@string/choose_password"
                 android:inputType="textPassword"
@@ -136,6 +160,7 @@
                 android:layout_marginStart="@dimen/dimen_40dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
                 android:background="@drawable/button_bg_orange"
+                android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:paddingBottom="@dimen/dimen_15dp"
                 android:paddingEnd="@dimen/dimen_10dp"
