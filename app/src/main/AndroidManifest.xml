@@ -3,6 +3,7 @@
     package="com.enqos.atc">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".base.AtcApplication"
         android:allowBackup="true"
@@ -35,7 +36,7 @@
             android:theme="@style/AppThemeBlue"
             android:windowSoftInputMode="stateHidden" />
 
-        <!--Facebook login-->
+        <!-- Facebook login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -44,6 +45,7 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+        <activity android:name=".myaccount.MyAccountActivity"></activity>
     </application>
 
 </manifest>

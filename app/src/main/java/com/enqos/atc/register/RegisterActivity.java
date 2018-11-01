@@ -15,7 +15,9 @@ import android.widget.Toast;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.data.response.RegisterResponse;
 import com.enqos.atc.storeList.StoreListActivity;
+import com.enqos.atc.utils.SharedPreferenceManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,6 +40,8 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     CoordinatorLayout coordinatorLayout;
     @Inject
     RegisterPresenter registerPresenter;
+    @Inject
+    SharedPreferenceManager sharedPreferenceManager;
 
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 123;
@@ -86,9 +90,6 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null)
-            onRegisterUser();
     }
 
     private void googleSignIn() {
@@ -127,7 +128,6 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     private void updateUI(GoogleSignInAccount account) {
 
         if (account != null) {
-
             Log.i("*****", account.getEmail());
         }
     }
@@ -145,7 +145,9 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     }
 
     @Override
-    public void onRegisterUser() {
+    public void onRegisterUser(RegisterResponse registerResponse) {
+        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.IS_LOGIN, true);
+        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, registerResponse.getEmail());
         Intent intent = new Intent(this, StoreListActivity.class);
         startActivity(intent);
         finish();

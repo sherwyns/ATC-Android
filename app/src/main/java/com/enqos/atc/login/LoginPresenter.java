@@ -1,15 +1,12 @@
 package com.enqos.atc.login;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.CreateApiRequest;
 import com.enqos.atc.data.response.BaseResponse;
-import com.enqos.atc.data.response.ErrorResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 
@@ -76,7 +73,7 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
     public void onSuccess(BaseResponse response) {
         getmMvpView().hideLoading();
         LoginResponse loginResponse = (LoginResponse) response;
-        loginView.onValidUser();
+        loginView.onValidUser(loginResponse);
 
     }
 

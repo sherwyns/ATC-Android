@@ -1,46 +1,61 @@
 package com.enqos.atc.storeList;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.enqos.atc.R;
+import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.myaccount.MyAccountActivity;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends AppCompatActivity implements ShopListFragment.OnFragmentInteractionListener {
+public class StoreListActivity extends BaseActivity implements StoreListView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    @Inject
+    StoreListPresenter storeListPresenter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store_list);
+        storeListPresenter.attachView(this);
         ButterKnife.bind(this);
-        initViews();
-        replaceFragment(R.id.content_frame, ShopListFragment.newInstance("", ""));
+        initToolbar();
+        replaceFragment(R.id.content_frame, ShopListFragment.newInstance());
 
+    }
+
+    @Override
+    public void injectDependency() {
+        AtcApplication.getAppComponents().inject(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        storeListPresenter.detachView();
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_store_list;
     }
 
     public void replaceFragment(int id, Fragment fragment) {
@@ -50,7 +65,7 @@ public class StoreListActivity extends AppCompatActivity implements ShopListFrag
         fragmentTransaction.commit();
     }
 
-    private void initViews() {
+    private void initToolbar() {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -58,7 +73,7 @@ public class StoreListActivity extends AppCompatActivity implements ShopListFrag
 
     }
 
-    @OnClick({R.id.image_right, R.id.image_left})
+    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
@@ -67,13 +82,14 @@ public class StoreListActivity extends AppCompatActivity implements ShopListFrag
             case R.id.image_right:
 
                 break;
+            case R.id.menu_my_account:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(this, MyAccountActivity.class);
+                startActivity(intent);
+                break;
 
         }
     }
 
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 }

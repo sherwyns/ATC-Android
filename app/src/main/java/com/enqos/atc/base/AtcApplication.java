@@ -7,6 +7,7 @@ import com.enqos.atc.di.AppComponent;
 import com.enqos.atc.di.AppModule;
 import com.enqos.atc.di.DaggerAppComponent;
 import com.enqos.atc.di.NetModule;
+import com.enqos.atc.di.SharedPreferenceModule;
 import com.squareup.leakcanary.LeakCanary;
 
 public class AtcApplication extends Application {
@@ -34,6 +35,7 @@ public class AtcApplication extends Application {
 
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(context))
+                .sharedPreferenceModule(new SharedPreferenceModule(context))
                 .netModule(new NetModule(NetworkConstants.BASE_URL))
                 .build();
         appComponent.inject(context);

@@ -76,7 +76,7 @@ public class RegisterPresenter extends BasePresenter implements NetworkApiRespon
     public void onSuccess(BaseResponse response) {
         getmMvpView().hideLoading();
         RegisterResponse registerResponse = (RegisterResponse) response;
-        registerView.onRegisterUser();
+        registerView.onRegisterUser(registerResponse);
         Log.i("*****", registerResponse.getId());
     }
 

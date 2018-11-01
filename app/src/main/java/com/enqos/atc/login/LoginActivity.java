@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.storeList.StoreListActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
 import com.facebook.CallbackManager;
@@ -48,8 +50,11 @@ public class LoginActivity extends BaseActivity implements LoginView {
     CoordinatorLayout coordinatorLayout;
     @Inject
     LoginPresenter loginPresenter;
+    @Inject
+    SharedPreferenceManager sharedPreferenceManager;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 123;
+    private String email;
 
 
     @Override
@@ -93,9 +98,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     protected void onStart() {
         super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null)
-            onValidUser();
     }
 
     @Override
@@ -150,12 +152,18 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     private void updateUI(GoogleSignInAccount account) {
         if (account != null) {
+            email = account.getEmail();
             Log.i("*****", account.getEmail());
         }
     }
 
     @Override
-    public void onValidUser() {
+    public void onValidUser(LoginResponse loginResponse) {
+        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.IS_LOGIN, true);
+        if (TextUtils.isEmpty(email))
+            sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, etEmail.getText().toString());
+        else
+            sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, email);
         Intent intent = new Intent(this, StoreListActivity.class);
         startActivity(intent);
         finish();
