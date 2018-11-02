@@ -19,6 +19,7 @@ import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.storeList.StoreListActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
+import com.enqos.atc.utils.Utility;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -48,6 +49,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
     EditText etPassword;
     @BindView(R.id.coordinate_layout)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.login_button)
+    LoginButton loginButton;
     @Inject
     LoginPresenter loginPresenter;
     @Inject
@@ -55,17 +58,37 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 123;
     private String email;
-
+    private static final String EMAIL = "email";
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        callbackManager = CallbackManager.Factory.create();
         loginPresenter.attachView(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        Utility.getUserProfile(loginResult.getAccessToken());
+                    }
 
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
 
     }
 
@@ -80,7 +103,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 googleSignIn();
                 break;
             case R.id.tv_fb_login:
-                Toast.makeText(this, "Next Release", Toast.LENGTH_LONG).show();
+                loginButton.performClick();
                 break;
             case R.id.back:
                 onBackPressed();
@@ -124,8 +147,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
 
             // The Task returned from this call is always completed, no need to attach

@@ -57,6 +57,12 @@
                 android:paddingStart="@dimen/dimen_10dp"
                 android:paddingTop="@dimen/dimen_15dp">
 
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
                 <TextView
 
                     android:layout_width="wrap_content"
