@@ -22,7 +22,7 @@ public class CreateApiRequest {
 
     public void createSocialLoginRequest(String email, String externalId, String provider) {
         LoginRequest loginInfo = new LoginRequest(email, externalId, provider);
-        dataRepository.authenticateSoicalUser(networkApiResponse, loginInfo);
+        dataRepository.authenticateSocialUser(networkApiResponse, loginInfo);
     }
 
     public void createSocialRegisterRequest(String email, String externalId, String provider) {

@@ -1,11 +1,13 @@
 package com.enqos.atc.launcher;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -22,12 +24,13 @@ public class SplashActivity extends BaseActivity implements SplashView {
     SharedPreferenceManager sharedPreferenceManager;
     @Inject
     SplashPresenter splashPresenter;
+    ImageView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         splashPresenter.attachView(this);
-
+        logo = findViewById(R.id.splash_logo);
         new Handler().postDelayed(() -> {
             splashPresenter.navigate(SplashActivity.this);
         }, 2000);
@@ -53,7 +56,10 @@ public class SplashActivity extends BaseActivity implements SplashView {
     public void navigateHome() {
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        ActivityOptions activityOptions =
+                ActivityOptions.makeSceneTransitionAnimation(
+                        this, logo, "logo");
+        startActivity(intent, activityOptions.toBundle());
         finish();
     }
 

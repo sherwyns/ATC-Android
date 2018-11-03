@@ -81,7 +81,6 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
     public void onFailure(String errorMessage, int requestCode, int statusCode) {
         getmMvpView().hideLoading();
         loginView.showMessage(errorMessage);
-        Log.i("*****", errorMessage);
     }
 
     @Override

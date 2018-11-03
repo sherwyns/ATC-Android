@@ -76,7 +76,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        Utility.getUserProfile(loginResult.getAccessToken());
+                        Utility.getUserProfile(loginResult.getAccessToken(), RegisterActivity.this);
                     }
 
                     @Override
@@ -183,6 +183,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     public void onRegisterUser(RegisterResponse registerResponse) {
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.IS_LOGIN, true);
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, registerResponse.getEmail());
+        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.TOKEN, registerResponse.getId());
         Intent intent = new Intent(this, StoreListActivity.class);
         startActivity(intent);
         finish();
@@ -190,12 +191,9 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     }
 
     @Override
-    public String getStringMessage(int id) {
-        return null;
+    public void fbLogin(String email, String accessToken) {
+
+        registerPresenter.registerSocialUser(email, accessToken, "facebook", this);
     }
 
-    @Override
-    public int getInt(int id) {
-        return 0;
-    }
 }

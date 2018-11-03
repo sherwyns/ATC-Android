@@ -1,6 +1,7 @@
 package com.enqos.atc.data;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;
@@ -76,10 +77,10 @@ public class DataRepository extends BasePresenter {
 
         registerResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
-                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, registerRequest.getRequestCode()), RegisterResponse.class))
+                .onErrorReturn(throwable -> new Gson().fromJson(getSocialExceptionResponse(throwable, networkApiResponse, registerRequest.getRequestCode()), RegisterResponse.class))
                 .subscribe(response -> {
-                    if (response.getError() != null) {
-                        networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                    if (response.getError() != null || TextUtils.isEmpty(response.getId())) {
+                        networkApiResponse.onFailure("user already exists", 121, 200);
                     } else {
                         networkApiResponse.onSuccess(response);
                     }
@@ -112,17 +113,17 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    public void authenticateSoicalUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
+    public void authenticateSocialUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
 
         Observable<LoginResponse> loginResponse = retrofit.create(WebServiceApi.class).socialNetworkSignIn(loginRequest);
 
         loginResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
-                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, loginRequest.getRequestCode()), LoginResponse.class))
+                .onErrorReturn(throwable -> new Gson().fromJson(getSocialExceptionResponse(throwable, networkApiResponse, loginRequest.getRequestCode()), LoginResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
-                        if (response.getError() != null) {
-                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        if (response.getError() != null || TextUtils.isEmpty(response.getId())) {
+                            networkApiResponse.onFailure("user already exists", 121, 200);
                         } else {
                             networkApiResponse.onSuccess(response);
                         }
@@ -160,11 +161,47 @@ public class DataRepository extends BasePresenter {
         return errorMessage;
     }
 
+    private String getSocialExceptionResponse(Throwable throwable, NetworkApiResponse networkResponse, int requestCode) {
+        String errorMessage = "";
+        try {
+            if (throwable instanceof HttpException) {
+                ResponseBody responseBody = ((HttpException) throwable).response().errorBody();
+                int statusCode = ((HttpException) throwable).response().code();
+                if (responseBody != null) {
+                    errorMessage = getSocialErrorMessage(responseBody);
+                    networkResponse.onFailure(errorMessage, requestCode, statusCode);
+
+                }
+
+            } else if (throwable instanceof SocketTimeoutException) {
+                networkResponse.onTimeOut(requestCode);
+            } else if (throwable instanceof IOException) {
+                networkResponse.onNetworkError(requestCode);
+            } else {
+                final int unknownErrorCode = 1112;
+                networkResponse.onUnknownError(requestCode, unknownErrorCode, throwable.getMessage());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return errorMessage;
+    }
+
     private String getErrorMessage(ResponseBody responseBody) {
         try {
             JSONObject jsonObject = new JSONObject(responseBody.string());
             JSONObject erroObj = jsonObject.getJSONObject("error");
             return erroObj.getString("message");
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    private String getSocialErrorMessage(ResponseBody responseBody) {
+        try {
+            JSONObject jsonObject = new JSONObject(responseBody.string());
+            return jsonObject.getString("message");
         } catch (Exception e) {
             return e.getMessage();
         }

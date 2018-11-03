@@ -7,7 +7,6 @@ public interface LoginView {
 
     void onValidUser(LoginResponse loginResponse);
 
-    String getStringMessage(int id);
+    void fbLogin(String email,String id);
 
-    int getInt(int id);
 }

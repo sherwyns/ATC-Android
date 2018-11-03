@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dimen_50dp"
-            android:src="@drawable/logo_black" />
+            android:src="@drawable/logo_black"
+            android:transitionName="logo" />
 
         <TextView
 

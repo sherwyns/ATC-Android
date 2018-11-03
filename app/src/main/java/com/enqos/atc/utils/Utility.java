@@ -3,13 +3,15 @@ package com.enqos.atc.utils;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.enqos.atc.login.LoginView;
+import com.enqos.atc.register.RegisterView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 
 import org.json.JSONException;
 
 public class Utility {
-    public static void getUserProfile(AccessToken currentAccessToken) {
+    public static void getUserProfile(AccessToken currentAccessToken, Object listener) {
         GraphRequest request = GraphRequest.newMeRequest(
                 currentAccessToken, (object, response) -> {
                     Log.d("TAG", object.toString());
@@ -18,6 +20,14 @@ public class Utility {
                         String last_name = object.getString("last_name");
                         String email = object.getString("email");
                         String id = object.getString("id");
+                        if (listener instanceof RegisterView) {
+                            RegisterView registerView = (RegisterView) listener;
+                            registerView.fbLogin("joycekishta@gmail.com", id);
+                        } else if (listener instanceof LoginView) {
+                            LoginView loginView = (LoginView) listener;
+                            loginView.fbLogin("joycekishta@gmail.com", id);
+                        }
+
                         //String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";
                         Log.i("FB_LOGIN", email);
                     } catch (JSONException e) {

@@ -22,7 +22,7 @@ android {
     }
     sourceSets {
         main {
-            res.srcDirs = ['src/main/res', 'src/main/res/drawable-hdpi', 'src/main/res/drawable-xdpi', 'src/main/res/drawable-xxdpi', 'src/main/res/drawable-xxxdpi']
+            res.srcDirs = ['src/main/res', 'src/main/res/drawable-hdpi', 'src/main/res/drawable-xdpi', 'src/main/res/drawable-xxdpi', 'src/main/res/drawable-xxxdpi', 'src/main/res/anim']
         }
     }
 }

@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        Utility.getUserProfile(loginResult.getAccessToken());
+                        Utility.getUserProfile(loginResult.getAccessToken(), LoginActivity.this);
                     }
 
                     @Override
@@ -187,18 +187,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
             sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, etEmail.getText().toString());
         else
             sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, email);
+        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.TOKEN, loginResponse.getId());
         Intent intent = new Intent(this, StoreListActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
-    public String getStringMessage(int id) {
-        return null;
+    public void fbLogin(String email, String password) {
+        this.email = email;
+        loginPresenter.authenticateSocialUser(email, password, "facebook", this);
     }
 
-    @Override
-    public int getInt(int id) {
-        return 0;
-    }
 }

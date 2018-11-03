@@ -8,7 +8,7 @@ public interface RegisterView {
 
     void onRegisterUser(RegisterResponse registerResponse);
 
-    String getStringMessage(int id);
+    void fbLogin(String email,String accessToken);
 
-    int getInt(int id);
+
 }
