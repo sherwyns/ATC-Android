@@ -14,7 +14,9 @@ import android.view.View;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.home.HomeActivity;
 import com.enqos.atc.myaccount.MyAccountActivity;
+import com.enqos.atc.utils.SharedPreferenceManager;
 
 import javax.inject.Inject;
 
@@ -30,6 +32,8 @@ public class StoreListActivity extends BaseActivity implements StoreListView {
     DrawerLayout drawerLayout;
     @Inject
     StoreListPresenter storeListPresenter;
+    @Inject
+    SharedPreferenceManager sharedPreferenceManager;
 
 
     @Override
@@ -84,8 +88,15 @@ public class StoreListActivity extends BaseActivity implements StoreListView {
                 break;
             case R.id.menu_my_account:
                 drawerLayout.closeDrawer(GravityCompat.START);
-                Intent intent = new Intent(this, MyAccountActivity.class);
-                startActivity(intent);
+                boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+                if (isLogin) {
+                    Intent intent = new Intent(this, MyAccountActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    startActivity(intent);
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
 
         }
