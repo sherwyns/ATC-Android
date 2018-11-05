@@ -33,6 +33,11 @@
     <string name="enter_new_password">Enter New Password</string>
     <string name="re_enter_new_password">Re-enter New Password</string>
     <string name="sign_out">Sign out</string>
+    <string name="product">Product</string>
+    <string name="store">Store</string>
+    <string name="favourites">Favourites</string>
+    <string name="search_by_product_store">Search by product, store</string>
+    <string name="search">Search</string>
 
 
 </resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4">
+
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_20dp"
+            android:layout_marginEnd="@dimen/dimen_20dp"
+            android:layout_marginStart="@dimen/dimen_20dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:background="@drawable/button_white_rounded_bg"
+            android:drawablePadding="@dimen/dimen_10dp"
+            android:drawableStart="@drawable/ic_search_black_24dp"
+            android:elevation="@dimen/dimen_5dp"
+            android:gravity="center"
+            android:hint="@string/search_by_product_store"
+            android:paddingBottom="@dimen/dimen_5dp"
+            android:paddingEnd="@dimen/dimen_20dp"
+            android:paddingStart="@dimen/dimen_20dp"
+            android:paddingTop="@dimen/dimen_5dp"
+            android:textSize="@dimen/font_12" />
+
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_layout"
+        android:clipToPadding="false"
+        android:columnWidth="@dimen/dimen_120dp"
+        android:gravity="center"
+        android:horizontalSpacing="@dimen/dimen_10dp"
+        android:numColumns="2"
+        android:padding="@dimen/dimen_10dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/dimen_10dp" />
+</RelativeLayout>

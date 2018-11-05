@@ -22,10 +22,10 @@ public class Utility {
                         String id = object.getString("id");
                         if (listener instanceof RegisterView) {
                             RegisterView registerView = (RegisterView) listener;
-                            registerView.fbLogin("joycekishta@gmail.com", id);
+                            registerView.fbLogin(email, id);
                         } else if (listener instanceof LoginView) {
                             LoginView loginView = (LoginView) listener;
-                            loginView.fbLogin("joycekishta@gmail.com", id);
+                            loginView.fbLogin(email, id);
                         }
 
                         //String image_url = "https://graph.facebook.com/" + id + "/picture?type=normal";

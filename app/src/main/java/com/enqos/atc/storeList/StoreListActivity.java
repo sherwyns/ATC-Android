@@ -10,6 +10,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -30,6 +32,14 @@ public class StoreListActivity extends BaseActivity implements StoreListView {
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+    @BindView(R.id.img_search)
+    ImageView menuSearch;
+    @BindView(R.id.img_fav)
+    ImageView menuFav;
+    @BindView(R.id.img_home)
+    ImageView menuHome;
+    @BindView(R.id.title)
+    TextView title;
     @Inject
     StoreListPresenter storeListPresenter;
     @Inject
@@ -77,14 +87,36 @@ public class StoreListActivity extends BaseActivity implements StoreListView {
 
     }
 
-    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account})
+    private void menuSelection(int id) {
+        switch (id) {
+            case R.id.img_fav:
+                break;
+            case R.id.img_search:
+                break;
+            case R.id.img_home:
+                break;
+        }
+    }
+
+    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.img_fav, R.id.img_search, R.id.img_home})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.image_right:
-
+                break;
+            case R.id.img_fav:
+                title.setText(R.string.favourites);
+                replaceFragment(R.id.content_frame, FavouriteFragment.newInstance());
+                break;
+            case R.id.img_home:
+                title.setText(R.string.store);
+                replaceFragment(R.id.content_frame, ShopListFragment.newInstance());
+                break;
+            case R.id.img_search:
+                title.setText(R.string.search);
+                replaceFragment(R.id.content_frame, SearchFragment.newInstance());
                 break;
             case R.id.menu_my_account:
                 drawerLayout.closeDrawer(GravityCompat.START);
