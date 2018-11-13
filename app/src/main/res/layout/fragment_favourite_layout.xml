@@ -11,7 +11,10 @@
         android:background="@android:color/white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/dimen_20dp">
+        android:paddingBottom="@dimen/dimen_10dp"
+        android:paddingEnd="@dimen/dimen_20dp"
+        android:paddingStart="@dimen/dimen_20dp"
+        android:paddingTop="@dimen/dimen_10dp">
 
         <TextView
             android:id="@+id/tv_product"
@@ -27,7 +30,7 @@
             android:paddingTop="3dp"
             android:text="@string/product"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/font_16" />
+            android:textSize="@dimen/font_12" />
 
         <TextView
             android:id="@+id/tv_store"
@@ -43,7 +46,7 @@
             android:paddingTop="3dp"
             android:text="@string/store"
             android:textColor="#787878"
-            android:textSize="@dimen/font_16" />
+            android:textSize="@dimen/font_12" />
     </LinearLayout>
 
     <GridView

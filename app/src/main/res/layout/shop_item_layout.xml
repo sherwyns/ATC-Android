@@ -16,7 +16,9 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#F4F4F4F4">
+
 
             <ImageView
                 android:id="@+id/shop_img"
@@ -24,9 +26,10 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_photo_size_select_actual_black_24dp" />
 
             <ImageView
+                android:id="@+id/img_fav"
                 android:layout_width="@dimen/dimen_30dp"
                 android:layout_height="@dimen/dimen_30dp"
                 android:layout_gravity="end"

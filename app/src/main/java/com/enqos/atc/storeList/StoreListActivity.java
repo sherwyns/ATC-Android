@@ -52,7 +52,7 @@ public class StoreListActivity extends BaseActivity implements StoreListView {
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
         initToolbar();
-        replaceFragment(R.id.content_frame, ShopListFragment.newInstance());
+        replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
 
     }
 
@@ -72,9 +72,11 @@ public class StoreListActivity extends BaseActivity implements StoreListView {
         return R.layout.activity_store_list;
     }
 
-    public void replaceFragment(int id, Fragment fragment) {
+    public void replaceFragment(int id, Fragment fragment, boolean isAnim) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (isAnim)
+            fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         fragmentTransaction.replace(id, fragment);
         fragmentTransaction.commit();
     }
@@ -108,15 +110,15 @@ public class StoreListActivity extends BaseActivity implements StoreListView {
                 break;
             case R.id.img_fav:
                 title.setText(R.string.favourites);
-                replaceFragment(R.id.content_frame, FavouriteFragment.newInstance());
+                replaceFragment(R.id.content_frame, FavouriteFragment.newInstance(), false);
                 break;
             case R.id.img_home:
                 title.setText(R.string.store);
-                replaceFragment(R.id.content_frame, ShopListFragment.newInstance());
+                replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
                 break;
             case R.id.img_search:
                 title.setText(R.string.search);
-                replaceFragment(R.id.content_frame, SearchFragment.newInstance());
+                replaceFragment(R.id.content_frame, SearchFragment.newInstance(), false);
                 break;
             case R.id.menu_my_account:
                 drawerLayout.closeDrawer(GravityCompat.START);

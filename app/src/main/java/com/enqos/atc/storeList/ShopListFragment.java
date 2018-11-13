@@ -47,7 +47,7 @@ public class ShopListFragment extends Fragment {
      */
     private void setShopListData() {
 
-        gridView.setAdapter(new ShopListAdapter());
+        gridView.setAdapter(new ShopListAdapter(getActivity()));
 
     }
 
