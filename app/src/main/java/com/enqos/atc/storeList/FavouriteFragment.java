@@ -45,7 +45,7 @@ public class FavouriteFragment extends Fragment {
      */
     private void setShopListData() {
 
-        gridView.setAdapter(new ShopListAdapter(getActivity()));
+        gridView.setAdapter(new ShopListAdapter(getActivity(), null));
 
     }
 

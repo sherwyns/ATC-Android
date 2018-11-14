@@ -10,6 +10,8 @@ import com.enqos.atc.myaccount.MyAccountActivity;
 import com.enqos.atc.myaccount.MyAccountPresenter;
 import com.enqos.atc.register.RegisterActivity;
 import com.enqos.atc.register.RegisterPresenter;
+import com.enqos.atc.storeList.SearchFragment;
+import com.enqos.atc.storeList.ShopListFragment;
 import com.enqos.atc.storeList.StoreListActivity;
 import com.enqos.atc.storeList.StoreListPresenter;
 
@@ -44,4 +46,8 @@ public interface AppComponent {
     void inject(MyAccountPresenter myAccountPresenter);
 
     void inject(MyAccountActivity myAccountActivity);
+
+    void inject(SearchFragment searchFragment);
+
+    void inject(ShopListFragment shopListFragment);
 }

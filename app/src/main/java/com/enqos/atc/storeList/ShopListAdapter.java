@@ -11,18 +11,23 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
+import com.enqos.atc.data.response.StoreEntity;
+
+import java.util.List;
 
 public class ShopListAdapter extends BaseAdapter {
 
     private Context context;
+    private List<StoreEntity> data;
 
-    public ShopListAdapter(Context context) {
+    public ShopListAdapter(Context context, List<StoreEntity> data) {
         this.context = context;
+        this.data = data;
     }
 
     @Override
     public int getCount() {
-        return 20;
+        return data == null ? 0 : data.size();
     }
 
     @Override

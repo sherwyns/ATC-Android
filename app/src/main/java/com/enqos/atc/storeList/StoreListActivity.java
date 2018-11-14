@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.home.HomeActivity;
 import com.enqos.atc.myaccount.MyAccountActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
@@ -26,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends BaseActivity implements StoreListView {
+public class StoreListActivity extends BaseActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;

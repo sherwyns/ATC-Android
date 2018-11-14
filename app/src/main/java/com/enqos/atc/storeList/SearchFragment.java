@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.enqos.atc.R;
+import com.enqos.atc.base.AtcApplication;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +26,9 @@ public class SearchFragment extends Fragment {
 
     private Unbinder unbinder;
 
+    @Inject
     public SearchFragment() {
+        AtcApplication.getAppComponents().inject(this);
     }
 
     public static SearchFragment newInstance() {
@@ -45,7 +50,7 @@ public class SearchFragment extends Fragment {
      */
     private void setShopListData() {
 
-        gridView.setAdapter(new ShopListAdapter(getActivity()));
+        gridView.setAdapter(new ShopListAdapter(getActivity(), null));
 
     }
 

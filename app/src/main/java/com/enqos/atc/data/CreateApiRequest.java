@@ -35,4 +35,8 @@ public class CreateApiRequest {
         dataRepository.registerUser(networkApiResponse, registerRequest);
     }
 
+    public void createStoreRequest() {
+        dataRepository.getStore(networkApiResponse);
+    }
+
 }

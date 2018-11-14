@@ -4,9 +4,11 @@ import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.StoreResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface WebServiceApi {
@@ -22,6 +24,9 @@ public interface WebServiceApi {
 
     @POST("api/socialUsers/signin")
     Observable<LoginResponse> socialNetworkSignIn(@Body LoginRequest loginRequest);
+
+    @GET("api/Store/getstores")
+    Observable<StoreResponse> store();
 
 
 }

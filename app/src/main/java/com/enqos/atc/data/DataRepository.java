@@ -11,6 +11,7 @@ import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.utils.Constants;
 import com.google.gson.Gson;
 
@@ -124,6 +125,28 @@ public class DataRepository extends BasePresenter {
                     if (response != null) {
                         if (response.getError() != null || TextUtils.isEmpty(response.getId())) {
                             networkApiResponse.onFailure("user already exists", 121, 200);
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    public void getStore(NetworkApiResponse networkApiResponse) {
+
+        Observable<StoreResponse> storeResponse = retrofit.create(WebServiceApi.class).store();
+
+        storeResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StoreResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
                         } else {
                             networkApiResponse.onSuccess(response);
                         }
