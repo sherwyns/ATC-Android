@@ -114,8 +114,10 @@ public class StoreListActivity extends BaseActivity {
                 replaceFragment(R.id.content_frame, FavouriteFragment.newInstance(), false);
                 break;
             case R.id.img_home:
-                title.setText(R.string.store);
-                replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
+                if (!title.getText().toString().equals(getString(R.string.store))) {
+                    title.setText(R.string.store);
+                    replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
+                }
                 break;
             case R.id.img_search:
                 title.setText(R.string.search);

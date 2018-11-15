@@ -7,4 +7,6 @@ public interface StoreListView {
     void showMessage(String message);
 
     void storeResponse(StoreResponse storeResponse);
+
+    void navigateLogin();
 }

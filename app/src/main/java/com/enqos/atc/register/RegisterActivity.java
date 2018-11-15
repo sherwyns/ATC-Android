@@ -184,6 +184,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.IS_LOGIN, true);
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, registerResponse.getEmail());
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.TOKEN, registerResponse.getId());
+        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.USER_ID, registerResponse.getId());
         Intent intent = new Intent(this, StoreListActivity.class);
         startActivity(intent);
         finish();

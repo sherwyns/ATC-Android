@@ -8,6 +8,8 @@ import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.remote.WebServiceApi;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
+import com.enqos.atc.data.request.SaveFavoriteRequest;
+import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.RegisterResponse;
@@ -44,7 +46,7 @@ public class DataRepository extends BasePresenter {
     Retrofit retrofit;
 
     @Inject
-    public DataRepository() {
+    DataRepository() {
 
         AtcApplication.getAppComponents().inject(this);
 
@@ -52,7 +54,7 @@ public class DataRepository extends BasePresenter {
 
 
     @SuppressLint("CheckResult")
-    public void registerUser(NetworkApiResponse networkApiResponse, RegisterRequest registerRequest) {
+    void registerUser(NetworkApiResponse networkApiResponse, RegisterRequest registerRequest) {
 
         Observable<RegisterResponse> registerResponse = retrofit.create(WebServiceApi.class).register(registerRequest);
 
@@ -72,7 +74,7 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    public void socialRegisterUser(NetworkApiResponse networkApiResponse, RegisterRequest registerRequest) {
+    void socialRegisterUser(NetworkApiResponse networkApiResponse, RegisterRequest registerRequest) {
 
         Observable<RegisterResponse> registerResponse = retrofit.create(WebServiceApi.class).socialNetworkSignUp(registerRequest);
 
@@ -92,7 +94,7 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    public void authenticateUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
+    void authenticateUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
 
         Observable<LoginResponse> loginResponse = retrofit.create(WebServiceApi.class).authenticate(loginRequest);
 
@@ -114,7 +116,7 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    public void authenticateSocialUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
+    void authenticateSocialUser(NetworkApiResponse networkApiResponse, LoginRequest loginRequest) {
 
         Observable<LoginResponse> loginResponse = retrofit.create(WebServiceApi.class).socialNetworkSignIn(loginRequest);
 
@@ -136,13 +138,57 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    public void getStore(NetworkApiResponse networkApiResponse) {
+    void getStore(NetworkApiResponse networkApiResponse) {
 
         Observable<StoreResponse> storeResponse = retrofit.create(WebServiceApi.class).store();
 
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
                 .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StoreResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void saveFavorite(NetworkApiResponse networkApiResponse, SaveFavoriteRequest favoriteRequest) {
+
+        Observable<FavoriteResponse> storeResponse = retrofit.create(WebServiceApi.class).saveFavorite(favoriteRequest);
+
+        storeResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, favoriteRequest.getRequestCode()), FavoriteResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void getFavorites(NetworkApiResponse networkApiResponse, String id) {
+
+        Observable<FavoriteResponse> storeResponse = retrofit.create(WebServiceApi.class).favorites(id);
+
+        storeResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), FavoriteResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
                         if (response.getError() != null) {

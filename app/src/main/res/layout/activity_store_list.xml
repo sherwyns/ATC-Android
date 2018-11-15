@@ -69,6 +69,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:layout_weight="1.2"
+                android:elevation="2dp"
                 android:padding="@dimen/dimen_5dp"
                 android:src="@drawable/ic_favorite_border_black_24dp" />
         </LinearLayout>

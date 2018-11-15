@@ -23,6 +23,16 @@ public class StoreEntity {
     @SerializedName("category")
     private List<CategoryEntity> category;
 
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
+    }
+
+    private boolean isFavourite;
+
     public String getId() {
         return id;
     }

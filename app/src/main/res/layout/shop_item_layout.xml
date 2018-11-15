@@ -49,18 +49,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/shop_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="Shop Name"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/font_14" />
 
             <TextView
+                android:id="@+id/neighbourhood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="Neighbourhood"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="@dimen/font_14" />
         </LinearLayout>

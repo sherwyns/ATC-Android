@@ -188,6 +188,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         else
             sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, email);
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.TOKEN, loginResponse.getId());
+        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.USER_ID,loginResponse.getUserId());
         Intent intent = new Intent(this, StoreListActivity.class);
         startActivity(intent);
         finish();

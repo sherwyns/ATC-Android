@@ -2,6 +2,8 @@ package com.enqos.atc.data.remote;
 
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
+import com.enqos.atc.data.request.SaveFavoriteRequest;
+import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.RegisterResponse;
 import com.enqos.atc.data.response.StoreResponse;
@@ -10,6 +12,7 @@ import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface WebServiceApi {
 
@@ -28,5 +31,10 @@ public interface WebServiceApi {
     @GET("api/Store/getstores")
     Observable<StoreResponse> store();
 
+    @GET("api/favorites/findOne?")
+    Observable<FavoriteResponse> favorites(@Query("filter") String filter);
 
+
+    @POST("api/favorites")
+    Observable<FavoriteResponse> saveFavorite(@Body SaveFavoriteRequest saveFavorite);
 }
