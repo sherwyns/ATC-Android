@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.enqos.atc.R;
+import com.enqos.atc.listener.FavoriteListener;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +23,6 @@ public class FavouriteFragment extends Fragment {
 
     @BindView(R.id.gridview)
     GridView gridView;
-
     private Unbinder unbinder;
 
     public FavouriteFragment() {
@@ -36,24 +38,16 @@ public class FavouriteFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_favourite_layout, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        setShopListData();
         return rootView;
-    }
-
-    /**
-     * Set the shop lists
-     */
-    private void setShopListData() {
-
-        gridView.setAdapter(new ShopListAdapter(getActivity(), null));
-
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        FavoriteListener favoriteListener = (FavoriteListener) context;
+        if (favoriteListener != null && favoriteListener.getFavoriteStores() != null)
+            gridView.setAdapter(new ShopListAdapter(getActivity(), favoriteListener.getFavoriteStores()));
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.enqos.atc.data.response.BaseResponse;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
+import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreFavoriteEntity;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.utils.SharedPreferenceManager;
@@ -21,6 +22,7 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
     private CreateApiRequest createApiRequest;
     private StoreListView storeListView;
     private FavoriteResponse favoriteResponse;
+    private StoreResponse storeResponse;
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
 
@@ -60,13 +62,34 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
     @Override
     public void onSuccess(BaseResponse response) {
         if (response instanceof StoreResponse) {
-            StoreResponse storeResponse = (StoreResponse) response;
+            storeResponse = (StoreResponse) response;
             storeListView.storeResponse(storeResponse);
             String id = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             createApiRequest.createFavoriteRequest("{\"where\":{\"user_id\":" + id + "}}");
         } else {
             favoriteResponse = (FavoriteResponse) response;
         }
+        if (favoriteResponse != null && favoriteResponse.getStore() != null && storeResponse != null && storeResponse.getData() != null)
+            getFavoriteStores();
+    }
+
+    public List<StoreEntity> getFavoriteStores() {
+        List<StoreEntity> allStoreFavorites = new ArrayList<>();
+        for (StoreFavoriteEntity favStore :
+                favoriteResponse.getStore()) {
+            for (StoreEntity store : storeResponse.getData()) {
+                if (store.getId().equals(favStore.getStoreid())) {
+                    store.setFavourite(true);
+                    allStoreFavorites.add(store);
+
+                }
+            }
+        }
+
+
+        return allStoreFavorites;
+
+
     }
 
     @Override

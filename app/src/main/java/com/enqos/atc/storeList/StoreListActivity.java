@@ -16,10 +16,17 @@ import android.widget.TextView;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.data.response.ProductFavoriteEntity;
+import com.enqos.atc.data.response.StoreEntity;
+import com.enqos.atc.data.response.StoreFavoriteEntity;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.home.HomeActivity;
+import com.enqos.atc.listener.FavoriteListener;
+import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.myaccount.MyAccountActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends BaseActivity {
+public class StoreListActivity extends BaseActivity implements FavoriteListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -140,4 +147,8 @@ public class StoreListActivity extends BaseActivity {
     }
 
 
+    @Override
+    public List<StoreEntity> getFavoriteStores() {
+        return storeListPresenter.getFavoriteStores();
+    }
 }
