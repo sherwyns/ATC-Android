@@ -10,6 +10,7 @@ import com.enqos.atc.myaccount.MyAccountActivity;
 import com.enqos.atc.myaccount.MyAccountPresenter;
 import com.enqos.atc.register.RegisterActivity;
 import com.enqos.atc.register.RegisterPresenter;
+import com.enqos.atc.storeList.FavouriteFragment;
 import com.enqos.atc.storeList.SearchFragment;
 import com.enqos.atc.storeList.ShopListFragment;
 import com.enqos.atc.storeList.StoreListActivity;
@@ -50,4 +51,6 @@ public interface AppComponent {
     void inject(SearchFragment searchFragment);
 
     void inject(ShopListFragment shopListFragment);
+
+    void inject(FavouriteFragment favouriteFragment);
 }

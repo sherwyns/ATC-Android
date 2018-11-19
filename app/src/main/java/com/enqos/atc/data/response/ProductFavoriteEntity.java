@@ -6,7 +6,7 @@ public class ProductFavoriteEntity {
 
     public ProductFavoriteEntity(String productid, String isfavorite) {
         this.productid = productid;
-        this.isfavorite = isfavorite;
+            this.isfavorite = isfavorite;
     }
 
 

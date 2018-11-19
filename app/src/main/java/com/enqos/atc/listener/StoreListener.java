@@ -8,4 +8,6 @@ public interface StoreListener {
     void onSaveStoreFavorite(StoreFavoriteEntity storeFavoriteEntity);
 
     void onSaveProductFavorite(ProductFavoriteEntity productFavoriteEntity);
+
+    void onRemoveFav(int index);
 }

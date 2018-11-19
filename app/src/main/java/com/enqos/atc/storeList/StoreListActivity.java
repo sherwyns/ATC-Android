@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.home.HomeActivity;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreListener;
+import com.enqos.atc.login.LoginActivity;
 import com.enqos.atc.myaccount.MyAccountActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
@@ -52,7 +54,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
     StoreListPresenter storeListPresenter;
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
-
+    private boolean isLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
         initToolbar();
+        isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
 
     }
@@ -97,17 +100,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
 
     }
 
-    private void menuSelection(int id) {
-        switch (id) {
-            case R.id.img_fav:
-                break;
-            case R.id.img_search:
-                break;
-            case R.id.img_home:
-                break;
-        }
-    }
-
     @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.img_fav, R.id.img_search, R.id.img_home})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -117,22 +109,20 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
             case R.id.image_right:
                 break;
             case R.id.img_fav:
-                title.setText(R.string.favourites);
-                replaceFragment(R.id.content_frame, FavouriteFragment.newInstance(), false);
+                if (!isLogin) {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                } else
+                    onMenuClick(view, getString(R.string.favourites));
                 break;
             case R.id.img_home:
-                if (!title.getText().toString().equals(getString(R.string.store))) {
-                    title.setText(R.string.store);
-                    replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
-                }
+                onMenuClick(view, getString(R.string.store));
                 break;
             case R.id.img_search:
-                title.setText(R.string.search);
-                replaceFragment(R.id.content_frame, SearchFragment.newInstance(), false);
+                onMenuClick(view, getString(R.string.search));
                 break;
             case R.id.menu_my_account:
                 drawerLayout.closeDrawer(GravityCompat.START);
-                boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
                 if (isLogin) {
                     Intent intent = new Intent(this, MyAccountActivity.class);
                     startActivity(intent);
@@ -146,9 +136,27 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
         }
     }
 
+    private void onMenuClick(View view, String titleStr) {
+        if (!title.getText().toString().equals(titleStr)) {
+            view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.image_click));
+            title.setText(titleStr);
+
+            switch (view.getId()) {
+                case R.id.img_home:
+                    replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
+                    break;
+                case R.id.img_search:
+                    replaceFragment(R.id.content_frame, SearchFragment.newInstance(), false);
+                    break;
+                case R.id.img_fav:
+                    replaceFragment(R.id.content_frame, FavouriteFragment.newInstance(), false);
+                    break;
+            }
+        }
+    }
 
     @Override
     public List<StoreEntity> getFavoriteStores() {
-        return storeListPresenter.getFavoriteStores();
+        return null;
     }
 }

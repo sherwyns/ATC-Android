@@ -63,17 +63,21 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
     public void onSuccess(BaseResponse response) {
         if (response instanceof StoreResponse) {
             storeResponse = (StoreResponse) response;
-            storeListView.storeResponse(storeResponse);
             String id = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
-            createApiRequest.createFavoriteRequest("{\"where\":{\"user_id\":" + id + "}}");
+            boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+            if (isLogin)
+                createApiRequest.createFavoriteRequest("{\"where\":{\"user_id\":" + id + "}}");
         } else {
             favoriteResponse = (FavoriteResponse) response;
         }
-        if (favoriteResponse != null && favoriteResponse.getStore() != null && storeResponse != null && storeResponse.getData() != null)
-            getFavoriteStores();
+        if (favoriteResponse != null && favoriteResponse.getStore() != null && storeResponse != null && storeResponse.getData() != null) {
+            sharedPreferenceManager.saveFavourites(getFavoriteStores());
+            storeListView.storeResponse(storeResponse);
+        } else
+            storeListView.storeResponse(storeResponse);
     }
 
-    public List<StoreEntity> getFavoriteStores() {
+    List<StoreEntity> getFavoriteStores() {
         List<StoreEntity> allStoreFavorites = new ArrayList<>();
         for (StoreFavoriteEntity favStore :
                 favoriteResponse.getStore()) {
@@ -85,8 +89,6 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
                 }
             }
         }
-
-
         return allStoreFavorites;
 
 

@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentBottom="true"
-            android:background="@android:color/white"
+            android:background="@drawable/shadow"
             android:paddingTop="@dimen/dimen_20dp" />
 
         <LinearLayout

@@ -11,25 +11,24 @@
         android:background="@android:color/white"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/dimen_10dp"
-        android:paddingEnd="@dimen/dimen_20dp"
         android:paddingStart="@dimen/dimen_20dp"
-        android:paddingTop="@dimen/dimen_10dp">
+        android:paddingTop="@dimen/dimen_10dp"
+        android:paddingEnd="@dimen/dimen_20dp"
+        android:paddingBottom="@dimen/dimen_10dp">
 
         <TextView
             android:id="@+id/tv_product"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient_blue"
             android:elevation="5dp"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:paddingBottom="3dp"
-            android:paddingEnd="@dimen/dimen_15dp"
             android:paddingStart="@dimen/dimen_15dp"
             android:paddingTop="3dp"
+            android:paddingEnd="@dimen/dimen_15dp"
+            android:paddingBottom="3dp"
             android:text="@string/product"
-            android:textColor="@android:color/white"
+            android:textColor="#787878"
             android:textSize="@dimen/font_12" />
 
         <TextView
@@ -37,15 +36,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_20dp"
+            android:background="@drawable/gradient_blue"
             android:elevation="2dp"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:paddingBottom="3dp"
-            android:paddingEnd="@dimen/dimen_15dp"
             android:paddingStart="@dimen/dimen_15dp"
             android:paddingTop="3dp"
+            android:paddingEnd="@dimen/dimen_15dp"
+            android:paddingBottom="3dp"
             android:text="@string/store"
-            android:textColor="#787878"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/font_12" />
     </LinearLayout>
 

@@ -104,4 +104,9 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     public void onSaveProductFavorite(ProductFavoriteEntity productFavoriteEntity) {
 
     }
+
+    @Override
+    public void onRemoveFav(int index) {
+
+    }
 }
