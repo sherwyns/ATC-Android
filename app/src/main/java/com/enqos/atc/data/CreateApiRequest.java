@@ -3,6 +3,7 @@ package com.enqos.atc.data;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
+import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.StoreFavoriteEntity;
@@ -48,7 +49,10 @@ public class CreateApiRequest {
         SaveFavoriteRequest saveFavoriteRequest = new SaveFavoriteRequest(userId, store, product);
         dataRepository.saveFavorite(networkApiResponse, saveFavoriteRequest);
     }
-
+    public void createUpdateFavoriteRequest(String userId, List<StoreFavoriteEntity> store, List<ProductFavoriteEntity> product) {
+        UpdateFavoriteRequest saveFavoriteRequest = new UpdateFavoriteRequest(store, product);
+        dataRepository.updateFavorite(networkApiResponse, userId,saveFavoriteRequest);
+    }
     public void createFavoriteRequest(String id) {
         dataRepository.getFavorites(networkApiResponse, id);
     }

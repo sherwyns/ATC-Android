@@ -3,10 +3,12 @@ package com.enqos.atc.data.remote;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
+import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.RegisterResponse;
 import com.enqos.atc.data.response.StoreResponse;
+import com.enqos.atc.data.response.UpdateFavoriteResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -37,4 +39,8 @@ public interface WebServiceApi {
 
     @POST("api/favorites")
     Observable<FavoriteResponse> saveFavorite(@Body SaveFavoriteRequest saveFavorite);
+
+    @POST("api/favorites/update?")
+    Observable<UpdateFavoriteResponse> updateFavorite(@Query("where[user_id]") String id, @Body UpdateFavoriteRequest saveFavorite);
+
 }

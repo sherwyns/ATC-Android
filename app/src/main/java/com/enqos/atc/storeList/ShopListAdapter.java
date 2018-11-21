@@ -79,21 +79,24 @@ public class ShopListAdapter extends BaseAdapter {
             view1.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
             boolean isFav = data.get(i).isFavourite();
             if (isFav) {
-
                 if (storeListener instanceof FavouriteFragment)
                     storeListener.onRemoveFav(i);
-                else
-                    storeListener.onSaveStoreFavorite(new StoreFavoriteEntity(data.get(i).getId(), "0"));
+                else {
+                    storeListener.onSaveStoreFavorite(data.get(i), false, i);
+                    if (!data.isEmpty())
+                        data.get(i).setFavourite(!isFav);
+                }
             } else {
-                storeListener.onSaveStoreFavorite(new StoreFavoriteEntity(data.get(i).getId(), "1"));
+                storeListener.onSaveStoreFavorite(data.get(i), true, i);
+                if (!data.isEmpty())
+                    data.get(i).setFavourite(!isFav);
             }
-            if (!data.isEmpty())
-                data.get(i).setFavourite(!isFav);
-            notifyDataSetChanged();
+
+
 
         });
-        Glide.with(viewGroup.getContext()).load("http://www.morestore.com/images/Website/inner-banner/store-experience.jpg")
-                .apply(new RequestOptions().override(250, 150)
+        Glide.with(viewGroup.getContext()).load(data.get(i).getImage())
+                .apply(new RequestOptions().override(250, 180)
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .centerCrop())

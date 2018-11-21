@@ -81,9 +81,10 @@ public class FavouriteFragment extends Fragment implements StoreListener {
     }
 
     @Override
-    public void onSaveStoreFavorite(StoreFavoriteEntity storeFavoriteEntity) {
+    public void onSaveStoreFavorite(StoreEntity storeFavoriteEntity, boolean isFav, int pos) {
         String id = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
-        presenter.saveFavorite(id, storeFavoriteEntity);
+
+        //presenter.saveFavorite(id, storeFavoriteEntity);
     }
 
     @Override
@@ -93,9 +94,10 @@ public class FavouriteFragment extends Fragment implements StoreListener {
 
     @Override
     public void onRemoveFav(int index) {
-
         if (favourites != null) {
             favourites.remove(index);
+            sharedPreferenceManager.saveFavourites(favourites);
+            adapter.notifyDataSetChanged();
         }
     }
 }

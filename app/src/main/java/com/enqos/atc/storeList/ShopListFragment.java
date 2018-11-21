@@ -13,11 +13,15 @@ import android.widget.GridView;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
+import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreFavoriteEntity;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.login.LoginActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -36,6 +40,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     private Unbinder unbinder;
+    private ShopListAdapter shopListAdapter;
 
     public ShopListFragment() {
         AtcApplication.getAppComponents().inject(this);
@@ -83,7 +88,17 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void storeResponse(StoreResponse storeResponse) {
-        ShopListAdapter shopListAdapter = new ShopListAdapter(getActivity(), storeResponse.getData());
+        List<StoreEntity> favs = sharedPreferenceManager.getFavorites();
+        if (favs != null) {
+            for (StoreEntity store :
+                    storeResponse.getData()) {
+                for (StoreEntity fav : favs) {
+                    if (store.getId().equals(fav.getId()))
+                        store.setFavourite(true);
+                }
+            }
+        }
+        shopListAdapter = new ShopListAdapter(getActivity(), storeResponse.getData());
         shopListAdapter.setListener(this);
         gridView.setAdapter(shopListAdapter);
     }
@@ -95,9 +110,47 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     }
 
     @Override
-    public void onSaveStoreFavorite(StoreFavoriteEntity storeFavoriteEntity) {
-        String id = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
-        storeListPresenter.saveFavorite(id, storeFavoriteEntity);
+    public void onSaveStoreFavorite(StoreEntity storeEntity, boolean isFav, int pos) {
+        boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+        if (isLogin) {
+            StoreEntity removeEnity = null;
+            String id = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
+            List<StoreEntity> fav = sharedPreferenceManager.getFavorites();
+            if (fav != null) {
+
+                if (isFav) {
+                    storeEntity.setFavourite(true);
+                    fav.add(storeEntity);
+                } else {
+
+                    for (StoreEntity store :
+                            fav) {
+                        if (storeEntity.getId().equals(store.getId())) {
+                            store.setFavourite(false);
+                            removeEnity = store;
+                        } else {
+                            store.setFavourite(true);
+                        }
+                    }
+                }
+                if (removeEnity != null)
+                    fav.remove(removeEnity);
+                sharedPreferenceManager.saveFavourites(fav);
+            } else {
+                List<StoreEntity> favorite = new ArrayList<>();
+                storeEntity.setFavourite(true);
+                favorite.add(storeEntity);
+                sharedPreferenceManager.saveFavourites(favorite);
+            }
+            shopListAdapter.notifyDataSetChanged();
+        } else {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+        /*List<StoreEntity> fav = sharedPreferenceManager.getFavorites();
+       if (fav != null && !fav.isEmpty())
+            storeListPresenter.updateFav(id, storeFavoriteEntity);
+        else
+            storeListPresenter.saveFavorite(id, storeFavoriteEntity);*/
     }
 
     @Override

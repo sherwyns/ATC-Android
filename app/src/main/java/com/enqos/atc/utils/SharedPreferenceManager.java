@@ -66,7 +66,6 @@ public class SharedPreferenceManager {
     }
 
     public List<StoreEntity>  getFavorites() {
-
         return gson.fromJson((String) getPreferenceValue(STRING, FAVOURITES), new TypeToken<List<StoreEntity>>() {
         }.getType());
     }
