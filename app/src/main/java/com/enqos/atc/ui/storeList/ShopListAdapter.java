@@ -1,4 +1,4 @@
-package com.enqos.atc.storeList;
+package com.enqos.atc.ui.storeList;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.data.response.StoreEntity;
-import com.enqos.atc.data.response.StoreFavoriteEntity;
 import com.enqos.atc.listener.StoreListener;
 
 import java.util.List;
@@ -95,6 +94,8 @@ public class ShopListAdapter extends BaseAdapter {
 
 
         });
+
+
         Glide.with(viewGroup.getContext()).load(data.get(i).getImage())
                 .apply(new RequestOptions().override(250, 180)
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)

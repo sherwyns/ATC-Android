@@ -1,4 +1,4 @@
-package com.enqos.atc.myaccount;
+package com.enqos.atc.ui.myaccount;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
-import com.enqos.atc.home.HomeActivity;
+import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import javax.inject.Inject;

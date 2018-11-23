@@ -1,4 +1,4 @@
-package com.enqos.atc.home;
+package com.enqos.atc.ui.home;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.enqos.atc.R;
-import com.enqos.atc.login.LoginActivity;
-import com.enqos.atc.register.RegisterActivity;
-import com.enqos.atc.storeList.StoreListActivity;
+import com.enqos.atc.ui.login.LoginActivity;
+import com.enqos.atc.ui.register.RegisterActivity;
+import com.enqos.atc.ui.storeList.StoreListActivity;
 
 public class HomeActivity extends AppCompatActivity {
 

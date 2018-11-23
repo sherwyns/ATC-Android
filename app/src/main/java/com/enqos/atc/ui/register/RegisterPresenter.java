@@ -1,4 +1,4 @@
-package com.enqos.atc.register;
+package com.enqos.atc.ui.register;
 
 import android.text.TextUtils;
 import android.util.Log;

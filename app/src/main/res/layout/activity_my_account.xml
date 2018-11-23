@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#F2F2F2"
     android:orientation="vertical"
-    tools:context=".myaccount.MyAccountActivity">
+    tools:context=".ui.myaccount.MyAccountActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

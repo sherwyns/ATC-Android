@@ -1,4 +1,4 @@
-package com.enqos.atc.login;
+package com.enqos.atc.ui.login;
 
 import com.enqos.atc.data.response.LoginResponse;
 

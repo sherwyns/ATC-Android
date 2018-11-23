@@ -1,4 +1,4 @@
-package com.enqos.atc.myaccount;
+package com.enqos.atc.ui.myaccount;
 
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;

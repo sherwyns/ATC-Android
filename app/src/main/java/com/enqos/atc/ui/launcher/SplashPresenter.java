@@ -1,4 +1,4 @@
-package com.enqos.atc.launcher;
+package com.enqos.atc.ui.launcher;
 
 
 import com.enqos.atc.base.AtcApplication;

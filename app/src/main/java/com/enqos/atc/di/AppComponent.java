@@ -2,19 +2,19 @@ package com.enqos.atc.di;
 
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.DataRepository;
-import com.enqos.atc.launcher.SplashActivity;
-import com.enqos.atc.launcher.SplashPresenter;
-import com.enqos.atc.login.LoginActivity;
-import com.enqos.atc.login.LoginPresenter;
-import com.enqos.atc.myaccount.MyAccountActivity;
-import com.enqos.atc.myaccount.MyAccountPresenter;
-import com.enqos.atc.register.RegisterActivity;
-import com.enqos.atc.register.RegisterPresenter;
-import com.enqos.atc.storeList.FavouriteFragment;
-import com.enqos.atc.storeList.SearchFragment;
-import com.enqos.atc.storeList.ShopListFragment;
-import com.enqos.atc.storeList.StoreListActivity;
-import com.enqos.atc.storeList.StoreListPresenter;
+import com.enqos.atc.ui.launcher.SplashActivity;
+import com.enqos.atc.ui.launcher.SplashPresenter;
+import com.enqos.atc.ui.login.LoginActivity;
+import com.enqos.atc.ui.login.LoginPresenter;
+import com.enqos.atc.ui.myaccount.MyAccountActivity;
+import com.enqos.atc.ui.myaccount.MyAccountPresenter;
+import com.enqos.atc.ui.register.RegisterActivity;
+import com.enqos.atc.ui.register.RegisterPresenter;
+import com.enqos.atc.ui.storeList.FavouriteFragment;
+import com.enqos.atc.ui.storeList.SearchFragment;
+import com.enqos.atc.ui.storeList.ShopListFragment;
+import com.enqos.atc.ui.storeList.StoreListActivity;
+import com.enqos.atc.ui.storeList.StoreListPresenter;
 
 import javax.inject.Singleton;
 

@@ -3,8 +3,8 @@ package com.enqos.atc.utils;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.enqos.atc.login.LoginView;
-import com.enqos.atc.register.RegisterView;
+import com.enqos.atc.ui.login.LoginView;
+import com.enqos.atc.ui.register.RegisterView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 

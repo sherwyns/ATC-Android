@@ -38,6 +38,8 @@
     <string name="favourites">Favourites</string>
     <string name="search_by_product_store">Search by product, store</string>
     <string name="search">Search</string>
+    <string name="about">About</string>
+    <string name="view_products">View products</string>
 
 
 </resources>

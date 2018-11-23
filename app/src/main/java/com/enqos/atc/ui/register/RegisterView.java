@@ -1,4 +1,4 @@
-package com.enqos.atc.register;
+package com.enqos.atc.ui.register;
 
 import com.enqos.atc.data.response.RegisterResponse;
 

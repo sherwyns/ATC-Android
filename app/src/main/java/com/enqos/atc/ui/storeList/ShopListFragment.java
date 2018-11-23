@@ -1,4 +1,4 @@
-package com.enqos.atc.storeList;
+package com.enqos.atc.ui.storeList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,16 +8,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
-import com.enqos.atc.data.response.StoreFavoriteEntity;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreListener;
-import com.enqos.atc.login.LoginActivity;
+import com.enqos.atc.ui.login.LoginActivity;
+import com.enqos.atc.ui.shopdetail.ShopDetailActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ShopListFragment extends Fragment implements StoreListView, StoreListener {
+public class ShopListFragment extends Fragment implements StoreListView, StoreListener, AdapterView.OnItemClickListener {
 
 
     @BindView(R.id.gridview)
@@ -58,7 +59,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         View rootView = inflater.inflate(R.layout.fragment_shope_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         storeListPresenter.getStore(this);
-
+        gridView.setOnItemClickListener(this);
         return rootView;
     }
 
@@ -122,7 +123,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                     storeEntity.setFavourite(true);
                     fav.add(storeEntity);
                 } else {
-
                     for (StoreEntity store :
                             fav) {
                         if (storeEntity.getId().equals(store.getId())) {
@@ -146,11 +146,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         } else {
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
-        /*List<StoreEntity> fav = sharedPreferenceManager.getFavorites();
-       if (fav != null && !fav.isEmpty())
-            storeListPresenter.updateFav(id, storeFavoriteEntity);
-        else
-            storeListPresenter.saveFavorite(id, storeFavoriteEntity);*/
     }
 
     @Override
@@ -161,5 +156,10 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     @Override
     public void onRemoveFav(int index) {
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        startActivity(new Intent(getActivity(), ShopDetailActivity.class));
     }
 }

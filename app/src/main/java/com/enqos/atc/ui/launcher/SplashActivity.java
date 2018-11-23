@@ -1,19 +1,16 @@
-package com.enqos.atc.launcher;
+package com.enqos.atc.ui.launcher;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
-import com.enqos.atc.home.HomeActivity;
-import com.enqos.atc.storeList.StoreListActivity;
+import com.enqos.atc.ui.home.HomeActivity;
+import com.enqos.atc.ui.storeList.StoreListActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import javax.inject.Inject;

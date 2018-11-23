@@ -1,4 +1,4 @@
-package com.enqos.atc.storeList;
+package com.enqos.atc.ui.storeList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,15 +17,11 @@ import android.widget.TextView;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
-import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
-import com.enqos.atc.data.response.StoreFavoriteEntity;
-import com.enqos.atc.data.response.StoreResponse;
-import com.enqos.atc.home.HomeActivity;
+import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.listener.FavoriteListener;
-import com.enqos.atc.listener.StoreListener;
-import com.enqos.atc.login.LoginActivity;
-import com.enqos.atc.myaccount.MyAccountActivity;
+import com.enqos.atc.ui.login.LoginActivity;
+import com.enqos.atc.ui.myaccount.MyAccountActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.List;

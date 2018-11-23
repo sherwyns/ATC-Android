@@ -1,4 +1,4 @@
-package com.enqos.atc.login;
+package com.enqos.atc.ui.login;
 
 import android.text.TextUtils;
 import android.util.Log;

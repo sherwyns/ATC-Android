@@ -1,4 +1,4 @@
-package com.enqos.atc.storeList;
+package com.enqos.atc.ui.storeList;
 
 import android.content.Context;
 import android.os.Bundle;

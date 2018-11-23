@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".launcher.SplashActivity"
+            android:name=".ui.launcher.SplashActivity"
             android:theme="@style/AppThemeBlue">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,17 +24,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".storeList.StoreListActivity"
+            android:name=".ui.storeList.StoreListActivity"
             android:label="@string/title_activity_store_list" />
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:theme="@style/AppThemeBlue"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".ui.home.HomeActivity"
             android:theme="@style/AppThemeBlue" />
         <activity
-            android:name=".register.RegisterActivity"
+            android:name=".ui.register.RegisterActivity"
             android:theme="@style/AppThemeBlue"
             android:windowSoftInputMode="stateHidden" />
 
@@ -47,7 +47,8 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-        <activity android:name=".myaccount.MyAccountActivity"></activity>
+        <activity android:name=".ui.myaccount.MyAccountActivity" />
+        <activity android:name=".ui.shopdetail.ShopDetailActivity"></activity>
     </application>
 
 </manifest>
