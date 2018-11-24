@@ -27,6 +27,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="facebook_app_id">1130175903799419</string>
     <string name="fb_login_protocol_scheme">fb1130175903799419</string>
+    <string name="google_map_key">AIzaSyA-71QGb4Gm46d9_FpcVJ0-sG0safakjJo</string>
     <string name="signed_in_as">Signed in as</string>
     <string name="change_password">Change Password</string>
     <string name="current_password">Current Password</string>

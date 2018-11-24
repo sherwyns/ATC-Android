@@ -181,11 +181,12 @@
         android:layout_marginTop="@dimen/dimen_30dp"
         android:layout_marginEnd="@dimen/dimen_10dp">
 
-        <FrameLayout
+        <fragment
             android:id="@+id/map_fragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_140dp"
-            android:background="@android:color/darker_gray" />
+            tools:context=".MapsActivity" />
 
         <TextView
             android:id="@+id/tv_view_products"

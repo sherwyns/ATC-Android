@@ -14,6 +14,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.listener.StoreActivityListener;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.Objects;
 
@@ -26,12 +29,14 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShopDetailFragment extends Fragment {
+public class ShopDetailFragment extends Fragment implements OnMapReadyCallback {
 
     private Unbinder unbinder;
     private StoreActivityListener listener;
     @BindView(R.id.iv_shop_image)
     ImageView shopImg;
+    private GoogleMap googleMap;
+
 
     @Inject
     public ShopDetailFragment() {
@@ -71,6 +76,10 @@ public class ShopDetailFragment extends Fragment {
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .centerCrop())
                 .into(shopImg);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map_fragment);
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
         return rootView;
     }
 
@@ -78,5 +87,10 @@ public class ShopDetailFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 }
