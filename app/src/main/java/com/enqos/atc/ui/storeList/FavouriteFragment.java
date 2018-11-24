@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.enqos.atc.R;
@@ -17,7 +18,9 @@ import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreFavoriteEntity;
 import com.enqos.atc.listener.FavoriteListener;
+import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
+import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.List;
@@ -28,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class FavouriteFragment extends Fragment implements StoreListener {
+public class FavouriteFragment extends Fragment implements StoreListener, AdapterView.OnItemClickListener {
 
     @BindView(R.id.gridview)
     GridView gridView;
@@ -39,6 +42,7 @@ public class FavouriteFragment extends Fragment implements StoreListener {
     @Inject
     StoreListPresenter presenter;
     private List<StoreEntity> favourites;
+    private StoreActivityListener listener;
 
     public FavouriteFragment() {
         AtcApplication.getAppComponents().inject(this);
@@ -55,6 +59,7 @@ public class FavouriteFragment extends Fragment implements StoreListener {
         View rootView = inflater.inflate(R.layout.fragment_favourite_layout, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         favourites = sharedPreferenceManager.getFavorites();
+        gridView.setOnItemClickListener(this);
         if (favourites != null) {
             adapter = new ShopListAdapter(getActivity(), favourites);
             gridView.setAdapter(adapter);
@@ -67,6 +72,14 @@ public class FavouriteFragment extends Fragment implements StoreListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        listener = (StoreActivityListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (listener != null)
+            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.favourites), R.drawable.ic_filter_outline);
     }
 
     @Override
@@ -99,5 +112,12 @@ public class FavouriteFragment extends Fragment implements StoreListener {
             sharedPreferenceManager.saveFavourites(favourites);
             adapter.notifyDataSetChanged();
         }
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (listener != null)
+            listener.replaceFragment(ShopDetailFragment.newInstance());
     }
 }

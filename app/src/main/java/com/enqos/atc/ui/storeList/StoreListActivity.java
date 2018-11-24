@@ -18,6 +18,7 @@ import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.data.response.StoreEntity;
+import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.ui.login.LoginActivity;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends BaseActivity implements FavoriteListener {
+public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -46,6 +47,10 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
     ImageView menuHome;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.image_left)
+    ImageView leftImg;
+    @BindView(R.id.image_right)
+    ImageView rightImg;
     @Inject
     StoreListPresenter storeListPresenter;
     @Inject
@@ -82,9 +87,10 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
     public void replaceFragment(int id, Fragment fragment, boolean isAnim) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (isAnim)
-            fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+        /*if (isAnim)
+            fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);*/
         fragmentTransaction.replace(id, fragment);
+        fragmentTransaction.addToBackStack(fragment.getClass().getName());
         fragmentTransaction.commit();
     }
 
@@ -96,11 +102,19 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.img_fav, R.id.img_search, R.id.img_home})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
-                drawerLayout.openDrawer(GravityCompat.START);
+                if (title.getText().toString().equals(getString(R.string.store)) || title.getText().toString().equals(getString(R.string.favourites)) || title.getText().toString().equals(getString(R.string.search)))
+                    drawerLayout.openDrawer(GravityCompat.START);
+                else
+                    onBackPressed();
                 break;
             case R.id.image_right:
                 break;
@@ -154,5 +168,27 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener 
     @Override
     public List<StoreEntity> getFavoriteStores() {
         return null;
+    }
+
+    @Override
+    public void replaceFragment(Fragment fragment) {
+        replaceFragment(R.id.content_frame, fragment, false);
+    }
+
+    @Override
+    public void changeHeader(int leftResId, String text, int rightResId) {
+        leftImg.setImageResource(leftResId);
+        title.setText(text);
+        rightImg.setImageResource(rightResId);
+    }
+
+    @Override
+    public void clickLeft() {
+
+    }
+
+    @Override
+    public void clickRight() {
+
     }
 }

@@ -12,6 +12,7 @@ import android.widget.GridView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.listener.StoreActivityListener;
 
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public class SearchFragment extends Fragment {
     GridView gridView;
 
     private Unbinder unbinder;
+    private StoreActivityListener listener;
 
     @Inject
     public SearchFragment() {
@@ -58,7 +60,16 @@ public class SearchFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        listener = (StoreActivityListener) context;
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (listener != null)
+            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline);
     }
 
     @Override

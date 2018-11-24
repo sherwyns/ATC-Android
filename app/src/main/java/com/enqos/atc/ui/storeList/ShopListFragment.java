@@ -16,13 +16,15 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreResponse;
+import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.ui.login.LoginActivity;
-import com.enqos.atc.ui.shopdetail.ShopDetailActivity;
+import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -42,6 +44,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     SharedPreferenceManager sharedPreferenceManager;
     private Unbinder unbinder;
     private ShopListAdapter shopListAdapter;
+    private StoreActivityListener listener;
 
     public ShopListFragment() {
         AtcApplication.getAppComponents().inject(this);
@@ -67,7 +70,16 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        listener = (StoreActivityListener) context;
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (listener != null)
+            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store), R.drawable.ic_filter_outline);
     }
 
     @Override
@@ -160,6 +172,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        startActivity(new Intent(getActivity(), ShopDetailActivity.class));
+        if (listener != null)
+            listener.replaceFragment(ShopDetailFragment.newInstance());
     }
 }

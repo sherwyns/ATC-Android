@@ -11,4 +11,6 @@ public interface StoreListener {
     void onSaveProductFavorite(ProductFavoriteEntity productFavoriteEntity);
 
     void onRemoveFav(int index);
+
+
 }

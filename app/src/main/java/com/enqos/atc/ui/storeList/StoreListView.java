@@ -9,4 +9,5 @@ public interface StoreListView {
     void storeResponse(StoreResponse storeResponse);
 
     void navigateLogin();
+
 }
