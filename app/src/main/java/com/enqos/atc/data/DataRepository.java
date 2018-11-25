@@ -14,6 +14,8 @@ import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.StoreDetailResponse;
+import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.data.response.UpdateFavoriteResponse;
 import com.enqos.atc.utils.Constants;
@@ -184,9 +186,9 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    void updateFavorite(NetworkApiResponse networkApiResponse,String id, UpdateFavoriteRequest favoriteRequest) {
+    void updateFavorite(NetworkApiResponse networkApiResponse, String id, UpdateFavoriteRequest favoriteRequest) {
 
-        Observable<UpdateFavoriteResponse> storeResponse = retrofit.create(WebServiceApi.class).updateFavorite(id,favoriteRequest);
+        Observable<UpdateFavoriteResponse> storeResponse = retrofit.create(WebServiceApi.class).updateFavorite(id, favoriteRequest);
 
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
@@ -213,6 +215,50 @@ public class DataRepository extends BasePresenter {
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
                 .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), FavoriteResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void getStoreDetail(NetworkApiResponse networkApiResponse, String id) {
+
+        Observable<StoreDetailResponse> storeDetailResponse = retrofit.create(WebServiceApi.class).storeDetail(id);
+
+        storeDetailResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StoreDetailResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void getStorePage(NetworkApiResponse networkApiResponse, String id) {
+
+        Observable<StorePageResponse> storeDetailResponse = retrofit.create(WebServiceApi.class).storePage(id);
+
+        storeDetailResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StorePageResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
                         if (response.getError() != null) {

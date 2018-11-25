@@ -6,6 +6,24 @@ import java.util.List;
 
 public class StoreEntity {
 
+    @SerializedName("tagline")
+    private String tagline;
+    @SerializedName("user_id")
+    private String user_id;
+    @SerializedName("workinghours")
+    private String workinghours;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("contact")
+    private String contact;
+    @SerializedName("address")
+    private String address;
+    @SerializedName("city")
+    private String city;
+    @SerializedName("state")
+    private String state;
+    @SerializedName("zipcode")
+    private String zipcode;
     @SerializedName("id")
     private String id;
     @SerializedName("shop_name")
@@ -95,5 +113,77 @@ public class StoreEntity {
 
     public void setCategory(List<CategoryEntity> category) {
         this.category = category;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getWorkinghours() {
+        return workinghours;
+    }
+
+    public void setWorkinghours(String workinghours) {
+        this.workinghours = workinghours;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 }

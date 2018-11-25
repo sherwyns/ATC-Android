@@ -49,12 +49,21 @@ public class CreateApiRequest {
         SaveFavoriteRequest saveFavoriteRequest = new SaveFavoriteRequest(userId, store, product);
         dataRepository.saveFavorite(networkApiResponse, saveFavoriteRequest);
     }
+
     public void createUpdateFavoriteRequest(String userId, List<StoreFavoriteEntity> store, List<ProductFavoriteEntity> product) {
         UpdateFavoriteRequest saveFavoriteRequest = new UpdateFavoriteRequest(store, product);
-        dataRepository.updateFavorite(networkApiResponse, userId,saveFavoriteRequest);
+        dataRepository.updateFavorite(networkApiResponse, userId, saveFavoriteRequest);
     }
+
     public void createFavoriteRequest(String id) {
         dataRepository.getFavorites(networkApiResponse, id);
     }
 
+    public void createStoreDetailRequest(String id) {
+        dataRepository.getStoreDetail(networkApiResponse, id);
+    }
+
+    public void createStorePageRequest(String id) {
+        dataRepository.getStorePage(networkApiResponse, id);
+    }
 }

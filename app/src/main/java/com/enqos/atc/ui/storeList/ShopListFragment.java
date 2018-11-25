@@ -20,11 +20,11 @@ import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
+import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -45,6 +45,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     private Unbinder unbinder;
     private ShopListAdapter shopListAdapter;
     private StoreActivityListener listener;
+    private List<StoreEntity> allStores;
 
     public ShopListFragment() {
         AtcApplication.getAppComponents().inject(this);
@@ -111,6 +112,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 }
             }
         }
+        this.allStores = storeResponse.getData();
         shopListAdapter = new ShopListAdapter(getActivity(), storeResponse.getData());
         shopListAdapter.setListener(this);
         gridView.setAdapter(shopListAdapter);
@@ -173,6 +175,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (listener != null)
-            listener.replaceFragment(ShopDetailFragment.newInstance());
+            listener.replaceFragment(StorePageFragment.newInstance(allStores.get(i).getId()));
     }
 }

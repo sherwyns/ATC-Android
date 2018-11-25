@@ -21,6 +21,7 @@ import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
+import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.List;
@@ -118,6 +119,6 @@ public class FavouriteFragment extends Fragment implements StoreListener, Adapte
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (listener != null)
-            listener.replaceFragment(ShopDetailFragment.newInstance());
+            listener.replaceFragment(StorePageFragment.newInstance(favourites.get(i).getId()));
     }
 }

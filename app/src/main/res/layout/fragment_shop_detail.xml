@@ -6,9 +6,35 @@
     tools:context=".ui.shopdetail.ShopDetailFragment">
 
     <ScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <include layout="@layout/shop_detail_content" />
+
+        <include layout="@layout/shop_detail_content" />
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/error_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_warning_black_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_5dp"
+            android:fontFamily="sans-serif"
+            android:text="@string/no_connection_try_again"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/font_18" />
+    </LinearLayout>
 
 </FrameLayout>

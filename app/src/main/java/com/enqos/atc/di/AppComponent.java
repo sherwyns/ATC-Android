@@ -11,6 +11,9 @@ import com.enqos.atc.ui.myaccount.MyAccountPresenter;
 import com.enqos.atc.ui.register.RegisterActivity;
 import com.enqos.atc.ui.register.RegisterPresenter;
 import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
+import com.enqos.atc.ui.shopdetail.ShopDetailPresenter;
+import com.enqos.atc.ui.shoppage.ShopPagePresenter;
+import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.enqos.atc.ui.storeList.FavouriteFragment;
 import com.enqos.atc.ui.storeList.SearchFragment;
 import com.enqos.atc.ui.storeList.ShopListFragment;
@@ -56,4 +59,10 @@ public interface AppComponent {
     void inject(FavouriteFragment favouriteFragment);
 
     void inject(ShopDetailFragment shopDetailFragment);
+
+    void inject(ShopDetailPresenter shopDetailPresenter);
+
+    void inject(ShopPagePresenter shopPagePresenter);
+
+    void inject(StorePageFragment storePageFragment);
 }

@@ -41,6 +41,8 @@
     <string name="search">Search</string>
     <string name="about">About</string>
     <string name="view_products">View products</string>
+    <string name="no_connection_try_again">No connection. Try again!</string>
+    <string name="products_category">Products Category</string>
 
 
 </resources>
