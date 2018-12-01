@@ -19,7 +19,6 @@ import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.ui.login.LoginActivity;
-import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
@@ -113,7 +112,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
             }
         }
         this.allStores = storeResponse.getData();
-        shopListAdapter = new ShopListAdapter(getActivity(), storeResponse.getData());
+        shopListAdapter = new ShopListAdapter(getActivity(), allStores);
         shopListAdapter.setListener(this);
         gridView.setAdapter(shopListAdapter);
     }
@@ -174,7 +173,10 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        if (listener != null)
-            listener.replaceFragment(StorePageFragment.newInstance(allStores.get(i).getId()));
+        if (listener != null) {
+
+            listener.replaceFragment(StorePageFragment.newInstance(allStores.get(i).getId(),
+                    allStores.get(0).getShop_name(), allStores.get(0).getNeighbourhood(), allStores.get(0).isFavourite()));
+        }
     }
 }

@@ -44,6 +44,7 @@
     <string name="no_connection_try_again">No connection. Try again!</string>
     <string name="products_category">Products Category</string>
     <string name="similar_products">Similar Products</string>
+    <string name="something_went_wrong_try_again">Something went wrong. Try again!</string>
 
 
 </resources>

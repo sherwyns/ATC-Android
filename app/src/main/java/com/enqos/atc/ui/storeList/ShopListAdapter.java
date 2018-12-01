@@ -83,14 +83,13 @@ public class ShopListAdapter extends BaseAdapter {
                 else {
                     storeListener.onSaveStoreFavorite(data.get(i), false, i);
                     if (!data.isEmpty())
-                        data.get(i).setFavourite(!isFav);
+                        data.get(i).setFavourite(false);
                 }
             } else {
                 storeListener.onSaveStoreFavorite(data.get(i), true, i);
                 if (!data.isEmpty())
-                    data.get(i).setFavourite(!isFav);
+                    data.get(i).setFavourite(true);
             }
-
 
 
         });

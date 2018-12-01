@@ -57,6 +57,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -5,7 +5,13 @@ import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.CreateApiRequest;
 import com.enqos.atc.data.response.BaseResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
+import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.StorePageResponse;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -13,6 +19,8 @@ public class ShopPagePresenter extends BasePresenter implements NetworkApiRespon
 
     private CreateApiRequest createApiRequest;
     private ShopPageView shopPageView;
+    public Map<String, List<ProductEntity>> groupProducts;
+    public List<String> categories;
 
 
     @Inject
@@ -20,7 +28,7 @@ public class ShopPagePresenter extends BasePresenter implements NetworkApiRespon
         AtcApplication.getAppComponents().inject(this);
     }
 
-    public void callShopPageDetailApi(ShopPageView shopPageView, String storeId) {
+    void callShopPageDetailApi(ShopPageView shopPageView, String storeId) {
         this.shopPageView = shopPageView;
         if (createApiRequest == null)
             createApiRequest = new CreateApiRequest(this);
@@ -28,11 +36,31 @@ public class ShopPagePresenter extends BasePresenter implements NetworkApiRespon
 
     }
 
+    private void groupProducts(StorePageResponse storePageResponse) {
+        groupProducts = new HashMap<>();
+        categories = new ArrayList<>();
+        for (ProductEntity product :
+                storePageResponse.getData()) {
+            if (!groupProducts.containsKey(product.getCategory_name())) {
+                categories.add(product.getCategory_name());
+                List<ProductEntity> productEntities = new ArrayList<>();
+                productEntities.add(product);
+                groupProducts.put(product.getCategory_name(), productEntities);
+            } else {
+                groupProducts.get(product.getCategory_name()).add(product);
+            }
+
+        }
+    }
+
     @Override
     public void onSuccess(BaseResponse response) {
 
-        if (response instanceof StorePageResponse)
-            shopPageView.onSuccess((StorePageResponse) response);
+        if (response instanceof StorePageResponse) {
+            StorePageResponse storePageResponse = (StorePageResponse) response;
+            groupProducts(storePageResponse);
+            shopPageView.onSuccess(storePageResponse);
+        }
     }
 
     @Override

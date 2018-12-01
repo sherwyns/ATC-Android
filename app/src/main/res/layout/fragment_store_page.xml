@@ -1,113 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFEFEFE"
-    android:orientation="vertical"
     tools:context=".ui.shoppage.StorePageFragment">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_10dp"
-        app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="@dimen/dimen_5dp"
-        app:cardElevation="@dimen/dimen_5dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimen_15dp"
-            android:layout_marginTop="@dimen/dimen_18dp"
-            android:layout_marginEnd="@dimen/dimen_15dp"
-            android:layout_marginBottom="@dimen/dimen_18dp">
-
-            <ImageView
-                android:id="@+id/img_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_restaurant_menu_black_24dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/dimen_10dp"
-                android:layout_toEndOf="@id/img_category"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_shop_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:letterSpacing="0.02"
-                    android:text="Shop Name"
-                    android:textColor="@color/textColor"
-                    android:textSize="@dimen/font_16"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/tv_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:letterSpacing="0.02"
-                    android:text="Shop Name"
-                    android:textColor="@color/colorOrange"
-                    android:textSize="8sp"
-                    android:textStyle="normal|italic"
-                    tools:text="Place , street, city, pincode " />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/img_fav"
-                android:layout_width="@dimen/dimen_30dp"
-                android:layout_height="@dimen/dimen_30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="@dimen/dimen_5dp"
-                android:background="@drawable/white_round"
-                android:elevation="@dimen/dimen_5dp"
-                android:padding="@dimen/dimen_5dp"
-                android:src="@drawable/ic_favorite_border_black_24dp"
-                android:tint="@android:color/holo_red_light" />
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_20dp"
-        android:fontFamily="sans-serif"
-        android:letterSpacing="0.02"
-        android:text="@string/products_category"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/font_12"
-        android:textStyle="normal" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_10dp"
-        android:orientation="horizontal"
-        tools:itemCount="0" />
-
-    <GridView
-        android:id="@+id/gridview"
+    <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:columnWidth="@dimen/dimen_120dp"
-        android:gravity="center"
-        android:horizontalSpacing="@dimen/dimen_10dp"
-        android:numColumns="2"
-        android:padding="@dimen/dimen_10dp"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/dimen_10dp" />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="@dimen/dimen_5dp"
+            app:cardElevation="@dimen/dimen_5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_15dp"
+                android:layout_marginTop="@dimen/dimen_18dp"
+                android:layout_marginEnd="@dimen/dimen_15dp"
+                android:layout_marginBottom="@dimen/dimen_18dp">
+
+                <ImageView
+                    android:id="@+id/img_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_restaurant_menu_black_24dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/dimen_10dp"
+                    android:layout_toEndOf="@id/img_category"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_shop_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.02"
+                        android:text="Shop Name"
+                        android:textColor="@color/textColor"
+                        android:textSize="@dimen/font_16"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tv_neighbourhood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:letterSpacing="0.02"
+                        android:text="Place , street, city, pincode "
+                        android:textColor="@color/colorOrange"
+                        android:textSize="8sp"
+                        android:textStyle="normal|italic" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/img_fav"
+                    android:layout_width="@dimen/dimen_30dp"
+                    android:layout_height="@dimen/dimen_30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/dimen_5dp"
+                    android:background="@drawable/white_round"
+                    android:elevation="@dimen/dimen_5dp"
+                    android:padding="@dimen/dimen_5dp"
+                    android:src="@drawable/ic_favorite_border_black_24dp"
+                    android:tint="@android:color/holo_red_light" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_20dp"
+            android:fontFamily="sans-serif"
+            android:letterSpacing="0.02"
+            android:text="@string/products_category"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_12"
+            android:textStyle="normal" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:itemCount="0" />
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:columnWidth="@dimen/dimen_120dp"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/dimen_10dp"
+            android:numColumns="2"
+            android:padding="@dimen/dimen_10dp"
+            android:paddingTop="@dimen/dimen_10dp"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="@dimen/dimen_10dp" />
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+</RelativeLayout>

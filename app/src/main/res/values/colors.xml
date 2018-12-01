@@ -13,5 +13,6 @@
     <color name="textColor">#242424</color>
     <color name="darkBlue">#1C2AFF</color>
     <color name="transMask">#80000000</color>
+    <color name="cateoryTextColor">#787878</color>
 
 </resources>

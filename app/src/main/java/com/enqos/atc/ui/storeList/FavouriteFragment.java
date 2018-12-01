@@ -119,6 +119,6 @@ public class FavouriteFragment extends Fragment implements StoreListener, Adapte
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (listener != null)
-            listener.replaceFragment(StorePageFragment.newInstance(favourites.get(i).getId()));
+            listener.replaceFragment(StorePageFragment.newInstance(favourites.get(i).getId(), favourites.get(i).getShop_name(), favourites.get(i).getNeighbourhood(), true));
     }
 }
