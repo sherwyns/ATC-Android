@@ -8,6 +8,7 @@ import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.login.LoginPresenter;
 import com.enqos.atc.ui.myaccount.MyAccountActivity;
 import com.enqos.atc.ui.myaccount.MyAccountPresenter;
+import com.enqos.atc.ui.productdetail.ProductDetailFragment;
 import com.enqos.atc.ui.register.RegisterActivity;
 import com.enqos.atc.ui.register.RegisterPresenter;
 import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
@@ -65,4 +66,6 @@ public interface AppComponent {
     void inject(ShopPagePresenter shopPagePresenter);
 
     void inject(StorePageFragment storePageFragment);
+
+    void inject(ProductDetailFragment productDetailFragment);
 }

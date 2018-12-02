@@ -3,6 +3,10 @@ package com.enqos.atc.ui.productdetail;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +17,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
+import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.data.response.ProductEntity;
 
+import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +40,8 @@ public class ProductDetailFragment extends Fragment {
     ImageView ivProductImg;
     @BindView(R.id.tv_product_price)
     TextView tvPrice;
+    @BindView(R.id.rv_products)
+    RecyclerView rvProducts;
 
     private static final String PRODUCT_ID = "productId";
     private static final String IMG_URL = "IMG_URL";
@@ -38,10 +49,13 @@ public class ProductDetailFragment extends Fragment {
     private static final String PRODUCT_PRICE = "PRODUCT_PRICE";
     private static final String PRODUCT_DES = "PRODUCT_DES";
     private String mProductId, url, name, price, des;
+    public List<ProductEntity> similiarProducts;
     private Unbinder unbinder;
 
 
+    @Inject
     public ProductDetailFragment() {
+        AtcApplication.getAppComponents().inject(this);
     }
 
 
@@ -66,17 +80,16 @@ public class ProductDetailFragment extends Fragment {
             name = getArguments().getString(PRODUCT_NAME);
             price = getArguments().getString(PRODUCT_PRICE);
             des = getArguments().getString(PRODUCT_DES);
-
         }
     }
 
     private void setValues() {
 
-        if (TextUtils.isEmpty(name))
+        if (!TextUtils.isEmpty(name))
             tvProductName.setText(name);
-        if (TextUtils.isEmpty(price))
-            tvPrice.setText(price);
-        if (TextUtils.isEmpty(des))
+        if (!TextUtils.isEmpty(price))
+            tvPrice.setText(String.format("$ %s", price));
+        if (!TextUtils.isEmpty(des))
             tvProductDes.setText(des);
 
         Glide.with(Objects.requireNonNull(getActivity())).load(url)
@@ -85,6 +98,15 @@ public class ProductDetailFragment extends Fragment {
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .centerCrop())
                 .into(ivProductImg);
+
+        SimiliarProductsAdapter adapter = new SimiliarProductsAdapter(getActivity(), similiarProducts);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvProducts.setLayoutManager(layoutManager);
+        SnapHelper snapHelper = new LinearSnapHelper();
+
+        snapHelper.attachToRecyclerView(rvProducts);
+        rvProducts.setAdapter(adapter);
 
     }
 

@@ -1,9 +1,15 @@
 package com.enqos.atc.ui.shopdetail;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -22,6 +29,7 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.StoreDetailResponse;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreActivityListener;
+import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,7 +44,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +76,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
     private StoreDetailResponse storeDetailResponse;
     private GoogleMap googleMap;
     private static final String STORE_ID = "storeId";
+    private String storeid;
 
     @Inject
     public ShopDetailFragment() {
@@ -94,9 +106,90 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             Bundle bundle = getArguments();
-            String storeid = bundle.getString(STORE_ID);
-            if (!TextUtils.isEmpty(storeid))
-                presenter.callStoreDetail(this, storeid);
+            storeid = bundle.getString(STORE_ID);
+
+        }
+    }
+
+    public boolean isPermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (Objects.requireNonNull(getActivity()).checkSelfPermission(android.Manifest.permission.CALL_PHONE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v("TAG", "Permission is granted");
+                return true;
+            } else {
+
+                Log.v("TAG", "Permission is revoked");
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("TAG", "Permission is granted");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+                    callPhone();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + storeDetailResponse.getData().get(0).getPhonenumber()));
+        startActivity(intent);
+    }
+
+    @OnClick({R.id.tv_view_products, R.id.iv_call, R.id.iv_email, R.id.iv_website})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_view_products:
+                if (listener != null) {
+                    listener.replaceFragment(StorePageFragment.newInstance(storeDetailResponse.getData().get(0).getId(),
+                            storeDetailResponse.getData().get(0).getShop_name(), storeDetailResponse.getData().get(0).getNeighbourhood(), storeDetailResponse.getData().get(0).isFavourite()));
+                }
+                break;
+            case R.id.iv_call:
+                if (TextUtils.isEmpty(storeDetailResponse.getData().get(0).getPhonenumber())) {
+                    Toast.makeText(getActivity(), "Phone number not available", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (isPermissionGranted())
+                    callPhone();
+                break;
+            case R.id.iv_email:
+                if (TextUtils.isEmpty(storeDetailResponse.getData().get(0).getContact())) {
+                    Toast.makeText(getActivity(), "Email id not available", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                break;
+            case R.id.iv_website:
+                String url = storeDetailResponse.getData().get(0).getStore_url();
+                if (TextUtils.isEmpty(url)) {
+                    Toast.makeText(getActivity(), "Store url not available", Toast.LENGTH_LONG).show();
+                    return;
+
+                }
+                if (!url.startsWith("http://") && !url.startsWith("https://"))
+                    url = "http://" + url;
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
+                break;
         }
     }
 
@@ -105,6 +198,8 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
         super.onResume();
         if (listener != null)
             listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, "Shop Detail", R.drawable.ic_filter_outline);
+        if (!TextUtils.isEmpty(storeid))
+            presenter.callStoreDetail(this, storeid);
     }
 
     @Override

@@ -13,11 +13,13 @@ import android.widget.GridView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
+import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.enqos.atc.utils.SharedPreferenceManager;
@@ -128,7 +130,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
             StoreEntity removeEnity = null;
-            String id = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             List<StoreEntity> fav = sharedPreferenceManager.getFavorites();
             if (fav != null) {
 
@@ -157,12 +158,12 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
             }
             shopListAdapter.notifyDataSetChanged();
         } else {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            startActivity(new Intent(getActivity(), HomeActivity.class));
         }
     }
 
     @Override
-    public void onSaveProductFavorite(ProductFavoriteEntity productFavoriteEntity) {
+    public void onSaveProductFavorite(ProductEntity productFavoriteEntity, boolean isFav, int pos) {
 
     }
 
@@ -174,9 +175,8 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (listener != null) {
-
             listener.replaceFragment(StorePageFragment.newInstance(allStores.get(i).getId(),
-                    allStores.get(0).getShop_name(), allStores.get(0).getNeighbourhood(), allStores.get(0).isFavourite()));
+                    allStores.get(i).getShop_name(), allStores.get(i).getNeighbourhood(), allStores.get(i).isFavourite()));
         }
     }
 }

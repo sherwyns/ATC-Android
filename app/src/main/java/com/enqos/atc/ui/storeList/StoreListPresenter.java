@@ -47,7 +47,6 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
     public void onSuccess(BaseResponse response) {
         if (response instanceof StoreResponse) {
             storeResponse = (StoreResponse) response;
-            String id = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
         }
         storeListView.storeResponse(storeResponse);
     }

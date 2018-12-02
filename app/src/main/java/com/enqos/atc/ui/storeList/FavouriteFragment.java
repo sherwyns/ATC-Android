@@ -14,6 +14,7 @@ import android.widget.GridView;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.FavoriteResponse;
+import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreFavoriteEntity;
@@ -102,7 +103,7 @@ public class FavouriteFragment extends Fragment implements StoreListener, Adapte
     }
 
     @Override
-    public void onSaveProductFavorite(ProductFavoriteEntity productFavoriteEntity) {
+    public void onSaveProductFavorite(ProductEntity productFavoriteEntity, boolean isFav, int pos) {
 
     }
 

@@ -24,6 +24,8 @@ public class StoreEntity {
     private String state;
     @SerializedName("zipcode")
     private String zipcode;
+    @SerializedName("phonenumber")
+    private String phonenumber;
     @SerializedName("id")
     private String id;
     @SerializedName("shop_name")
@@ -185,5 +187,13 @@ public class StoreEntity {
 
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 }

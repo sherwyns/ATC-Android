@@ -2,7 +2,7 @@ package com.enqos.atc.data.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ProductEntity {
+public class ProductEntity{
 
     @SerializedName("id")
     private String id;
@@ -20,6 +20,16 @@ public class ProductEntity {
     private String category_name;
     @SerializedName("category_image")
     private String category_image;
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
+    }
+
+    private boolean isFavourite;
 
     public String getId() {
         return id;
