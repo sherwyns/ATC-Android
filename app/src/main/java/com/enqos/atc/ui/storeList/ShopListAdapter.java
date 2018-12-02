@@ -79,7 +79,7 @@ public class ShopListAdapter extends BaseAdapter {
             boolean isFav = data.get(i).isFavourite();
             if (isFav) {
                 if (storeListener instanceof FavouriteFragment)
-                    storeListener.onRemoveFav(i);
+                    storeListener.onRemoveFav(i, true);
                 else {
                     storeListener.onSaveStoreFavorite(data.get(i), false, i);
                     if (!data.isEmpty())

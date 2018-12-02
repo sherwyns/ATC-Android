@@ -262,7 +262,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     }
 
     @Override
-    public void onRemoveFav(int index) {
+    public void onRemoveFav(int index,boolean isStore) {
 
     }
 }

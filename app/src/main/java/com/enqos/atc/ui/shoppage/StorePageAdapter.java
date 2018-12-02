@@ -25,7 +25,7 @@ public class StorePageAdapter extends BaseAdapter {
     private List<ProductEntity> data;
     private StoreListener storeListener;
 
-    StorePageAdapter(Context context, List<ProductEntity> data) {
+    public StorePageAdapter(Context context, List<ProductEntity> data) {
         this.context = context;
         this.data = data;
     }
@@ -82,7 +82,7 @@ public class StorePageAdapter extends BaseAdapter {
                 boolean isFav = data.get(i).isFavourite();
                 if (isFav) {
                     if (storeListener instanceof FavouriteFragment)
-                        storeListener.onRemoveFav(i);
+                        storeListener.onRemoveFav(i, false);
                     else {
                         storeListener.onSaveProductFavorite(data.get(i), false, i);
                         if (!data.isEmpty())

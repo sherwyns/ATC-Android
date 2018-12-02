@@ -168,7 +168,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     }
 
     @Override
-    public void onRemoveFav(int index) {
+    public void onRemoveFav(int index, boolean isStore) {
 
     }
 

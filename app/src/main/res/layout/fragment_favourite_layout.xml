@@ -21,22 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dimen_10dp"
-            android:elevation="5dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingStart="@dimen/dimen_15dp"
-            android:paddingTop="3dp"
-            android:paddingEnd="@dimen/dimen_15dp"
-            android:paddingBottom="3dp"
-            android:text="@string/product"
-            android:textColor="#787878"
-            android:textSize="@dimen/font_12" />
-
-        <TextView
-            android:id="@+id/tv_store"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_10dp"
             android:background="@drawable/gradient_blue"
             android:elevation="5dp"
             android:fontFamily="sans-serif"
@@ -45,8 +29,24 @@
             android:paddingTop="3dp"
             android:paddingEnd="@dimen/dimen_15dp"
             android:paddingBottom="3dp"
-            android:text="@string/store"
+            android:text="@string/product"
             android:textColor="@android:color/white"
+            android:textSize="@dimen/font_12" />
+
+        <TextView
+            android:id="@+id/tv_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:elevation="5dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingStart="@dimen/dimen_15dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="@dimen/dimen_15dp"
+            android:paddingBottom="3dp"
+            android:text="@string/store"
+            android:textColor="#787878"
             android:textSize="@dimen/font_12" />
     </LinearLayout>
 

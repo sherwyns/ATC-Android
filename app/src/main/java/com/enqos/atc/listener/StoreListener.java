@@ -11,7 +11,7 @@ public interface StoreListener {
 
     void onSaveProductFavorite(ProductEntity productEntity, boolean isFav, int pos);
 
-    void onRemoveFav(int index);
+    void onRemoveFav(int index,boolean isStore);
 
 
 }
