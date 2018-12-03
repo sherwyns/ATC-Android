@@ -175,8 +175,9 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (listener != null) {
-            listener.replaceFragment(StorePageFragment.newInstance(allStores.get(i).getId(),
-                    allStores.get(i).getShop_name(), allStores.get(i).getNeighbourhood(), allStores.get(i).isFavourite()));
+            StorePageFragment storePageFragment = StorePageFragment.newInstance();
+            storePageFragment.storeEntity = allStores.get(i);
+            listener.replaceFragment(storePageFragment);
         }
     }
 }

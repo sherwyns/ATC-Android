@@ -29,7 +29,9 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.StoreDetailResponse;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreActivityListener;
+import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
+import com.enqos.atc.utils.SharedPreferenceManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,6 +40,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -69,14 +73,20 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
     LinearLayout errorLayout;
     @BindView(R.id.scrollview)
     ScrollView scrollView;
+    @BindView(R.id.img_fav)
+    ImageView ivFav;
     @Inject
     ShopDetailPresenter presenter;
+    @Inject
+    SharedPreferenceManager sharedPreferenceManager;
     private Unbinder unbinder;
     private StoreActivityListener listener;
     private StoreDetailResponse storeDetailResponse;
     private GoogleMap googleMap;
     private static final String STORE_ID = "storeId";
+    private static final String IS_FAVOURITE = "isFavourite";
     private String storeid;
+    private boolean isFavourite;
 
     @Inject
     public ShopDetailFragment() {
@@ -85,10 +95,11 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
     }
 
 
-    public static ShopDetailFragment newInstance(String storeId) {
+    public static ShopDetailFragment newInstance(String storeId, boolean isFav) {
         ShopDetailFragment shopDetailFragment = new ShopDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString(STORE_ID, storeId);
+        bundle.putBoolean(IS_FAVOURITE, isFav);
         shopDetailFragment.setArguments(bundle);
         return shopDetailFragment;
     }
@@ -107,6 +118,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
         if (getArguments() != null) {
             Bundle bundle = getArguments();
             storeid = bundle.getString(STORE_ID);
+            isFavourite = bundle.getBoolean(IS_FAVOURITE);
 
         }
     }
@@ -155,13 +167,18 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
         startActivity(intent);
     }
 
-    @OnClick({R.id.tv_view_products, R.id.iv_call, R.id.iv_email, R.id.iv_website})
+    @OnClick({R.id.tv_view_products, R.id.iv_call, R.id.iv_email, R.id.iv_website, R.id.img_fav})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.img_fav:
+                if (storeDetailResponse != null && !storeDetailResponse.getData().isEmpty())
+                    saveStoreFav(storeDetailResponse.getData().get(0));
+                break;
             case R.id.tv_view_products:
                 if (listener != null) {
-                    listener.replaceFragment(StorePageFragment.newInstance(storeDetailResponse.getData().get(0).getId(),
-                            storeDetailResponse.getData().get(0).getShop_name(), storeDetailResponse.getData().get(0).getNeighbourhood(), storeDetailResponse.getData().get(0).isFavourite()));
+                    StorePageFragment storePageFragment = StorePageFragment.newInstance();
+                    storePageFragment.storeEntity = storeDetailResponse.getData().get(0);
+                    listener.replaceFragment(storePageFragment);
                 }
                 break;
             case R.id.iv_call:
@@ -190,6 +207,44 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
                 break;
+        }
+    }
+
+    private void saveStoreFav(StoreEntity storeEntity) {
+
+        boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+        if (isLogin) {
+            StoreEntity removeEnity = null;
+            List<StoreEntity> prodFav = sharedPreferenceManager.getFavorites();
+            if (prodFav != null) {
+                if (!isFavourite) {
+                    ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    storeEntity.setFavourite(true);
+                    prodFav.add(storeEntity);
+                } else {
+                    ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    for (StoreEntity store :
+                            prodFav) {
+                        if (storeEntity.getId().equals(store.getId())) {
+                            store.setFavourite(false);
+                            removeEnity = store;
+                        } else {
+                            store.setFavourite(true);
+                        }
+                    }
+                }
+                if (removeEnity != null)
+                    prodFav.remove(removeEnity);
+
+                sharedPreferenceManager.saveFavourites(prodFav);
+            } else {
+                List<StoreEntity> favorite = new ArrayList<>();
+                storeEntity.setFavourite(true);
+                favorite.add(storeEntity);
+                sharedPreferenceManager.saveFavourites(favorite);
+            }
+        } else {
+            startActivity(new Intent(getActivity(), HomeActivity.class));
         }
     }
 
@@ -240,6 +295,11 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             googleMap.addMarker(markerOptions);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
         }
+
+        if (isFavourite)
+            ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
+        else
+            ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 
         tvStoreName.setText(storeEntity.getShop_name());
         tvAddress.setText(storeEntity.getAddress());

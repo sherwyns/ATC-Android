@@ -14,12 +14,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.data.response.ProductEntity;
+import com.enqos.atc.listener.RecyclerViewItemClickListner;
 
 import java.util.List;
 
 public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProductsAdapter.ViewHolder> {
     private Context context;
     private List<ProductEntity> products;
+    private RecyclerViewItemClickListner listner;
 
     public SimiliarProductsAdapter(Context context, List<ProductEntity> products) {
 
@@ -27,6 +29,9 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
         this.products = products;
     }
 
+    public void setListener(RecyclerViewItemClickListner listener){
+        this.listner = listener;
+    }
     @NonNull
     @Override
     public SimiliarProductsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -49,6 +54,8 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .centerCrop())
                 .into(viewHolder.imageView);
+
+        viewHolder.itemView.setOnClickListener(view -> listner.onItemClick(viewHolder.getAdapterPosition()));
     }
 
     @Override

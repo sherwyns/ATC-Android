@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductEntity;
-import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.listener.CategoryItemClickListner;
@@ -61,12 +60,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     ShopPagePresenter presenter;
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
-    private static final String STORE_ID = "storeId";
-    private static final String SHOP_NAME = "shopName";
-    private static final String CATEGORY_NAME = "categoryName";
-    private static final String IS_FAV = "isFav";
-    private String mStoreId, mShopName, mNeighbourHood;
-    private boolean isFav;
+    public StoreEntity storeEntity;
     private Unbinder unbinder;
     private List<ProductEntity> allProducts = new ArrayList<>();
     private StoreActivityListener listener;
@@ -78,29 +72,11 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         AtcApplication.getAppComponents().inject(this);
     }
 
-    public static StorePageFragment newInstance(String storeId, String shopName, String neighbourHood, boolean isFav) {
-        StorePageFragment fragment = new StorePageFragment();
-        Bundle args = new Bundle();
-        args.putString(STORE_ID, storeId);
-        args.putString(SHOP_NAME, shopName);
-        args.putString(CATEGORY_NAME, neighbourHood);
-        args.putBoolean(IS_FAV, isFav);
-        fragment.setArguments(args);
-        return fragment;
+    public static StorePageFragment newInstance() {
+
+        return new StorePageFragment();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            Bundle bundle = getArguments();
-            mStoreId = bundle.getString(STORE_ID);
-            mShopName = bundle.getString(SHOP_NAME);
-            mNeighbourHood = bundle.getString(CATEGORY_NAME);
-            isFav = bundle.getBoolean(IS_FAV);
-
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -109,15 +85,14 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     }
 
     private void setValues() {
-        listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, mShopName, R.drawable.ic_filter_outline);
-        tvShopName.setText(mShopName);
-        tvNeighbour.setText(mNeighbourHood);
 
-        if (isFav) {
-            Log.i("******", "true");
+        listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, storeEntity.getShop_name(), R.drawable.ic_filter_outline);
+        tvShopName.setText(storeEntity.getShop_name());
+        tvNeighbour.setText(storeEntity.getNeighbourhood());
+
+        if (storeEntity.isFavourite()) {
             ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
         } else {
-            Log.i("******", "false");
             ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
 
@@ -126,14 +101,24 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     @Override
     public void onResume() {
         super.onResume();
-        presenter.callShopPageDetailApi(this, mStoreId);
+        if (storeEntity != null)
+            presenter.callShopPageDetailApi(this, storeEntity.getId());
     }
 
-    @OnClick(R.id.card_view)
+    @OnClick({R.id.card_view, R.id.img_fav})
     public void OnClick(View view) {
-        if (listener != null)
-            listener.replaceFragment(ShopDetailFragment.newInstance(mStoreId));
+        switch (view.getId()) {
+            case R.id.card_view:
+                if (listener != null && storeEntity != null)
+                    listener.replaceFragment(ShopDetailFragment.newInstance(storeEntity.getId(), storeEntity.isFavourite()));
+                break;
+            case R.id.img_fav:
+                saveStoreFav();
+                break;
+        }
+
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -141,7 +126,8 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         View view = inflater.inflate(R.layout.fragment_store_page, container, false);
         unbinder = ButterKnife.bind(this, view);
         gridView.setOnItemClickListener(this);
-        setValues();
+        if (storeEntity != null)
+            setValues();
         return view;
     }
 
@@ -200,7 +186,8 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         ProductEntity product = allProducts.get(i);
-        ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance(product.getId(), product.getProduct_image(), product.getTitle(), product.getPrice(), "");
+        ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
+        productDetailFragment.productEntity = product;
         productDetailFragment.similiarProducts = allProducts;
         listener.replaceFragment(productDetailFragment);
     }
@@ -221,6 +208,44 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     @Override
     public void onSaveStoreFavorite(StoreEntity storeEntity, boolean isFav, int pos) {
 
+    }
+
+    private void saveStoreFav() {
+
+        boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+        if (isLogin) {
+            StoreEntity removeEnity = null;
+            List<StoreEntity> prodFav = sharedPreferenceManager.getFavorites();
+            if (prodFav != null) {
+                if (!storeEntity.isFavourite()) {
+                    ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
+                    storeEntity.setFavourite(true);
+                    prodFav.add(storeEntity);
+                } else {
+                    ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                    for (StoreEntity store :
+                            prodFav) {
+                        if (storeEntity.getId().equals(store.getId())) {
+                            store.setFavourite(false);
+                            removeEnity = store;
+                        } else {
+                            store.setFavourite(true);
+                        }
+                    }
+                }
+                if (removeEnity != null)
+                    prodFav.remove(removeEnity);
+
+                sharedPreferenceManager.saveFavourites(prodFav);
+            } else {
+                List<StoreEntity> favorite = new ArrayList<>();
+                storeEntity.setFavourite(true);
+                favorite.add(storeEntity);
+                sharedPreferenceManager.saveFavourites(favorite);
+            }
+        } else {
+            startActivity(new Intent(getActivity(), HomeActivity.class));
+        }
     }
 
     @Override
@@ -262,7 +287,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     }
 
     @Override
-    public void onRemoveFav(int index,boolean isStore) {
+    public void onRemoveFav(int index, boolean isStore) {
 
     }
 }
