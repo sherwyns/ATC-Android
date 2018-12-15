@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreActivityListener;
+import com.enqos.atc.ui.filter.FilterFragment;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.ui.login.LoginActivity;
@@ -56,6 +58,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
+    private boolean isFilterClicked = false;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -112,12 +115,22 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
-                if (title.getText().toString().equals(getString(R.string.store)) || title.getText().toString().equals(getString(R.string.favourites)) || title.getText().toString().equals(getString(R.string.search)))
+                if (title.getText().toString().equals(getString(R.string.store)) || title.getText().toString().equals(getString(R.string.favourites)) || title.getText().toString().equals(getString(R.string.search)) || title.getText().toString().equals(getString(R.string.filter_by_category)))
                     drawerLayout.openDrawer(GravityCompat.START);
                 else
                     onBackPressed();
                 break;
             case R.id.image_right:
+                if (!isFilterClicked) {
+                    isFilterClicked = true;
+                    rightImg.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary));
+                    replaceFragment(FilterFragment.getInstance());
+                } else {
+                    isFilterClicked = false;
+                    rightImg.setColorFilter(ContextCompat.getColor(this, android.R.color.black));
+                    onBackPressed();
+                }
+
                 break;
             case R.id.img_fav:
                 if (!isLogin) {
