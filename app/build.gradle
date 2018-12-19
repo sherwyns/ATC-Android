@@ -47,7 +47,7 @@ ext {
     gsonConvertorVersion = '2.4.0'
     facebookVersion = '4.38.0'
     googleVersion = '16.0.1'
-    mapVersion ='16.0.0'
+    mapVersion = '16.0.0'
 
 }
 dependencies {

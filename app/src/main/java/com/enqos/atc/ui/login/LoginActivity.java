@@ -88,7 +88,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     }
 
-    @OnClick({R.id.login, R.id.tv_google_login, R.id.tv_fb_login, R.id.back})
+    @OnClick({R.id.login, R.id.tv_google_login, R.id.tv_fb_login, R.id.back,R.id.tv_forgot_pass})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login:
@@ -100,6 +100,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 break;
             case R.id.tv_fb_login:
                 loginButton.performClick();
+                break;
+            case R.id.tv_forgot_pass:
+                startActivity(new Intent(this,ForgotPasswordActivity.class));
                 break;
             case R.id.back:
                 onBackPressed();

@@ -24,7 +24,7 @@ public class ShopListAdapter extends BaseAdapter {
     private List<StoreEntity> data;
     private StoreListener storeListener;
 
-    ShopListAdapter(Context context, List<StoreEntity> data) {
+    public ShopListAdapter(Context context, List<StoreEntity> data) {
         this.context = context;
         this.data = data;
     }
@@ -75,27 +75,34 @@ public class ShopListAdapter extends BaseAdapter {
             viewHolder.neighbourhood.setText(data.get(i).getNeighbourhood());
 
         viewHolder.favImg.setOnClickListener(view1 -> {
-            view1.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
-            boolean isFav = data.get(i).isFavourite();
-            if (isFav) {
-                if (storeListener instanceof FavouriteFragment)
-                    storeListener.onRemoveFav(i, true);
-                else {
-                    storeListener.onSaveStoreFavorite(data.get(i), false, i);
+
+            if (storeListener != null) {
+                view1.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
+                boolean isFav = data.get(i).isFavourite();
+                if (isFav) {
+                    if (storeListener instanceof FavouriteFragment)
+                        storeListener.onRemoveFav(i, true);
+                    else {
+                        storeListener.onSaveStoreFavorite(data.get(i), false, i);
+                        if (!data.isEmpty())
+                            data.get(i).setFavourite(false);
+                    }
+                } else {
+                    storeListener.onSaveStoreFavorite(data.get(i), true, i);
                     if (!data.isEmpty())
-                        data.get(i).setFavourite(false);
+                        data.get(i).setFavourite(true);
                 }
-            } else {
-                storeListener.onSaveStoreFavorite(data.get(i), true, i);
-                if (!data.isEmpty())
-                    data.get(i).setFavourite(true);
+
             }
-
-
         });
 
 
-        Glide.with(viewGroup.getContext()).load(data.get(i).getImage())
+        String url;
+        if (TextUtils.isEmpty(data.get(i).getImage()) || data.get(i).getImage().equalsIgnoreCase("null"))
+            url = "https://www.retailgazette.co.uk/wp/wp-content/uploads/Typo-696x464.jpg";
+        else
+            url = data.get(i).getImage();
+        Glide.with(viewGroup.getContext()).load(url)
                 .apply(new RequestOptions().override(250, 180)
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)

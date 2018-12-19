@@ -46,6 +46,8 @@
     <string name="products_category">Products Category</string>
     <string name="similar_products">Similar Products</string>
     <string name="something_went_wrong_try_again">Something went wrong. Try again!</string>
+    <string name="forgot_password"><u>Forgot password?</u></string>
+    <string name="forgot_pass">Forgot password</string>
 
 
 </resources>

@@ -8,11 +8,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.enqos.atc.R;
+import com.enqos.atc.data.response.CategoryEntity;
+
+import java.util.List;
 
 public class FilterAdapter extends BaseAdapter {
+    private List<CategoryEntity> categoryEntities;
+
+    FilterAdapter(List<CategoryEntity> categoryEntities) {
+        this.categoryEntities = categoryEntities;
+    }
+
     @Override
     public int getCount() {
-        return 10;
+        return categoryEntities == null ? 0 : categoryEntities.size();
     }
 
     @Override
@@ -37,8 +46,11 @@ public class FilterAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-
-        viewHolder.tvCategoryName.setText("Category name " + i + 1);
+        if (i == 1)
+            viewHolder.ivCategory.setImageResource(R.drawable.ic_card_giftcard_black_24dp);
+        else if (i == 3)
+            viewHolder.ivCategory.setImageResource(R.drawable.ic_directions_run_black_24dp);
+        viewHolder.tvCategoryName.setText(categoryEntities.get(i).getName());
         return view;
     }
 

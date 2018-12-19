@@ -23,7 +23,7 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
     }
 
 
-    public void authenticateUser(String email, String password, LoginView loginView) {
+    void authenticateUser(String email, String password, LoginView loginView) {
 
         if (createApiRequest == null)
             createApiRequest = new CreateApiRequest(this);
@@ -42,7 +42,7 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
         }
     }
 
-    public void authenticateSocialUser(String email, String externalId, String provider, LoginView loginView) {
+    void authenticateSocialUser(String email, String externalId, String provider, LoginView loginView) {
 
         if (createApiRequest == null)
             createApiRequest = new CreateApiRequest(this);
@@ -61,11 +61,11 @@ public class LoginPresenter extends BasePresenter implements NetworkApiResponse 
         }
     }
 
-    public void showDialog() {
+    void showDialog() {
         getmMvpView().showLoading();
     }
 
-    public void hideDialog() {
+    void hideDialog() {
         getmMvpView().hideLoading();
     }
 

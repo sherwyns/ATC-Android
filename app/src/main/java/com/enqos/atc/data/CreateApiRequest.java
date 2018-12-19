@@ -66,4 +66,8 @@ public class CreateApiRequest {
     public void createStorePageRequest(String id) {
         dataRepository.getStorePage(networkApiResponse, id);
     }
+
+    public void createCategoriesRequest() {
+        dataRepository.getCategories(networkApiResponse);
+    }
 }

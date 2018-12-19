@@ -4,6 +4,7 @@ import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
 import com.enqos.atc.data.request.UpdateFavoriteRequest;
+import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.RegisterResponse;
@@ -51,4 +52,6 @@ public interface WebServiceApi {
     @GET("api/products/getproductbystore/{store_id}")
     Observable<StorePageResponse> storePage(@Path("store_id") String storeId);
 
+    @GET("api/categories/list")
+    Observable<CategoryResponse> getCategories();
 }

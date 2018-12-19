@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +49,19 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     private ShopListAdapter shopListAdapter;
     private StoreActivityListener listener;
     private List<StoreEntity> allStores;
+    private String selecteCategoryId;
+    private static final String CATEGORY_ID = "categoryId";
 
     public ShopListFragment() {
         AtcApplication.getAppComponents().inject(this);
     }
 
-    public static ShopListFragment newInstance() {
-        return new ShopListFragment();
+    public static ShopListFragment newInstance(String categoryId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CATEGORY_ID, categoryId);
+        ShopListFragment shopListFragment = new ShopListFragment();
+        shopListFragment.setArguments(bundle);
+        return shopListFragment;
     }
 
 
@@ -63,11 +71,26 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_shope_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        storeListPresenter.getStore(this);
+        if (TextUtils.isEmpty(selecteCategoryId))
+            storeListPresenter.getStore(this);
+        else {
+            allStores = storeListPresenter.groupStores.get(selecteCategoryId);
+            shopListAdapter = new ShopListAdapter(getActivity(), allStores);
+            shopListAdapter.setListener(this);
+            gridView.setAdapter(shopListAdapter);
+
+        }
         gridView.setOnItemClickListener(this);
         return rootView;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            selecteCategoryId = getArguments().getString(CATEGORY_ID);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {

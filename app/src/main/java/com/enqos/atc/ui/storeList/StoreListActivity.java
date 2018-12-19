@@ -19,12 +19,13 @@ import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.data.response.StoreEntity;
+import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.filter.FilterFragment;
 import com.enqos.atc.ui.home.HomeActivity;
-import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.myaccount.MyAccountActivity;
+import com.enqos.atc.ui.search.SearchFragment;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.List;
@@ -68,7 +69,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         ButterKnife.bind(this);
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
-        replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
+        replaceFragment(R.id.content_frame, ShopListFragment.newInstance(""), false);
 
     }
 
@@ -167,12 +168,15 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
             switch (view.getId()) {
                 case R.id.img_home:
-                    replaceFragment(R.id.content_frame, ShopListFragment.newInstance(), false);
+                    toolbar.setVisibility(View.VISIBLE);
+                    replaceFragment(R.id.content_frame, ShopListFragment.newInstance(""), false);
                     break;
                 case R.id.img_search:
+                    toolbar.setVisibility(View.GONE);
                     replaceFragment(R.id.content_frame, SearchFragment.newInstance(), false);
                     break;
                 case R.id.img_fav:
+                    toolbar.setVisibility(View.VISIBLE);
                     replaceFragment(R.id.content_frame, FavouriteFragment.newInstance(), false);
                     break;
             }
@@ -186,11 +190,16 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void replaceFragment(Fragment fragment) {
+
         replaceFragment(R.id.content_frame, fragment, false);
     }
 
     @Override
     public void changeHeader(int leftResId, String text, int rightResId) {
+        if (!text.equals(getString(R.string.filter_by_category))) {
+            isFilterClicked = false;
+            rightImg.setColorFilter(ContextCompat.getColor(this, android.R.color.black));
+        }
         leftImg.setImageResource(leftResId);
         title.setText(text);
         rightImg.setImageResource(rightResId);
@@ -198,7 +207,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void clickLeft() {
-
+        onBackPressed();
     }
 
     @Override
