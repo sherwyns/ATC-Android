@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -40,7 +41,8 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @BindView(R.id.gridview)
     GridView gridView;
-
+    @BindView(R.id.no_result_layout)
+    LinearLayout noResultLayout;
     @Inject
     StoreListPresenter storeListPresenter;
     @Inject
@@ -74,10 +76,17 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         if (TextUtils.isEmpty(selecteCategoryId))
             storeListPresenter.getStore(this);
         else {
-            allStores = storeListPresenter.groupStores.get(selecteCategoryId);
-            shopListAdapter = new ShopListAdapter(getActivity(), allStores);
-            shopListAdapter.setListener(this);
-            gridView.setAdapter(shopListAdapter);
+            allStores = StoreListPresenter.groupStores.get(selecteCategoryId);
+
+            if (allStores == null || allStores.size() == 0) {
+                noResultLayout.setVisibility(View.VISIBLE);
+            } else {
+                noResultLayout.setVisibility(View.GONE);
+                shopListAdapter = new ShopListAdapter(getActivity(), allStores);
+                shopListAdapter.setListener(this);
+                gridView.setAdapter(shopListAdapter);
+            }
+
 
         }
         gridView.setOnItemClickListener(this);
@@ -137,9 +146,15 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
             }
         }
         this.allStores = storeResponse.getData();
-        shopListAdapter = new ShopListAdapter(getActivity(), allStores);
-        shopListAdapter.setListener(this);
-        gridView.setAdapter(shopListAdapter);
+
+        if (allStores == null || allStores.size() == 0) {
+            noResultLayout.setVisibility(View.VISIBLE);
+        } else {
+            noResultLayout.setVisibility(View.GONE);
+            shopListAdapter = new ShopListAdapter(getActivity(), allStores);
+            shopListAdapter.setListener(this);
+            gridView.setAdapter(shopListAdapter);
+        }
     }
 
     @Override

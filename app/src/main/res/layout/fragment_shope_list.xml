@@ -10,13 +10,39 @@
         android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/dimen_10dp"
         android:clipToPadding="false"
         android:columnWidth="@dimen/dimen_120dp"
         android:gravity="center"
         android:horizontalSpacing="@dimen/dimen_10dp"
         android:numColumns="2"
+        android:padding="@dimen/dimen_10dp"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/dimen_10dp" />
+        android:verticalSpacing="@dimen/dimen_10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/no_result_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_warning_black_24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.09"
+            android:text="No store found"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/font_18" />
+    </LinearLayout>
 
 </FrameLayout>
