@@ -110,6 +110,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if (toolbar.getVisibility() == View.GONE)
+            toolbar.setVisibility(View.VISIBLE);
     }
 
     @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.img_fav, R.id.img_search, R.id.img_home})

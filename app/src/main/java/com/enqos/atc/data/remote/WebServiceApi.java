@@ -8,10 +8,14 @@ import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.SearchDataResponse;
+import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreDetailResponse;
 import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.data.response.UpdateFavoriteResponse;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -54,4 +58,7 @@ public interface WebServiceApi {
 
     @GET("api/categories/list")
     Observable<CategoryResponse> getCategories();
+
+    @GET("api/search/by/{search_key}")
+    Observable<SearchResponse> getSearch(@Path("search_key") String key);
 }

@@ -15,6 +15,7 @@ import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreDetailResponse;
 import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
@@ -260,6 +261,28 @@ public class DataRepository extends BasePresenter {
         storeDetailResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
                 .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StorePageResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void getSearch(NetworkApiResponse networkApiResponse, String key) {
+
+        Observable<SearchResponse> storeDetailResponse = retrofit.create(WebServiceApi.class).getSearch(key);
+
+        storeDetailResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), SearchResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
                         if (response.getError() != null) {

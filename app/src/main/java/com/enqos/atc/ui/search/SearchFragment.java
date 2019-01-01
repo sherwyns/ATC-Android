@@ -14,10 +14,12 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductEntity;
+import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.shoppage.StorePageAdapter;
@@ -25,6 +27,8 @@ import com.enqos.atc.ui.storeList.ShopListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -32,7 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class SearchFragment extends Fragment implements TextWatcher {
+public class SearchFragment extends Fragment implements SearchView {
 
     @BindView(R.id.gridview1)
     GridView gridView1;
@@ -44,8 +48,17 @@ public class SearchFragment extends Fragment implements TextWatcher {
     RelativeLayout rlStore;
     @BindView(R.id.rl_product)
     RelativeLayout rlProduct;
+    @Inject
+    SearchPresenter presenter;
     private Unbinder unbinder;
     private StoreActivityListener listener;
+    private Timer timer = new Timer();
+    ;
+    private List<StoreEntity> stores = new ArrayList<>();
+    private List<ProductEntity> products = new ArrayList<>();
+    private ShopListAdapter shopAdapter;
+    private StorePageAdapter productsAdapter;
+
 
     @Inject
     public SearchFragment() {
@@ -61,55 +74,10 @@ public class SearchFragment extends Fragment implements TextWatcher {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_search_layout, container, false);
+
         unbinder = ButterKnife.bind(this, rootView);
-        etSearch.addTextChangedListener(this);
+        etSearch.addTextChangedListener(searchWatcher);
         return rootView;
-    }
-
-    /**
-     * Set the shop lists
-     */
-    private void setShopListData() {
-
-        List<StoreEntity> stores = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-
-            StoreEntity storeEntity = new StoreEntity();
-            storeEntity.setFavourite(false);
-            storeEntity.setAddress("Melbourne, USA");
-            storeEntity.setCity("Melbourne");
-            storeEntity.setDescription("Sample Store");
-            storeEntity.setShop_name("Shop name :" + i);
-            storeEntity.setId(String.valueOf(i));
-            storeEntity.setNeighbourhood("Neighbourhood");
-            storeEntity.setImage("http://34.209.125.112/images/store_1545034019399.jpg");
-            stores.add(storeEntity);
-
-        }
-        gridView1.setAdapter(new ShopListAdapter(getActivity(), stores));
-
-    }
-
-    /**
-     * Set the shop lists
-     */
-    private void setProductListData() {
-
-        List<ProductEntity> products = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-
-            ProductEntity product = new ProductEntity();
-            product.setTitle("Product name: " + i);
-            product.setFavourite(false);
-            product.setId(String.valueOf(i));
-            product.setPrice(String.valueOf(i));
-            product.setStore_id(String.valueOf(i));
-            product.setProduct_image("http://34.209.125.112/images/store_1544881569364.jpeg");
-            products.add(product);
-
-        }
-        gridView2.setAdapter(new StorePageAdapter(getActivity(), products));
-
     }
 
 
@@ -139,31 +107,83 @@ public class SearchFragment extends Fragment implements TextWatcher {
         unbinder.unbind();
     }
 
+
+    private TextWatcher searchWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            if (timer != null)
+                timer.cancel();
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    String searchKey = etSearch.getText().toString();
+                    if (!searchKey.isEmpty()) {
+                        presenter.getSearch(SearchFragment.this, searchKey);
+                    } else {
+                        if (rlProduct.getVisibility() == View.VISIBLE)
+                            rlProduct.setVisibility(View.GONE);
+                        if (rlStore.getVisibility() == View.VISIBLE)
+                            rlStore.setVisibility(View.GONE);
+                    }
+
+                }
+            }, 1000);
+
+        }
+    };
+
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    public void onStop() {
+        super.onStop();
 
     }
 
     @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        String searchKey = etSearch.getText().toString();
-        if (searchKey.isEmpty()) {
-            rlProduct.setVisibility(View.GONE);
-            rlStore.setVisibility(View.GONE);
-            gridView1.setAdapter(new ShopListAdapter(getActivity(), null));
-            gridView2.setAdapter(new StorePageAdapter(getActivity(), null));
-        } else {
+    public void onError(String error) {
+        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void searchResponse(SearchResponse searchResponse) {
+        stores.clear();
+        products.clear();
+        stores = searchResponse.getData().get(0).getStores();
+        products = searchResponse.getData().get(0).getProducts();
+
+        if (!stores.isEmpty()) {
             if (rlStore.getVisibility() == View.GONE)
                 rlStore.setVisibility(View.VISIBLE);
+        } else if (rlStore.getVisibility() == View.VISIBLE)
+            rlStore.setVisibility(View.GONE);
+
+
+        if (!products.isEmpty()) {
             if (rlProduct.getVisibility() == View.GONE)
                 rlProduct.setVisibility(View.VISIBLE);
-            setShopListData();
-            setProductListData();
-        }
-    }
+        } else if (rlProduct.getVisibility() == View.VISIBLE)
+            rlProduct.setVisibility(View.GONE);
 
-    @Override
-    public void afterTextChanged(Editable editable) {
+        if (shopAdapter == null) {
+            shopAdapter = new ShopListAdapter(getActivity(), stores);
+            gridView1.setAdapter(shopAdapter);
+        } else
+            shopAdapter.notifyDataSetChanged();
+        if (productsAdapter == null) {
+            productsAdapter = new StorePageAdapter(getActivity(), products);
+            gridView2.setAdapter(productsAdapter);
+        } else
+            productsAdapter.notifyDataSetChanged();
+
 
     }
 }

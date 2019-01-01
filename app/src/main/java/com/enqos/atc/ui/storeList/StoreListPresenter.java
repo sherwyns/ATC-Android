@@ -50,14 +50,16 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
         groupStores = new HashMap<>();
         for (StoreEntity store :
                 storeResponse.getData()) {
-            if (!groupStores.containsKey(store.getCategory().get(0).getId())) {
-                List<StoreEntity> storeEntities = new ArrayList<>();
-                storeEntities.add(store);
-                groupStores.put(store.getCategory().get(0).getId(), storeEntities);
-            } else {
-                groupStores.get(store.getCategory().get(0).getId()).add(store);
-            }
+            if (store.getCategory() != null) {
+                if (!groupStores.containsKey(store.getCategory().get(0).getId())) {
+                    List<StoreEntity> storeEntities = new ArrayList<>();
+                    storeEntities.add(store);
+                    groupStores.put(store.getCategory().get(0).getId(), storeEntities);
+                } else {
+                    groupStores.get(store.getCategory().get(0).getId()).add(store);
+                }
 
+            }
         }
     }
 

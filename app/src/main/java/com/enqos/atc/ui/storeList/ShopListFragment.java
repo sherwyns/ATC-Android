@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductEntity;
-import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreActivityListener;

@@ -70,4 +70,8 @@ public class CreateApiRequest {
     public void createCategoriesRequest() {
         dataRepository.getCategories(networkApiResponse);
     }
+
+    public void createSearchRequest(String key) {
+        dataRepository.getSearch(networkApiResponse, key);
+    }
 }
