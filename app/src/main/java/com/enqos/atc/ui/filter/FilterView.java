@@ -7,4 +7,6 @@ public interface FilterView {
     void onSuccess(CategoryResponse categoryResponse);
 
     void onError(String message);
+
+    void onItemClick(String id);
 }

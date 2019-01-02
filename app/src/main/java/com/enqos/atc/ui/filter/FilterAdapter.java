@@ -1,5 +1,7 @@
 package com.enqos.atc.ui.filter;
 
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,51 +14,51 @@ import com.enqos.atc.data.response.CategoryEntity;
 
 import java.util.List;
 
-public class FilterAdapter extends BaseAdapter {
+public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder> {
     private List<CategoryEntity> categoryEntities;
+    private FilterView filterView;
 
-    FilterAdapter(List<CategoryEntity> categoryEntities) {
+    FilterAdapter(List<CategoryEntity> categoryEntities, FilterView filterView) {
         this.categoryEntities = categoryEntities;
+        this.filterView = filterView;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_row_layout, viewGroup, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public int getCount() {
-        return categoryEntities == null ? 0 : categoryEntities.size();
-    }
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-    @Override
-    public Object getItem(int i) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder;
-        if (view == null) {
-            viewHolder = new ViewHolder();
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_row_layout, viewGroup, false);
-            viewHolder.tvCategoryName = view.findViewById(R.id.tv_category);
-            viewHolder.ivCategory = view.findViewById(R.id.iv_category);
-            view.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) view.getTag();
-        }
+        CategoryEntity categoryEntity = categoryEntities.get(i);
         if (i == 1)
             viewHolder.ivCategory.setImageResource(R.drawable.ic_card_giftcard_black_24dp);
         else if (i == 3)
             viewHolder.ivCategory.setImageResource(R.drawable.ic_directions_run_black_24dp);
-        viewHolder.tvCategoryName.setText(categoryEntities.get(i).getName());
-        return view;
+        viewHolder.tvCategoryName.setText(categoryEntity.getName());
+
+        viewHolder.itemView.setOnClickListener(view -> {
+
+            filterView.onItemClick(categoryEntity.getId());
+        });
     }
 
-    static class ViewHolder {
+    @Override
+    public int getItemCount() {
+        return categoryEntities == null ? 0 : categoryEntities.size();
+    }
 
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCategoryName;
         ImageView ivCategory;
+
+        ViewHolder(@NonNull View view) {
+            super(view);
+            tvCategoryName = view.findViewById(R.id.tv_category);
+            ivCategory = view.findViewById(R.id.iv_category);
+        }
     }
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +32,10 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FilterFragment extends Fragment implements AdapterView.OnItemClickListener, FilterView {
+public class FilterFragment extends Fragment implements FilterView {
     private Unbinder unbinder;
-    @BindView(R.id.gridview)
-    GridView gridView;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
     @Inject
     FilterPresenter filterPresenter;
     private StoreActivityListener storeActivityListener;
@@ -53,12 +55,15 @@ public class FilterFragment extends Fragment implements AdapterView.OnItemClickL
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categroy, container, false);
         unbinder = ButterKnife.bind(this, view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
         if (categories == null || categories.size() == 0)
             filterPresenter.getCategories(this);
         else {
-            gridView.setAdapter(new FilterAdapter(categories));
+            recyclerView.setAdapter(new FilterAdapter(categories, this));
         }
-        gridView.setOnItemClickListener(this);
+        //gridView.setOnItemClickListener(this);
         return view;
     }
 
@@ -81,19 +86,12 @@ public class FilterFragment extends Fragment implements AdapterView.OnItemClickL
         unbinder.unbind();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String selectedId = categories.get(i).getId();
-        Log.i("ID", selectedId);
-        if (storeActivityListener != null)
-            storeActivityListener.replaceFragment(ShopListFragment.newInstance(selectedId));
-    }
 
     @Override
     public void onSuccess(CategoryResponse categoryResponse) {
         if (categoryResponse != null) {
             categories = categoryResponse.getCategoryEntities();
-            gridView.setAdapter(new FilterAdapter(categories));
+            recyclerView.setAdapter(new FilterAdapter(categories, this));
         }
 
     }
@@ -101,5 +99,12 @@ public class FilterFragment extends Fragment implements AdapterView.OnItemClickL
     @Override
     public void onError(String message) {
 
+    }
+
+    @Override
+    public void onItemClick(String id) {
+        Log.i("ID", id);
+        if (storeActivityListener != null)
+            storeActivityListener.replaceFragment(ShopListFragment.newInstance(id));
     }
 }
