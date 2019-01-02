@@ -6,6 +6,16 @@ import java.util.List;
 
 public class StoreEntity {
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @SerializedName("name")
+    private String name;
     @SerializedName("tagline")
     private String tagline;
     @SerializedName("user_id")

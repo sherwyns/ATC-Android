@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
@@ -22,7 +23,9 @@ import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreActivityListener;
+import com.enqos.atc.ui.productdetail.ProductDetailFragment;
 import com.enqos.atc.ui.shoppage.StorePageAdapter;
+import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.enqos.atc.ui.storeList.ShopListAdapter;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class SearchFragment extends Fragment implements SearchView {
+public class SearchFragment extends Fragment implements SearchView, AdapterView.OnItemClickListener {
 
     @BindView(R.id.gridview1)
     GridView gridView1;
@@ -52,8 +55,7 @@ public class SearchFragment extends Fragment implements SearchView {
     SearchPresenter presenter;
     private Unbinder unbinder;
     private StoreActivityListener listener;
-    private Timer timer = new Timer();
-    ;
+    private Timer timer;
     private List<StoreEntity> stores = new ArrayList<>();
     private List<ProductEntity> products = new ArrayList<>();
     private ShopListAdapter shopAdapter;
@@ -77,6 +79,8 @@ public class SearchFragment extends Fragment implements SearchView {
 
         unbinder = ButterKnife.bind(this, rootView);
         etSearch.addTextChangedListener(searchWatcher);
+        gridView1.setOnItemClickListener(this);
+        gridView2.setOnItemClickListener(this);
         return rootView;
     }
 
@@ -116,28 +120,23 @@ public class SearchFragment extends Fragment implements SearchView {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             if (timer != null)
                 timer.cancel();
+
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
+            String searchKey = etSearch.getText().toString();
+            timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    String searchKey = etSearch.getText().toString();
-                    if (!searchKey.isEmpty()) {
-                        presenter.getSearch(SearchFragment.this, searchKey);
-                    } else {
-                        if (rlProduct.getVisibility() == View.VISIBLE)
-                            rlProduct.setVisibility(View.GONE);
-                        if (rlStore.getVisibility() == View.VISIBLE)
-                            rlStore.setVisibility(View.GONE);
-                    }
+                    presenter.getSearch(SearchFragment.this, searchKey);
 
                 }
             }, 1000);
+
 
         }
     };
@@ -145,20 +144,29 @@ public class SearchFragment extends Fragment implements SearchView {
     @Override
     public void onStop() {
         super.onStop();
+        if (timer != null)
+            timer.cancel();
 
     }
 
     @Override
     public void onError(String error) {
-        Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+        rlStore.setVisibility(View.GONE);
+        rlProduct.setVisibility(View.GONE);
+        stores.clear();
+        products.clear();
+        if (shopAdapter != null)
+            shopAdapter.notifyDataSetChanged();
+        if (productsAdapter != null)
+            productsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void searchResponse(SearchResponse searchResponse) {
         stores.clear();
         products.clear();
-        stores = searchResponse.getData().get(0).getStores();
-        products = searchResponse.getData().get(0).getProducts();
+        stores.addAll(searchResponse.getData().get(0).getStores());
+        products.addAll(searchResponse.getData().get(0).getProducts());
 
         if (!stores.isEmpty()) {
             if (rlStore.getVisibility() == View.GONE)
@@ -185,5 +193,25 @@ public class SearchFragment extends Fragment implements SearchView {
             productsAdapter.notifyDataSetChanged();
 
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (adapterView.getId()) {
+            case R.id.gridview1:
+                if (listener != null) {
+                    StorePageFragment storePageFragment = StorePageFragment.newInstance();
+                    storePageFragment.storeEntity = stores.get(i);
+                    listener.replaceFragment(storePageFragment);
+                }
+                break;
+            case R.id.gridview2:
+                ProductEntity product = products.get(i);
+                ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
+                productDetailFragment.productEntity = product;
+                productDetailFragment.similiarProducts = products;
+                listener.replaceFragment(productDetailFragment);
+                break;
+        }
     }
 }

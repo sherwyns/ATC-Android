@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,9 +85,16 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     }
 
     private void setValues() {
+        String storeName, neighbourHood;
+        if (!TextUtils.isEmpty(storeEntity.getShop_name()))
+            storeName = storeEntity.getShop_name();
+        else if (!TextUtils.isEmpty(storeEntity.getName()))
+            storeName = storeEntity.getName();
+        else
+            storeName = "Shops";
 
-        listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, storeEntity.getShop_name(), R.drawable.ic_filter_outline);
-        tvShopName.setText(storeEntity.getShop_name());
+        listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, storeName, R.drawable.ic_filter_outline);
+        tvShopName.setText(storeName);
         tvNeighbour.setText(storeEntity.getNeighbourhood());
 
         if (storeEntity.isFavourite()) {

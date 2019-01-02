@@ -71,6 +71,8 @@ public class ShopListAdapter extends BaseAdapter {
 
         if (!TextUtils.isEmpty(data.get(i).getShop_name()))
             viewHolder.shopName.setText(data.get(i).getShop_name());
+        else if (!TextUtils.isEmpty(data.get(i).getName()))
+            viewHolder.shopName.setText(data.get(i).getName());
         if (!TextUtils.isEmpty(data.get(i).getNeighbourhood()))
             viewHolder.neighbourhood.setText(data.get(i).getNeighbourhood());
 
