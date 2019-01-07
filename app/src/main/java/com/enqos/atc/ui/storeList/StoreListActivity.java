@@ -165,7 +165,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     private void onMenuClick(View view, String titleStr) {
         if (!title.getText().toString().equals(titleStr)) {
-            view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.image_click));
             title.setText(titleStr);
 
             switch (view.getId()) {

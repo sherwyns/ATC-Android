@@ -48,6 +48,7 @@
     <string name="something_went_wrong_try_again">Something went wrong. Try again!</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
     <string name="forgot_pass">Forgot password</string>
+    <string name="please_log_in_to_do_that">Please log in to do that</string>
 
 
 </resources>

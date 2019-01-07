@@ -11,6 +11,7 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.storeList.StoreListActivity;
+import com.enqos.atc.utils.Constants;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import javax.inject.Inject;
@@ -53,6 +54,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
     public void navigateHome() {
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(Constants.IS_FAV, false);
         ActivityOptions activityOptions =
                 ActivityOptions.makeSceneTransitionAnimation(
                         this, logo, "logo");
