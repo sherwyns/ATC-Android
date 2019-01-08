@@ -1,5 +1,7 @@
 package com.enqos.atc.ui.storeList;
 
+import android.text.TextUtils;
+
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.CreateApiRequest;
@@ -68,8 +70,14 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
         if (response instanceof StoreResponse) {
             storeResponse = (StoreResponse) response;
             groupStoreByCategory(storeResponse);
+            storeListView.storeResponse(storeResponse);
+            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
+            if (!TextUtils.isEmpty(userId))
+                createApiRequest.createGetFavorites(userId);
+        } else if (response instanceof FavoriteResponse) {
+
         }
-        storeListView.storeResponse(storeResponse);
+
     }
 
     @Override

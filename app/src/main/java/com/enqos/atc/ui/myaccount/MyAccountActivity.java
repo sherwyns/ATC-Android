@@ -12,6 +12,7 @@ import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.ui.home.HomeActivity;
+import com.enqos.atc.utils.Constants;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import javax.inject.Inject;
@@ -70,6 +71,7 @@ public class MyAccountActivity extends BaseActivity {
             case R.id.tv_sign_out:
                 sharedPreferenceManager.clearPreference();
                 Intent intent = new Intent(MyAccountActivity.this, HomeActivity.class);
+                intent.putExtra(Constants.IS_FAV, false);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();

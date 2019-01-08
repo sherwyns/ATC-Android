@@ -55,7 +55,7 @@ public class CreateApiRequest {
         dataRepository.updateFavorite(networkApiResponse, userId, saveFavoriteRequest);
     }
 
-    public void createFavoriteRequest(String id) {
+    public void createGetFavorites(String id) {
         dataRepository.getFavorites(networkApiResponse, id);
     }
 

@@ -24,6 +24,7 @@ import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
+import com.enqos.atc.utils.FavouriteUtility;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
@@ -162,10 +163,13 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         startActivity(intent);
     }
 
+
     @Override
     public void onSaveStoreFavorite(StoreEntity storeEntity, boolean isFav, int pos) {
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
+            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
+
             StoreEntity removeEnity = null;
             List<StoreEntity> fav = sharedPreferenceManager.getFavorites();
             if (fav != null) {
@@ -193,6 +197,9 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 favorite.add(storeEntity);
                 sharedPreferenceManager.saveFavourites(favorite);
             }
+
+            FavouriteUtility.saveFavourite(userId, FavouriteUtility.getStoreFavourites(sharedPreferenceManager.getFavorites())
+                    , FavouriteUtility.getProductFavourites(sharedPreferenceManager.getProductFavorites()));
             shopListAdapter.notifyDataSetChanged();
         } else {
             startActivity(new Intent(getActivity(), HomeActivity.class));
