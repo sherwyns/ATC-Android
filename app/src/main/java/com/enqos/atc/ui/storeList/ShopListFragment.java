@@ -198,8 +198,8 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 sharedPreferenceManager.saveFavourites(favorite);
             }
 
-            FavouriteUtility.saveFavourite(userId, FavouriteUtility.getStoreFavourites(sharedPreferenceManager.getFavorites())
-                    , FavouriteUtility.getProductFavourites(sharedPreferenceManager.getProductFavorites()));
+           /* FavouriteUtility.saveFavourite(userId, FavouriteUtility.getStoreFavourites(sharedPreferenceManager.getFavorites())
+                    , FavouriteUtility.getProductFavourites(sharedPreferenceManager.getProductFavorites()));*/
             shopListAdapter.notifyDataSetChanged();
         } else {
             startActivity(new Intent(getActivity(), HomeActivity.class));

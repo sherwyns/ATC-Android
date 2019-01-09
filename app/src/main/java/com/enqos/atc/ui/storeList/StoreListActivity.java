@@ -26,6 +26,8 @@ import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.myaccount.MyAccountActivity;
 import com.enqos.atc.ui.search.SearchFragment;
+import com.enqos.atc.ui.slidemenu.TermsAndConditionsActivity;
+import com.enqos.atc.utils.Constants;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.List;
@@ -114,7 +116,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             toolbar.setVisibility(View.VISIBLE);
     }
 
-    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.img_fav, R.id.img_search, R.id.img_home})
+    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.terms_condition, R.id.img_fav, R.id.img_search, R.id.img_home})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
@@ -148,6 +150,9 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             case R.id.img_search:
                 onMenuClick(view, getString(R.string.search));
                 break;
+            case R.id.terms_condition:
+                startActivity(new Intent(this, TermsAndConditionsActivity.class));
+                break;
             case R.id.menu_my_account:
                 drawerLayout.closeDrawer(GravityCompat.START);
                 if (isLogin) {
@@ -155,6 +160,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra(Constants.IS_FAV, false);
                     startActivity(intent);
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -204,6 +210,11 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         leftImg.setImageResource(leftResId);
         title.setText(text);
         rightImg.setImageResource(rightResId);
+    }
+
+    @Override
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 
     @Override

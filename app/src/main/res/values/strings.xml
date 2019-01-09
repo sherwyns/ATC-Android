@@ -38,7 +38,7 @@
     <string name="store">Stores</string>
     <string name="favourites">Favourites</string>
     <string name="filter_by_category">Filter by category</string>
-    <string name="search_by_product_store">Search by product, store</string>
+    <string name="search_by_product_store">Search for products or stores</string>
     <string name="search">Search</string>
     <string name="about">About</string>
     <string name="view_products">View products</string>
@@ -49,6 +49,7 @@
     <string name="forgot_password"><u>Forgot password?</u></string>
     <string name="forgot_pass">Forgot password</string>
     <string name="please_log_in_to_do_that">Please log in to do that</string>
+    <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.enqos.atc.data.remote;
 
+import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
@@ -37,6 +38,9 @@ public interface WebServiceApi {
 
     @POST("api/socialUsers/signin")
     Observable<LoginResponse> socialNetworkSignIn(@Body LoginRequest loginRequest);
+
+    @POST("api/Users/change-password/{access_token}")
+    Observable<Void> changePassword(@Path("access_token") String accessToken, @Body ChangePasswordRequest changePasswordRequest);
 
     @GET("api/Store/getstores")
     Observable<StoreResponse> store();

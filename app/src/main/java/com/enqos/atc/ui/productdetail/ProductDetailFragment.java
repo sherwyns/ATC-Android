@@ -1,6 +1,7 @@
 package com.enqos.atc.ui.productdetail;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.listener.RecyclerViewItemClickListner;
+import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
@@ -53,6 +55,7 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     RecyclerView rvProducts;
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
+    private StoreActivityListener listener;
     public ProductEntity productEntity;
     public List<ProductEntity> similiarProducts;
     private Unbinder unbinder;
@@ -103,6 +106,7 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,6 +124,21 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                 saveProduct();
                 break;
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (StoreActivityListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (listener != null && productEntity != null && productEntity.getTitle() != null)
+            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, productEntity.getTitle(), R.drawable.ic_filter_outline);
+        else if (listener != null)
+            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, "Product", R.drawable.ic_filter_outline);
     }
 
     @Override

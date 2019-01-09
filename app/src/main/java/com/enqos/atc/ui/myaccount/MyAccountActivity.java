@@ -2,15 +2,18 @@ package com.enqos.atc.ui.myaccount;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.data.CreateApiRequest;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.utils.Constants;
 import com.enqos.atc.utils.SharedPreferenceManager;
@@ -21,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyAccountActivity extends BaseActivity {
+public class MyAccountActivity extends BaseActivity implements MyAccountView {
 
     @BindView(R.id.image_left)
     ImageView imgLeft;
@@ -64,7 +67,7 @@ public class MyAccountActivity extends BaseActivity {
         tvEmail.setText(email);
     }
 
-    @OnClick({R.id.tv_sign_out, R.id.image_left, R.id.change_pass_header})
+    @OnClick({R.id.tv_sign_out, R.id.image_left, R.id.change_pass_header, R.id.tv_change_password})
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -88,6 +91,19 @@ public class MyAccountActivity extends BaseActivity {
                     changePassArrow.setRotation(180);
                 }
                 break;
+            case R.id.tv_change_password:
+                String oldPassword = etCurrentPassword.getText().toString();
+                String newPassword = etNewPassword.getText().toString();
+                String re_enter_password = etConfirmPassword.getText().toString();
+                String accessToken = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.TOKEN);
+
+                if (TextUtils.isEmpty(oldPassword) || TextUtils.isEmpty(newPassword))
+                    Toast.makeText(this, "Enter valid inputs", Toast.LENGTH_LONG).show();
+                else if (!re_enter_password.equalsIgnoreCase(newPassword))
+                    Toast.makeText(this, "New Password and Re-enter password mismatch", Toast.LENGTH_LONG).show();
+                else
+                    myAccountPresenter.changePassword(this, accessToken, oldPassword, newPassword);
+                break;
         }
     }
 
@@ -106,5 +122,15 @@ public class MyAccountActivity extends BaseActivity {
     @Override
     public int getLayoutId() {
         return R.layout.activity_my_account;
+    }
+
+    @Override
+    public void onSuccess() {
+        Toast.makeText(this, "Password changed Successfully!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void errorMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

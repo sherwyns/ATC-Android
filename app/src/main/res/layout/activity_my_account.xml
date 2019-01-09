@@ -90,9 +90,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/change_pass_header"
-        android:layout_marginEnd="@dimen/dimen_60dp"
         android:layout_marginStart="@dimen/dimen_60dp"
         android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginEnd="@dimen/dimen_60dp"
         android:orientation="vertical">
 
         <EditText
@@ -138,6 +138,25 @@
             android:padding="@dimen/dimen_10dp"
             android:singleLine="true"
             android:textSize="@dimen/font_16" />
+
+        <TextView
+            android:id="@+id/tv_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:layout_marginBottom="@dimen/dimen_40dp"
+            android:background="@drawable/button_bg_orange"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingStart="@dimen/dimen_10dp"
+            android:paddingTop="@dimen/dimen_15dp"
+            android:paddingEnd="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/dimen_15dp"
+            android:text="@string/change_password"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_18" />
+
     </LinearLayout>
 
     <TextView
@@ -145,17 +164,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dimen_40dp"
-        android:layout_marginEnd="@dimen/dimen_60dp"
         android:layout_marginStart="@dimen/dimen_60dp"
         android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginEnd="@dimen/dimen_60dp"
+        android:layout_marginBottom="@dimen/dimen_40dp"
         android:background="@drawable/button_bg_orange"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:paddingBottom="@dimen/dimen_15dp"
-        android:paddingEnd="@dimen/dimen_10dp"
         android:paddingStart="@dimen/dimen_10dp"
         android:paddingTop="@dimen/dimen_15dp"
+        android:paddingEnd="@dimen/dimen_10dp"
+        android:paddingBottom="@dimen/dimen_15dp"
         android:text="@string/sign_out"
         android:textAllCaps="false"
         android:textColor="@android:color/white"

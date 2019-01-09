@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class SearchFragment extends Fragment implements SearchView, AdapterView.OnItemClickListener {
@@ -96,8 +98,10 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     @Override
     public void onResume() {
         super.onResume();
-        if (listener != null)
+        if (listener != null) {
+            listener.getToolbar().setVisibility(View.GONE);
             listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline);
+        }
     }
 
     @Override
@@ -197,6 +201,8 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (listener != null)
+            listener.getToolbar().setVisibility(View.VISIBLE);
         switch (adapterView.getId()) {
             case R.id.gridview1:
                 if (listener != null) {

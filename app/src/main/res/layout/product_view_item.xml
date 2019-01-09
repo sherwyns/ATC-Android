@@ -23,7 +23,7 @@
             <ImageView
                 android:id="@+id/product_img"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen_120dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_photo_size_select_actual_black_24dp" />

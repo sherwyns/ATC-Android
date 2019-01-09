@@ -1,5 +1,6 @@
 package com.enqos.atc.data;
 
+import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
@@ -73,5 +74,10 @@ public class CreateApiRequest {
 
     public void createSearchRequest(String key) {
         dataRepository.getSearch(networkApiResponse, key);
+    }
+
+    public void createChangePasswordRequest(String accessToken,String oldPassword,String newPassword) {
+        ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest(oldPassword,newPassword);
+        dataRepository.changePassword(networkApiResponse, accessToken,changePasswordRequest);
     }
 }

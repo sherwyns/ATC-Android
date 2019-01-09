@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.remote.WebServiceApi;
+import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
@@ -114,6 +115,25 @@ public class DataRepository extends BasePresenter {
                         } else {
                             networkApiResponse.onSuccess(response);
                         }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void changePassword(NetworkApiResponse networkApiResponse, String accessToken, ChangePasswordRequest changePasswordRequest) {
+
+        Observable<Void> loginResponse = retrofit.create(WebServiceApi.class).changePassword(accessToken, changePasswordRequest);
+
+        loginResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, changePasswordRequest.getRequestCode()), Void.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        networkApiResponse.onSuccess(null);
+
                     }
 
                 }, error -> {
