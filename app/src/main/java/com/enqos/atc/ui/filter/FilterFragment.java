@@ -91,6 +91,12 @@ public class FilterFragment extends Fragment implements FilterView {
     public void onSuccess(CategoryResponse categoryResponse) {
         if (categoryResponse != null) {
             categories = categoryResponse.getCategoryEntities();
+            if (categories != null) {
+                CategoryEntity allCategory = new CategoryEntity();
+                allCategory.setId("");
+                allCategory.setName("All");
+                categories.add(0, allCategory);
+            }
             recyclerView.setAdapter(new FilterAdapter(categories, this));
         }
 

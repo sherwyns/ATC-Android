@@ -53,6 +53,10 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     RelativeLayout rlStore;
     @BindView(R.id.rl_product)
     RelativeLayout rlProduct;
+    @BindView(R.id.arrow_store)
+    ImageView ivStoreArrow;
+    @BindView(R.id.arrow_product)
+    ImageView ivProductArrow;
     @Inject
     SearchPresenter presenter;
     private Unbinder unbinder;
@@ -116,6 +120,19 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     }
 
 
+    @OnClick({R.id.rl_store, R.id.rl_product})
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.rl_store:
+                showMoreStore();
+                break;
+            case R.id.rl_product:
+                showMoreProducts();
+                break;
+        }
+    }
+
     private TextWatcher searchWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -151,6 +168,26 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
         if (timer != null)
             timer.cancel();
 
+    }
+
+    private void showMoreStore() {
+        if (gridView2.getVisibility() == View.VISIBLE) {
+            ivStoreArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+            gridView2.setVisibility(View.GONE);
+        } else {
+            ivStoreArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
+            gridView2.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showMoreProducts() {
+        if (gridView1.getVisibility() == View.VISIBLE) {
+            ivProductArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+            gridView1.setVisibility(View.GONE);
+        } else {
+            ivProductArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
+            gridView1.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

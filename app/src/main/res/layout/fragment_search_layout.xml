@@ -67,11 +67,13 @@
                     android:textStyle="normal" />
 
                 <ImageView
+                    android:id="@+id/arrow_store"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+                    android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:tint="@android:color/darker_gray" />
             </RelativeLayout>
 
             <GridView
@@ -109,11 +111,13 @@
                     android:textStyle="normal" />
 
                 <ImageView
+                    android:id="@+id/arrow_product"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+                    android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:tint="@android:color/darker_gray" />
             </RelativeLayout>
 
             <GridView

@@ -1,8 +1,12 @@
 package com.enqos.atc.data.request;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ChangePasswordRequest extends BaseRequest {
 
+    @SerializedName("oldPassword")
     private String oldPassword;
+    @SerializedName("newPassword")
     private String newPassword;
 
     public ChangePasswordRequest(String oldPassword, String newPassword) {

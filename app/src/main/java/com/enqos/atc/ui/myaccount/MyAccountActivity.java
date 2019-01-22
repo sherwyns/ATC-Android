@@ -131,6 +131,14 @@ public class MyAccountActivity extends BaseActivity implements MyAccountView {
 
     @Override
     public void errorMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        if (message.equalsIgnoreCase("Null is not a valid element")) {
+            etConfirmPassword.setText("");
+            etCurrentPassword.setText("");
+            etNewPassword.setText("");
+            Toast.makeText(this, "Password changed Successfully!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
     }
 }

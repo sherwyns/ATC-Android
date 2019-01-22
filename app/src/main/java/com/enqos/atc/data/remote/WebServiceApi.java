@@ -39,8 +39,8 @@ public interface WebServiceApi {
     @POST("api/socialUsers/signin")
     Observable<LoginResponse> socialNetworkSignIn(@Body LoginRequest loginRequest);
 
-    @POST("api/Users/change-password/{access_token}")
-    Observable<Void> changePassword(@Path("access_token") String accessToken, @Body ChangePasswordRequest changePasswordRequest);
+    @POST("api/Users/change-password?")
+    Observable<Void> changePassword(@Query("access_token") String accessToken, @Body ChangePasswordRequest changePasswordRequest);
 
     @GET("api/Store/getstores")
     Observable<StoreResponse> store();

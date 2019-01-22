@@ -50,10 +50,10 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     TextView tvShopName;
     @BindView(R.id.tv_neighbourhood)
     TextView tvNeighbour;
+    @BindView(R.id.product_by_label)
+    TextView prodcutLabel;
     @BindView(R.id.img_fav)
     ImageView ivFav;
-    @BindView(R.id.error_layout)
-    LinearLayout errorLayout;
     @BindView(R.id.ll_content)
     LinearLayout contentLayout;
     @Inject
@@ -167,12 +167,9 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         if (response != null) {
 
             if (response.getData().isEmpty()) {
-                errorLayout.setVisibility(View.VISIBLE);
-                contentLayout.setVisibility(View.GONE);
+                prodcutLabel.setVisibility(View.GONE);
             } else {
-
-                errorLayout.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
+                prodcutLabel.setVisibility(View.VISIBLE);
                 allProducts.clear();
                 allProducts.addAll(response.getData());
                 if (allProducts != null)

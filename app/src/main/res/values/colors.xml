@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#4BA0FF</color>  <!--1C2AFF-->
     <color name="colorAccent">#FF4081</color>
 
+    <color name="colorPrimaryTrans">#804BA0FF</color>
     <color name="colorOrange">#EB6423</color>
     <color name="colorDarkOrange">#EB5B23</color>
 
