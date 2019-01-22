@@ -1,6 +1,7 @@
 package com.enqos.atc.ui.storeList;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -116,7 +117,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             toolbar.setVisibility(View.VISIBLE);
     }
 
-    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.terms_condition, R.id.img_fav, R.id.img_search, R.id.img_home})
+    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.terms_condition, R.id.help, R.id.privacy, R.id.about, R.id.img_fav, R.id.img_search, R.id.img_home})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
@@ -151,7 +152,32 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 onMenuClick(view, getString(R.string.search));
                 break;
             case R.id.terms_condition:
-                startActivity(new Intent(this, TermsAndConditionsActivity.class));
+                Intent browserIntent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PRIVACY_POLICY_LINK));
+                startActivity(browserIntent1);
+                /*Intent intent1 = new Intent(this, TermsAndConditionsActivity.class);
+                intent1.putExtra("link", "TC");
+                startActivity(intent1);*/
+                break;
+            case R.id.help:
+                Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.HELP_LINK));
+                startActivity(browserIntent2);
+               /* Intent intent2 = new Intent(this, TermsAndConditionsActivity.class);
+                intent2.putExtra("link", "HELP");
+                startActivity(intent2);*/
+                break;
+            case R.id.privacy:
+                Intent browserIntent3 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PRIVACY_POLICY_LINK));
+                startActivity(browserIntent3);
+               /* Intent intent3 = new Intent(this, TermsAndConditionsActivity.class);
+                intent3.putExtra("link", "PRIVACY");
+                startActivity(intent3);*/
+                break;
+            case R.id.about:
+                Intent browserIntent4 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ABOUT_US_LINK));
+                startActivity(browserIntent4);
+               /* Intent intent4 = new Intent(this, TermsAndConditionsActivity.class);
+                intent4.putExtra("link", "ABOUT");
+                startActivity(intent4);*/
                 break;
             case R.id.menu_my_account:
                 drawerLayout.closeDrawer(GravityCompat.START);

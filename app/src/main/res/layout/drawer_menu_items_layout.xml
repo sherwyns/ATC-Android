@@ -43,6 +43,7 @@
             android:background="@color/colorOrange" />
 
         <TextView
+            android:id="@+id/help"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_50dp"
@@ -68,6 +69,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/about"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_50dp"
@@ -85,6 +87,7 @@
             android:background="@color/colorOrange" />
 
         <TextView
+            android:id="@+id/privacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_50dp"
