@@ -1,6 +1,7 @@
 package com.enqos.atc.data.remote;
 
 import com.enqos.atc.data.request.ChangePasswordRequest;
+import com.enqos.atc.data.request.GetFavouriteRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
@@ -9,9 +10,11 @@ import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.SaveFavouriteResponse;
 import com.enqos.atc.data.response.SearchDataResponse;
 import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreDetailResponse;
+import com.enqos.atc.data.response.StoreFavoriteResponse;
 import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.data.response.UpdateFavoriteResponse;
@@ -19,6 +22,7 @@ import com.enqos.atc.data.response.UpdateFavoriteResponse;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -45,11 +49,11 @@ public interface WebServiceApi {
     @GET("api/Store/getstores")
     Observable<StoreResponse> store();
 
-    @GET("api/favorites/findOne?")
-    Observable<FavoriteResponse> favorites(@Query("filter") String filter);
+    @POST("api/favorite/list")
+    Observable<StoreFavoriteResponse> favorites(@Body GetFavouriteRequest favouriteRequest);
 
-    @POST("api/favorites")
-    Observable<FavoriteResponse> saveFavorite(@Body SaveFavoriteRequest saveFavorite);
+    @POST("api/favorite/save")
+    Observable<SaveFavouriteResponse> saveFavorite(@Body SaveFavoriteRequest saveFavorite);
 
     @POST("api/favorites/update?")
     Observable<UpdateFavoriteResponse> updateFavorite(@Query("where[user_id]") String id, @Body UpdateFavoriteRequest saveFavorite);

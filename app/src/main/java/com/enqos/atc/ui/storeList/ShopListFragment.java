@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.data.response.NewStoreFavouriteEntity;
 import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreResponse;
@@ -134,13 +135,13 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     }
 
     @Override
-    public void storeResponse(StoreResponse storeResponse) {
-        List<StoreEntity> favs = sharedPreferenceManager.getFavorites();
-        if (favs != null) {
+    public void storeResponse(StoreResponse storeResponse, List<NewStoreFavouriteEntity> data) {
+
+        if (data != null) {
             for (StoreEntity store :
                     storeResponse.getData()) {
-                for (StoreEntity fav : favs) {
-                    if (store.getId().equals(fav.getId()))
+                for (NewStoreFavouriteEntity fav : data) {
+                    if (store.getId().equals(fav.getStore_id()) && fav.getFavorite().equals("1"))
                         store.setFavourite(true);
                 }
             }
@@ -198,8 +199,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 sharedPreferenceManager.saveFavourites(favorite);
             }
 
-           /* FavouriteUtility.saveFavourite(userId, FavouriteUtility.getStoreFavourites(sharedPreferenceManager.getFavorites())
-                    , FavouriteUtility.getProductFavourites(sharedPreferenceManager.getProductFavorites()));*/
+            FavouriteUtility.saveFavourite(userId, storeEntity.getId(), "store", isFav ? "1" : "0");
             shopListAdapter.notifyDataSetChanged();
         } else {
             startActivity(new Intent(getActivity(), HomeActivity.class));

@@ -29,6 +29,7 @@ import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.productdetail.ProductDetailFragment;
 import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
+import com.enqos.atc.utils.FavouriteUtility;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
@@ -218,6 +219,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
 
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
+            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             StoreEntity removeEnity = null;
             List<StoreEntity> prodFav = sharedPreferenceManager.getFavorites();
             if (prodFav != null) {
@@ -241,6 +243,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
                     prodFav.remove(removeEnity);
 
                 sharedPreferenceManager.saveFavourites(prodFav);
+                FavouriteUtility.saveFavourite(userId, storeEntity.getId(), "store", !storeEntity.isFavourite() ? "1" : "0");
             } else {
                 List<StoreEntity> favorite = new ArrayList<>();
                 storeEntity.setFavourite(true);
@@ -256,6 +259,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     public void onSaveProductFavorite(ProductEntity productFavoriteEntity, boolean isFav, int pos) {
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
+            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             ProductEntity removeEnity = null;
             List<ProductEntity> prodFav = sharedPreferenceManager.getProductFavorites();
             if (prodFav != null) {
@@ -283,6 +287,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
                 favorite.add(productFavoriteEntity);
                 sharedPreferenceManager.saveProductFavourites(favorite);
             }
+            FavouriteUtility.saveFavourite(userId, storeEntity.getId(), "product", isFav ? "1" : "0");
             storePageAdapter.notifyDataSetChanged();
 
         } else {

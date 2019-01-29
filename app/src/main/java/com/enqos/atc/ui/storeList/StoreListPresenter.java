@@ -6,15 +6,10 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.CreateApiRequest;
 import com.enqos.atc.data.response.BaseResponse;
-import com.enqos.atc.data.response.ProductEntity;
-import com.enqos.atc.data.response.ProductFavoriteEntity;
-import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.StoreEntity;
-import com.enqos.atc.data.response.StoreFavoriteEntity;
-import com.enqos.atc.data.response.StorePageResponse;
+import com.enqos.atc.data.response.StoreFavoriteResponse;
 import com.enqos.atc.data.response.StoreResponse;
-import com.enqos.atc.data.response.UpdateFavoriteResponse;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
@@ -70,12 +65,14 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
         if (response instanceof StoreResponse) {
             storeResponse = (StoreResponse) response;
             groupStoreByCategory(storeResponse);
-            storeListView.storeResponse(storeResponse);
             String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             if (!TextUtils.isEmpty(userId))
-                createApiRequest.createGetFavorites(userId);
-        } else if (response instanceof FavoriteResponse) {
-
+                createApiRequest.createGetStoreFavorites(userId);
+            else
+                storeListView.storeResponse(storeResponse, null);
+        } else if (response instanceof StoreFavoriteResponse) {
+            StoreFavoriteResponse storeFavoriteResponse = (StoreFavoriteResponse) response;
+            storeListView.storeResponse(storeResponse, storeFavoriteResponse.getData());
         }
 
     }

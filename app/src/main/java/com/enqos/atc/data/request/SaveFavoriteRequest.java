@@ -1,18 +1,25 @@
 package com.enqos.atc.data.request;
 
-import com.enqos.atc.data.response.ProductFavoriteEntity;
-import com.enqos.atc.data.response.StoreFavoriteEntity;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 public class SaveFavoriteRequest extends BaseRequest {
 
-    public SaveFavoriteRequest(String userId, List<StoreFavoriteEntity> store, List<ProductFavoriteEntity> product) {
+    public SaveFavoriteRequest(String userId, String id, String type, String isFavorite) {
         this.userId = userId;
-        this.store = store;
-        this.product = product;
+        this.type = type;
+        this.id = id;
+        this.isFavorite = isFavorite;
     }
+
+
+    @SerializedName("user_id")
+    private String userId;
+    @SerializedName("type")
+    private String type;
+    @SerializedName("isfavorite")
+    private String isFavorite;
+    @SerializedName("id")
+    private String id;
 
     public String getUserId() {
         return userId;
@@ -22,26 +29,27 @@ public class SaveFavoriteRequest extends BaseRequest {
         this.userId = userId;
     }
 
-    public List<StoreFavoriteEntity> getStore() {
-        return store;
+    public String getType() {
+        return type;
     }
 
-    public void setStore(List<StoreFavoriteEntity> store) {
-        this.store = store;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public List<ProductFavoriteEntity> getProduct() {
-        return product;
+    public String getIsFavorite() {
+        return isFavorite;
     }
 
-    public void setProduct(List<ProductFavoriteEntity> product) {
-        this.product = product;
+    public void setIsFavorite(String isFavorite) {
+        this.isFavorite = isFavorite;
     }
 
-    @SerializedName("user_id")
-    private String userId;
-    @SerializedName("store")
-    private List<StoreFavoriteEntity> store;
-    @SerializedName("product")
-    private List<ProductFavoriteEntity> product;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

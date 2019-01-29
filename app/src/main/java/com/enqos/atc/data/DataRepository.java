@@ -7,6 +7,7 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.remote.WebServiceApi;
 import com.enqos.atc.data.request.ChangePasswordRequest;
+import com.enqos.atc.data.request.GetFavouriteRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
@@ -16,8 +17,10 @@ import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.SaveFavouriteResponse;
 import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreDetailResponse;
+import com.enqos.atc.data.response.StoreFavoriteResponse;
 import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.data.response.UpdateFavoriteResponse;
@@ -188,11 +191,11 @@ public class DataRepository extends BasePresenter {
     @SuppressLint("CheckResult")
     void saveFavorite(NetworkApiResponse networkApiResponse, SaveFavoriteRequest favoriteRequest) {
 
-        Observable<FavoriteResponse> storeResponse = retrofit.create(WebServiceApi.class).saveFavorite(favoriteRequest);
+        Observable<SaveFavouriteResponse> storeResponse = retrofit.create(WebServiceApi.class).saveFavorite(favoriteRequest);
 
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
-                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, favoriteRequest.getRequestCode()), FavoriteResponse.class))
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, favoriteRequest.getRequestCode()), SaveFavouriteResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
                         if (response.getError() != null) {
@@ -230,13 +233,13 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    void getFavorites(NetworkApiResponse networkApiResponse, String id) {
+    void getStoreFavorites(NetworkApiResponse networkApiResponse, GetFavouriteRequest getFavouriteRequest) {
 
-        Observable<FavoriteResponse> storeResponse = retrofit.create(WebServiceApi.class).favorites(id);
+        Observable<StoreFavoriteResponse> storeResponse = retrofit.create(WebServiceApi.class).favorites(getFavouriteRequest);
 
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
-                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), FavoriteResponse.class))
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StoreFavoriteResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
                         if (response.getError() != null) {

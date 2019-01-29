@@ -31,6 +31,7 @@ import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
+import com.enqos.atc.utils.FavouriteUtility;
 import com.enqos.atc.utils.SharedPreferenceManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -214,6 +215,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
 
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
+            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             StoreEntity removeEnity = null;
             List<StoreEntity> prodFav = sharedPreferenceManager.getFavorites();
             if (prodFav != null) {
@@ -243,6 +245,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
                 favorite.add(storeEntity);
                 sharedPreferenceManager.saveFavourites(favorite);
             }
+            FavouriteUtility.saveFavourite(userId, storeEntity.getId(), "store", !isFavourite ? "1" : "0");
         } else {
             startActivity(new Intent(getActivity(), HomeActivity.class));
         }
