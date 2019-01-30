@@ -179,8 +179,7 @@
                 android:padding="@dimen/dimen_10dp"
                 android:text="@string/forgot_password"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/font_16"
-                android:visibility="gone" />
+                android:textSize="@dimen/font_16" />
 
             <TextView
                 android:id="@+id/login"

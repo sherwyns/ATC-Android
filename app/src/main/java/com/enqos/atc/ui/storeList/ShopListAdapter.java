@@ -15,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreListener;
+import com.enqos.atc.utils.FavouriteUtility;
 
 import java.util.List;
 
@@ -82,8 +83,9 @@ public class ShopListAdapter extends BaseAdapter {
                 view1.startAnimation(AnimationUtils.loadAnimation(context, R.anim.image_click));
                 boolean isFav = data.get(i).isFavourite();
                 if (isFav) {
-                    if (storeListener instanceof FavouriteFragment)
+                    if (storeListener instanceof FavouriteFragment) {
                         storeListener.onRemoveFav(i, true);
+                    }
                     else {
                         storeListener.onSaveStoreFavorite(data.get(i), false, i);
                         if (!data.isEmpty())

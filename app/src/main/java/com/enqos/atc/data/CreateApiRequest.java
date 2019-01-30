@@ -4,6 +4,7 @@ import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.GetFavouriteRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
+import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
 import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
@@ -28,6 +29,11 @@ public class CreateApiRequest {
         dataRepository.authenticateUser(networkApiResponse, loginInfo);
     }
 
+    public void createResetPasswordRequest(String email, String url) {
+        ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest(email, url);
+        dataRepository.resetPassword(networkApiResponse, resetPasswordRequest);
+    }
+
     public void createSocialLoginRequest(String email, String externalId, String provider) {
         LoginRequest loginInfo = new LoginRequest(email, externalId, provider);
         dataRepository.authenticateSocialUser(networkApiResponse, loginInfo);
@@ -47,8 +53,8 @@ public class CreateApiRequest {
         dataRepository.getStore(networkApiResponse);
     }
 
-    public void createSaveFavoriteRequest(String userId,String id, String type,String isFavourite) {
-        SaveFavoriteRequest saveFavoriteRequest = new SaveFavoriteRequest(userId, id,type,isFavourite);
+    public void createSaveFavoriteRequest(String userId, String id, String type, String isFavourite) {
+        SaveFavoriteRequest saveFavoriteRequest = new SaveFavoriteRequest(userId, id, type, isFavourite);
         dataRepository.saveFavorite(networkApiResponse, saveFavoriteRequest);
     }
 
@@ -57,9 +63,14 @@ public class CreateApiRequest {
         dataRepository.updateFavorite(networkApiResponse, userId, saveFavoriteRequest);
     }
 
-    public void createGetStoreFavorites(String userId) {
-        GetFavouriteRequest favouriteRequest = new GetFavouriteRequest(userId, "store");
+    public void createGetStoreFavorites(String userId, String type) {
+        GetFavouriteRequest favouriteRequest = new GetFavouriteRequest(userId, type);
         dataRepository.getStoreFavorites(networkApiResponse, favouriteRequest);
+    }
+
+    public void createGetProductFavorites(String userId, String type) {
+        GetFavouriteRequest favouriteRequest = new GetFavouriteRequest(userId, type);
+        dataRepository.getProductFavorites(networkApiResponse, favouriteRequest);
     }
 
     public void createStoreDetailRequest(String id) {

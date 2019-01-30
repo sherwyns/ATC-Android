@@ -25,6 +25,7 @@ import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.listener.RecyclerViewItemClickListner;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.home.HomeActivity;
+import com.enqos.atc.utils.FavouriteUtility;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
@@ -151,6 +152,7 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
 
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
+            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             ProductEntity removeEnity = null;
             List<ProductEntity> prodFav = sharedPreferenceManager.getProductFavorites();
             if (prodFav != null) {
@@ -181,6 +183,7 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                 sharedPreferenceManager.saveProductFavourites(favorite);
             }
 
+            FavouriteUtility.saveFavourite(userId, productEntity.getId(), "product", !productEntity.isFavourite() ? "1" : "0");
         } else {
             startActivity(new Intent(getActivity(), HomeActivity.class));
         }

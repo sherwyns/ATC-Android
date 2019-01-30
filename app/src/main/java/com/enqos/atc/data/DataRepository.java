@@ -10,13 +10,16 @@ import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.GetFavouriteRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
+import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
 import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
+import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.ResetPasswordResponse;
 import com.enqos.atc.data.response.SaveFavouriteResponse;
 import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreDetailResponse;
@@ -111,6 +114,28 @@ public class DataRepository extends BasePresenter {
         loginResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
                 .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, loginRequest.getRequestCode()), LoginResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void resetPassword(NetworkApiResponse networkApiResponse, ResetPasswordRequest resetPasswordRequest) {
+
+        Observable<ResetPasswordResponse> responseObservable = retrofit.create(WebServiceApi.class).resetPassword(resetPasswordRequest);
+
+        responseObservable.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, resetPasswordRequest.getRequestCode()), ResetPasswordResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
                         if (response.getError() != null) {
@@ -240,6 +265,28 @@ public class DataRepository extends BasePresenter {
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
                 .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StoreFavoriteResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void getProductFavorites(NetworkApiResponse networkApiResponse, GetFavouriteRequest getFavouriteRequest) {
+
+        Observable<NewProductFavResponse> storeResponse = retrofit.create(WebServiceApi.class).productFavorites(getFavouriteRequest);
+
+        storeResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), NewProductFavResponse.class))
                 .subscribe(response -> {
                     if (response != null) {
                         if (response.getError() != null) {

@@ -7,6 +7,7 @@ import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.CreateApiRequest;
 import com.enqos.atc.data.response.BaseResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
+import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreFavoriteResponse;
 import com.enqos.atc.data.response.StoreResponse;
@@ -26,6 +27,7 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     static HashMap<String, List<StoreEntity>> groupStores;
+    private boolean isFav = false;
 
     @Inject
     StoreListPresenter() {
@@ -65,16 +67,46 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
         if (response instanceof StoreResponse) {
             storeResponse = (StoreResponse) response;
             groupStoreByCategory(storeResponse);
-            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
-            if (!TextUtils.isEmpty(userId))
-                createApiRequest.createGetStoreFavorites(userId);
+            boolean isLogin = (Boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+            if (isLogin)
+                getFavourites("store", null);
             else
                 storeListView.storeResponse(storeResponse, null);
         } else if (response instanceof StoreFavoriteResponse) {
             StoreFavoriteResponse storeFavoriteResponse = (StoreFavoriteResponse) response;
-            storeListView.storeResponse(storeResponse, storeFavoriteResponse.getData());
+            if (isFav)
+                storeListView.favStoreResponse(storeFavoriteResponse.getData());
+            else
+                storeListView.storeResponse(storeResponse, storeFavoriteResponse.getData());
+        } else if (response instanceof NewProductFavResponse) {
+            storeListView.favProductResponse((NewProductFavResponse) response);
         }
 
+    }
+
+    public void getFavourites(String type, StoreListView storeListView) {
+        if (storeListView != null) {
+            isFav = true;
+            this.storeListView = storeListView;
+            if (createApiRequest == null)
+                createApiRequest = new CreateApiRequest(this);
+
+        } else
+            isFav = false;
+        String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
+        createApiRequest.createGetStoreFavorites(userId, type);
+    }
+
+    public void getProductFavourites(String type, StoreListView storeListView) {
+        if (storeListView != null) {
+            isFav = true;
+            this.storeListView = storeListView;
+            if (createApiRequest == null)
+                createApiRequest = new CreateApiRequest(this);
+        } else
+            isFav = false;
+        String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
+        createApiRequest.createGetProductFavorites(userId, type);
     }
 
     @Override

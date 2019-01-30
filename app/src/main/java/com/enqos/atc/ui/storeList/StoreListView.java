@@ -1,5 +1,6 @@
 package com.enqos.atc.ui.storeList;
 
+import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.NewStoreFavouriteEntity;
 import com.enqos.atc.data.response.StoreResponse;
 
@@ -11,6 +12,8 @@ public interface StoreListView {
 
     void storeResponse(StoreResponse storeResponse, List<NewStoreFavouriteEntity> data);
 
-    void navigateLogin();
+    void favStoreResponse(List<NewStoreFavouriteEntity> data);
+
+    void favProductResponse(NewProductFavResponse response);
 
 }

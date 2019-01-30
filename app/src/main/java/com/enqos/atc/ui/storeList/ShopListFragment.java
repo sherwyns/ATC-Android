@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.NewStoreFavouriteEntity;
 import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.StoreEntity;
@@ -136,17 +137,18 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void storeResponse(StoreResponse storeResponse, List<NewStoreFavouriteEntity> data) {
-
+        List<StoreEntity> stores = null;
         if (data != null) {
+            stores = storeResponse.getData();
             for (StoreEntity store :
-                    storeResponse.getData()) {
+                    stores) {
                 for (NewStoreFavouriteEntity fav : data) {
                     if (store.getId().equals(fav.getStore_id()) && fav.getFavorite().equals("1"))
                         store.setFavourite(true);
                 }
             }
         }
-        this.allStores = storeResponse.getData();
+        this.allStores = stores;
 
         if (allStores == null || allStores.size() == 0) {
             noResultLayout.setVisibility(View.VISIBLE);
@@ -159,9 +161,13 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     }
 
     @Override
-    public void navigateLogin() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
+    public void favStoreResponse(List<NewStoreFavouriteEntity> data) {
+
+    }
+
+    @Override
+    public void favProductResponse(NewProductFavResponse response) {
+
     }
 
 

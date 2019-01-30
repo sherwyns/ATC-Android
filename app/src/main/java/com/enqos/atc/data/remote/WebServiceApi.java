@@ -4,12 +4,15 @@ import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.GetFavouriteRequest;
 import com.enqos.atc.data.request.LoginRequest;
 import com.enqos.atc.data.request.RegisterRequest;
+import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
 import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
+import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.RegisterResponse;
+import com.enqos.atc.data.response.ResetPasswordResponse;
 import com.enqos.atc.data.response.SaveFavouriteResponse;
 import com.enqos.atc.data.response.SearchDataResponse;
 import com.enqos.atc.data.response.SearchResponse;
@@ -37,6 +40,9 @@ public interface WebServiceApi {
     @POST("api/Users/login")
     Observable<LoginResponse> authenticate(@Body LoginRequest loginRequest);
 
+    @POST("api/service/email")
+    Observable<ResetPasswordResponse> resetPassword(@Body ResetPasswordRequest resetPasswordRequest);
+
     @POST("api/socialUsers/signup")
     Observable<RegisterResponse> socialNetworkSignUp(@Body RegisterRequest registerRequest);
 
@@ -51,6 +57,9 @@ public interface WebServiceApi {
 
     @POST("api/favorite/list")
     Observable<StoreFavoriteResponse> favorites(@Body GetFavouriteRequest favouriteRequest);
+
+    @POST("api/favorite/list")
+    Observable<NewProductFavResponse> productFavorites(@Body GetFavouriteRequest favouriteRequest);
 
     @POST("api/favorite/save")
     Observable<SaveFavouriteResponse> saveFavorite(@Body SaveFavoriteRequest saveFavorite);

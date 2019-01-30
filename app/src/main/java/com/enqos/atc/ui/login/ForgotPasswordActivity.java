@@ -19,11 +19,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ForgotPasswordActivity extends BaseActivity {
+public class ForgotPasswordActivity extends BaseActivity implements ForgotPassView {
     @BindView(R.id.et_email)
     EditText etEmail;
     @BindView(R.id.coordinate_layout)
     CoordinatorLayout coordinatorLayout;
+    @Inject
+    ForgotPassPresenter presenter;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -48,8 +50,7 @@ public class ForgotPasswordActivity extends BaseActivity {
                 if (TextUtils.isEmpty(etEmail.getText().toString()))
                     Snackbar.make(coordinatorLayout, "Please enter valid email address", Snackbar.LENGTH_LONG).show();
                 else {
-                    Snackbar.make(coordinatorLayout, "Password sent to your registered email address.", Snackbar.LENGTH_LONG).show();
-
+                    presenter.resetPassword(this, etEmail.getText().toString(), "https://app.aroundthecorner.store/");
                 }
                 break;
             case R.id.back:
@@ -61,5 +62,25 @@ public class ForgotPasswordActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onSuccess() {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, "Password sent to your registered email address.", Snackbar.LENGTH_LONG);
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                finish();
+            }
+        });
+
+        snackbar.show();
+
+    }
+
+    @Override
+    public void onMessage(String message) {
+
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }
