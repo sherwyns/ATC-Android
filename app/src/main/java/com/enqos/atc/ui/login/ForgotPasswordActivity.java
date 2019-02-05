@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -24,6 +25,8 @@ public class ForgotPasswordActivity extends BaseActivity implements ForgotPassVi
     EditText etEmail;
     @BindView(R.id.coordinate_layout)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
     @Inject
     ForgotPassPresenter presenter;
 
@@ -50,6 +53,7 @@ public class ForgotPasswordActivity extends BaseActivity implements ForgotPassVi
                 if (TextUtils.isEmpty(etEmail.getText().toString()))
                     Snackbar.make(coordinatorLayout, "Please enter valid email address", Snackbar.LENGTH_LONG).show();
                 else {
+                    progressLayout.setVisibility(View.VISIBLE);
                     presenter.resetPassword(this, etEmail.getText().toString(), "https://app.aroundthecorner.store/");
                 }
                 break;
@@ -66,6 +70,7 @@ public class ForgotPasswordActivity extends BaseActivity implements ForgotPassVi
 
     @Override
     public void onSuccess() {
+        progressLayout.setVisibility(View.GONE);
         Snackbar snackbar = Snackbar.make(coordinatorLayout, "Password sent to your registered email address.", Snackbar.LENGTH_LONG);
         snackbar.addCallback(new Snackbar.Callback() {
             @Override
@@ -80,7 +85,7 @@ public class ForgotPasswordActivity extends BaseActivity implements ForgotPassVi
 
     @Override
     public void onMessage(String message) {
-
+        progressLayout.setVisibility(View.GONE);
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }

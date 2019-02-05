@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.data.response.CategoryEntity;
 
@@ -34,16 +36,24 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
         CategoryEntity categoryEntity = categoryEntities.get(i);
-        if (i == 1)
-            viewHolder.ivCategory.setImageResource(R.drawable.ic_card_giftcard_black_24dp);
-        else if (i == 3)
-            viewHolder.ivCategory.setImageResource(R.drawable.ic_directions_run_black_24dp);
         viewHolder.tvCategoryName.setText(categoryEntity.getName());
 
-        viewHolder.itemView.setOnClickListener(view -> {
-
-            filterView.onItemClick(categoryEntity.getId());
-        });
+        if (categoryEntity.getName().equalsIgnoreCase("All")) {
+            Glide.with(viewHolder.itemView.getContext()).load(R.drawable.ic_done_all_black_24dp)
+                    .apply(new RequestOptions().override(30, 30)
+                            .error(R.drawable.ic_photo_size_select_actual_black_24dp)
+                            .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
+                            .centerCrop())
+                    .into(viewHolder.ivCategory);
+        } else {
+            Glide.with(viewHolder.itemView.getContext()).load(categoryEntity.getImage_url())
+                    .apply(new RequestOptions().override(30, 30)
+                            .error(R.drawable.ic_photo_size_select_actual_black_24dp)
+                            .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
+                            .centerCrop())
+                    .into(viewHolder.ivCategory);
+        }
+        viewHolder.itemView.setOnClickListener(view -> filterView.onItemClick(categoryEntity.getId()));
     }
 
     @Override

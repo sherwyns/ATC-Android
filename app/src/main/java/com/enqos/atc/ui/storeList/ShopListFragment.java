@@ -137,18 +137,25 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void storeResponse(StoreResponse storeResponse, List<NewStoreFavouriteEntity> data) {
-        List<StoreEntity> stores = null;
-        if (data != null) {
-            stores = storeResponse.getData();
-            for (StoreEntity store :
-                    stores) {
-                for (NewStoreFavouriteEntity fav : data) {
-                    if (store.getId().equals(fav.getStore_id()) && fav.getFavorite().equals("1"))
-                        store.setFavourite(true);
+
+        boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+
+        if (isLogin) {
+            List<StoreEntity> stores = null;
+            if (data != null) {
+                stores = storeResponse.getData();
+                for (StoreEntity store :
+                        stores) {
+                    for (NewStoreFavouriteEntity fav : data) {
+                        if (store.getId().equals(fav.getStore_id()) && fav.getFavorite().equals("1"))
+                            store.setFavourite(true);
+                    }
                 }
             }
+            this.allStores = stores;
+        } else {
+            this.allStores = storeResponse.getData();
         }
-        this.allStores = stores;
 
         if (allStores == null || allStores.size() == 0) {
             noResultLayout.setVisibility(View.VISIBLE);

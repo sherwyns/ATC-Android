@@ -80,8 +80,8 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             tvProductName.setText(productEntity.getTitle());
         if (!TextUtils.isEmpty(productEntity.getPrice()))
             tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
-       /* if (!TextUtils.isEmpty(""))
-            tvProductDes.setText(des);*/
+        if (!TextUtils.isEmpty(productEntity.getDescription()))
+            tvProductDes.setText(productEntity.getDescription());
 
         if (productEntity.isFavourite())
             ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
