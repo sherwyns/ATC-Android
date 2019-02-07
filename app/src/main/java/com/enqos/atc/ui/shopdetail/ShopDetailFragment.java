@@ -40,9 +40,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -68,6 +73,12 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
     TextView tvAddress;
     @BindView(R.id.tv_about)
     TextView tvAbout;
+    @BindView(R.id.iv_call)
+    ImageView ivCall;
+    @BindView(R.id.iv_website)
+    ImageView ivWebsite;
+    @BindView(R.id.iv_email)
+    ImageView ivEmail;
     @BindView(R.id.tv_opening_time)
     TextView tvOpeningTime;
     @BindView(R.id.error_layout)
@@ -305,8 +316,55 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 
         tvStoreName.setText(storeEntity.getShop_name());
-        tvAddress.setText(storeEntity.getAddress());
+        tvAddress.setText(String.format("%s, %s, %s, %s", storeEntity.getAddress(), storeEntity.getCity(), storeEntity.getState(), storeEntity.getZipcode()));
         tvAbout.setText(storeEntity.getDescription());
+        if (TextUtils.isEmpty(storeDetailResponse.getData().get(0).getPhonenumber()))
+            ivCall.setVisibility(View.GONE);
+        else
+            ivCall.setVisibility(View.VISIBLE);
+        if (TextUtils.isEmpty(storeDetailResponse.getData().get(0).getStore_url()))
+            ivWebsite.setVisibility(View.GONE);
+        else
+            ivWebsite.setVisibility(View.VISIBLE);
+        if (TextUtils.isEmpty(storeDetailResponse.getData().get(0).getContact()))
+            ivEmail.setVisibility(View.GONE);
+        else
+            ivEmail.setVisibility(View.VISIBLE);
+
+        if (googleMap != null) {
+            googleMap.clear();
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            if (storeDetailResponse != null) {
+                double lat = Double.valueOf(storeDetailResponse.getData().get(0).getLatitude());
+                double lng = Double.valueOf(storeDetailResponse.getData().get(0).getLongitude());
+                LatLng latLng;
+                if (lat > 0 && lng > 0)
+                    latLng = new LatLng(lat, lng);
+                else
+                    latLng = new LatLng(47.6062, 122.3321);
+                markerOptions.position(latLng);
+                googleMap.addMarker(markerOptions);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+            }
+        }
+
+        String workingHours = storeDetailResponse.getData().get(0).getWorkinghours().replaceAll("\\\\", "");
+        Calendar calendar = Calendar.getInstance();
+        String dayLongName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        try {
+            JSONObject jsonObject = new JSONObject(workingHours);
+            if (jsonObject.has(dayLongName.toLowerCase())) {
+                JSONObject json = jsonObject.getJSONObject(dayLongName.toLowerCase());
+                if (json.has("endTime"))
+                    tvOpeningTime.setText(String.format(getString(R.string.open_until), json.get("endTime")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.i("******", dayLongName);
+
+
     }
 
     @Override
@@ -319,7 +377,11 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
         if (storeDetailResponse != null) {
             double lat = Double.valueOf(storeDetailResponse.getData().get(0).getLatitude());
             double lng = Double.valueOf(storeDetailResponse.getData().get(0).getLongitude());
-            LatLng latLng = new LatLng(lat, lng);
+            LatLng latLng;
+            if (lat > 0 && lng > 0)
+                latLng = new LatLng(lat, lng);
+            else
+                latLng = new LatLng(47.6062, 122.3321);
             markerOptions.position(latLng);
             googleMap.addMarker(markerOptions);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));

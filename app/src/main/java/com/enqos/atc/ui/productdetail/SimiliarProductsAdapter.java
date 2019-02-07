@@ -29,9 +29,10 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
         this.products = products;
     }
 
-    public void setListener(RecyclerViewItemClickListner listener){
+    public void setListener(RecyclerViewItemClickListner listener) {
         this.listner = listener;
     }
+
     @NonNull
     @Override
     public SimiliarProductsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -44,8 +45,20 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
         ProductEntity product = products.get(i);
         if (!TextUtils.isEmpty(product.getTitle()))
             viewHolder.name.setText(product.getTitle());
-        if (!TextUtils.isEmpty(product.getPrice()))
-            viewHolder.price.setText(String.format("$ %s", product.getPrice()));
+
+        if (!TextUtils.isEmpty(products.get(i).getPrice())) {
+            if (products.get(i).getPrice().equalsIgnoreCase("0") || products.get(i).getPrice().equalsIgnoreCase("0.0")) {
+                viewHolder.price.setVisibility(View.GONE);
+                viewHolder.tvCall.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.price.setVisibility(View.VISIBLE);
+                viewHolder.tvCall.setVisibility(View.INVISIBLE);
+                viewHolder.price.setText(String.format("$ %s", products.get(i).getPrice()));
+            }
+        } else {
+            viewHolder.price.setVisibility(View.GONE);
+            viewHolder.tvCall.setVisibility(View.VISIBLE);
+        }
 
         Glide.with(context).load(product.getProduct_image())
                 .apply(new RequestOptions()
@@ -54,6 +67,7 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .centerCrop())
                 .into(viewHolder.imageView);
+
 
         viewHolder.itemView.setOnClickListener(view -> listner.onItemClick(viewHolder.getAdapterPosition()));
     }
@@ -66,7 +80,7 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView, favImg;
-        TextView name, price;
+        TextView name, price, tvCall;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,6 +88,7 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
             favImg = itemView.findViewById(R.id.img_fav);
             name = itemView.findViewById(R.id.tv_product_name);
             price = itemView.findViewById(R.id.tv_price);
+            tvCall = itemView.findViewById(R.id.tv_call);
         }
     }
 }

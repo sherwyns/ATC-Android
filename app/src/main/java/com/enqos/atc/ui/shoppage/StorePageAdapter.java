@@ -50,6 +50,7 @@ public class StorePageAdapter extends BaseAdapter {
         return 0;
     }
 
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder;
@@ -60,6 +61,7 @@ public class StorePageAdapter extends BaseAdapter {
             viewHolder.favImg = view.findViewById(R.id.img_fav);
             viewHolder.name = view.findViewById(R.id.tv_product_name);
             viewHolder.price = view.findViewById(R.id.tv_price);
+            viewHolder.tvCall = view.findViewById(R.id.tv_call);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -72,8 +74,19 @@ public class StorePageAdapter extends BaseAdapter {
 
         if (!TextUtils.isEmpty(data.get(i).getTitle()))
             viewHolder.name.setText(data.get(i).getTitle());
-        if (!TextUtils.isEmpty(data.get(i).getPrice()))
-            viewHolder.price.setText(String.format("$ %s", data.get(i).getPrice()));
+        if (!TextUtils.isEmpty(data.get(i).getPrice())) {
+            if (data.get(i).getPrice().equalsIgnoreCase("0") || data.get(i).getPrice().equalsIgnoreCase("0.0")) {
+                viewHolder.price.setVisibility(View.GONE);
+                viewHolder.tvCall.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.price.setVisibility(View.VISIBLE);
+                viewHolder.tvCall.setVisibility(View.INVISIBLE);
+                viewHolder.price.setText(String.format("$ %s", data.get(i).getPrice()));
+            }
+        } else {
+            viewHolder.price.setVisibility(View.GONE);
+            viewHolder.tvCall.setVisibility(View.VISIBLE);
+        }
 
 
         viewHolder.favImg.setOnClickListener(view1 -> {
@@ -108,7 +121,7 @@ public class StorePageAdapter extends BaseAdapter {
     private static class ViewHolder {
 
         ImageView imageView, favImg;
-        TextView name, price;
+        TextView name, price, tvCall;
 
     }
 

@@ -50,6 +50,8 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     ImageView ivProductImg;
     @BindView(R.id.tv_product_price)
     TextView tvPrice;
+    @BindView(R.id.tv_call)
+    TextView tvCall;
     @BindView(R.id.img_fav)
     ImageView ivFav;
     @BindView(R.id.rv_products)
@@ -78,6 +80,19 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
 
         if (!TextUtils.isEmpty(productEntity.getTitle()))
             tvProductName.setText(productEntity.getTitle());
+        if (!TextUtils.isEmpty(productEntity.getPrice())) {
+            if (productEntity.getPrice().equalsIgnoreCase("0") || productEntity.getPrice().equalsIgnoreCase("0.0")) {
+                tvPrice.setVisibility(View.GONE);
+                tvCall.setVisibility(View.VISIBLE);
+            } else {
+                tvPrice.setVisibility(View.VISIBLE);
+                tvCall.setVisibility(View.INVISIBLE);
+                tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
+            }
+        } else {
+            tvPrice.setVisibility(View.GONE);
+            tvCall.setVisibility(View.VISIBLE);
+        }
         if (!TextUtils.isEmpty(productEntity.getPrice()))
             tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
         if (!TextUtils.isEmpty(productEntity.getDescription()))

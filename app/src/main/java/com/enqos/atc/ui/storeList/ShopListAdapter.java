@@ -56,6 +56,7 @@ public class ShopListAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.shop_item_layout, viewGroup, false);
             viewHolder.imageView = view.findViewById(R.id.shop_img);
+            viewHolder.ivCategory = view.findViewById(R.id.iv_category);
             viewHolder.favImg = view.findViewById(R.id.img_fav);
             viewHolder.shopName = view.findViewById(R.id.shop_name);
             viewHolder.neighbourhood = view.findViewById(R.id.neighbourhood);
@@ -85,8 +86,7 @@ public class ShopListAdapter extends BaseAdapter {
                 if (isFav) {
                     if (storeListener instanceof FavouriteFragment) {
                         storeListener.onRemoveFav(i, true);
-                    }
-                    else {
+                    } else {
                         storeListener.onSaveStoreFavorite(data.get(i), false, i);
                         if (!data.isEmpty())
                             data.get(i).setFavourite(false);
@@ -106,6 +106,14 @@ public class ShopListAdapter extends BaseAdapter {
             url = "https://www.retailgazette.co.uk/wp/wp-content/uploads/Typo-696x464.jpg";
         else
             url = data.get(i).getImage();
+
+        Glide.with(viewGroup.getContext()).load(data.get(i).getCategory().get(0).getImage_url())
+                .apply(new RequestOptions().override(250, 180)
+                        .error(R.drawable.ic_restaurant_menu_black_24dp)
+                        .placeholder(R.drawable.ic_restaurant_menu_black_24dp)
+                        .centerCrop())
+                .into(viewHolder.ivCategory);
+
         Glide.with(viewGroup.getContext()).load(url)
                 .apply(new RequestOptions().override(250, 180)
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
@@ -117,7 +125,7 @@ public class ShopListAdapter extends BaseAdapter {
 
     private static class ViewHolder {
 
-        ImageView imageView, favImg;
+        ImageView imageView, favImg, ivCategory;
         TextView shopName, neighbourhood;
 
     }

@@ -117,7 +117,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             android:letterSpacing="0.02"
-            android:text="Open till 11pm"
+            android:text="@string/open_until"
             android:textColor="#a6a7a7"
             android:textSize="@dimen/font_12"
             android:textStyle="italic" />

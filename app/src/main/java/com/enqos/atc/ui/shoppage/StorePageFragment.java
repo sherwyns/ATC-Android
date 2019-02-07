@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductEntity;
@@ -34,6 +36,7 @@ import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -55,6 +58,8 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     TextView prodcutLabel;
     @BindView(R.id.img_fav)
     ImageView ivFav;
+    @BindView(R.id.img_category)
+    ImageView ivCategory;
     @BindView(R.id.ll_content)
     LinearLayout contentLayout;
     @Inject
@@ -86,7 +91,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     }
 
     private void setValues() {
-        String storeName, neighbourHood;
+        String storeName;
         if (!TextUtils.isEmpty(storeEntity.getShop_name()))
             storeName = storeEntity.getShop_name();
         else if (!TextUtils.isEmpty(storeEntity.getName()))
@@ -103,6 +108,12 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         } else {
             ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
+        Glide.with(Objects.requireNonNull(getActivity())).load(storeEntity.getCategory().get(0).getImage_url())
+                .apply(new RequestOptions().override(250, 180)
+                        .error(R.drawable.ic_restaurant_menu_black_24dp)
+                        .placeholder(R.drawable.ic_restaurant_menu_black_24dp)
+                        .centerCrop())
+                .into(ivCategory);
 
     }
 

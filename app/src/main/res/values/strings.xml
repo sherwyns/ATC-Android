@@ -36,20 +36,22 @@
     <string name="sign_out">Sign out</string>
     <string name="product">Product</string>
     <string name="store">Stores</string>
-    <string name="favourites">Favourites</string>
+    <string name="favourites">Favorites</string>
     <string name="filter_by_category">Filter by category</string>
     <string name="search_by_product_store">Search for products or stores</string>
     <string name="search">Search</string>
     <string name="about">About</string>
     <string name="view_products">View products</string>
     <string name="no_connection_try_again">No connection. Try again!</string>
-    <string name="products_category">Products Category</string>
+    <string name="products_category">Product Category</string>
     <string name="similar_products">Similar Products</string>
     <string name="something_went_wrong_try_again">Something went wrong. Try again!</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
     <string name="forgot_pass">Forgot password</string>
     <string name="please_log_in_to_do_that">Please log in to do that</string>
     <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="open_until">Open until %s</string>
+    <string name="call">Call</string>
 
 
 </resources>

@@ -58,15 +58,32 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dimen_20dp"
-                android:layout_toStartOf="@+id/tv_price"
+                android:layout_toStartOf="@+id/tv_call"
                 android:ellipsize="end"
                 android:gravity="start"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:text="Product name"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/font_12" />
+                android:textSize="@dimen/font_16" />
+
+
+            <TextView
+                android:id="@+id/tv_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:background="@drawable/rounded_rectangle"
+                android:paddingStart="@dimen/dimen_20dp"
+                android:paddingTop="@dimen/dimen_5dp"
+                android:textSize="@dimen/font_12"
+                android:textColor="@android:color/darker_gray"
+                android:paddingEnd="@dimen/dimen_20dp"
+                android:paddingBottom="@dimen/dimen_5dp"
+                android:text="@string/call"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/tv_price"
