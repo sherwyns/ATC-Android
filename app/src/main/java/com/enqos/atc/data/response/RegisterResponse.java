@@ -36,6 +36,8 @@ public class RegisterResponse extends BaseResponse {
         this.id = id;
     }
 
+
+
     @SerializedName("username")
     @Expose
     private String username;
@@ -48,5 +50,14 @@ public class RegisterResponse extends BaseResponse {
     @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("userId")
+    private String userId;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

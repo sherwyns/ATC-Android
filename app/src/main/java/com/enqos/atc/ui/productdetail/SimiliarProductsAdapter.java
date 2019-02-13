@@ -53,7 +53,10 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
             } else {
                 viewHolder.price.setVisibility(View.VISIBLE);
                 viewHolder.tvCall.setVisibility(View.INVISIBLE);
-                viewHolder.price.setText(String.format("$ %s", products.get(i).getPrice()));
+                if (!TextUtils.isEmpty(products.get(i).getPrice()) && products.get(i).getPrice().contains("."))
+                    viewHolder.price.setText(String.format("$ %s", products.get(i).getPrice()));
+                else
+                    viewHolder.price.setText(String.format("%s.00", String.format("$ %s", products.get(i).getPrice())));
             }
         } else {
             viewHolder.price.setVisibility(View.GONE);

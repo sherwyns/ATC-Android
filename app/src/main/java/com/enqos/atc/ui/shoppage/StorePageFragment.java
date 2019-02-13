@@ -109,7 +109,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
             ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
         Glide.with(Objects.requireNonNull(getActivity())).load(storeEntity.getCategory().get(0).getImage_url())
-                .apply(new RequestOptions().override(250, 180)
+                .apply(new RequestOptions()
                         .error(R.drawable.ic_restaurant_menu_black_24dp)
                         .placeholder(R.drawable.ic_restaurant_menu_black_24dp)
                         .centerCrop())
@@ -212,11 +212,23 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     public void onCategorySelected(String name) {
         allProducts.clear();
         if (storePageAdapter == null) {
-            allProducts.addAll(presenter.groupProducts.get(name));
+            if (name.equalsIgnoreCase("All")) {
+                for (String key :
+                        presenter.groupProducts.keySet()) {
+                    allProducts.addAll(presenter.groupProducts.get(key));
+                }
+            } else
+                allProducts.addAll(presenter.groupProducts.get(name));
             storePageAdapter = new StorePageAdapter(getActivity(), allProducts);
             gridView.setAdapter(storePageAdapter);
         } else {
-            allProducts.addAll(presenter.groupProducts.get(name));
+            if (name.equalsIgnoreCase("All")) {
+                for (String key :
+                        presenter.groupProducts.keySet()) {
+                    allProducts.addAll(presenter.groupProducts.get(key));
+                }
+            } else
+                allProducts.addAll(presenter.groupProducts.get(name));
             storePageAdapter.notifyDataSetChanged();
         }
     }

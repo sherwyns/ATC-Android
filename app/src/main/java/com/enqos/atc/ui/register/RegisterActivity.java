@@ -50,8 +50,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     RegisterPresenter registerPresenter;
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
-
-
+    private boolean isSocialRegister = false;
     private GoogleSignInClient mGoogleSignInClient;
     private static final String EMAIL = "email";
     private CallbackManager callbackManager;
@@ -124,6 +123,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     }
 
     private void googleSignIn() {
+        isSocialRegister = true;
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -180,8 +180,13 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
     public void onRegisterUser(RegisterResponse registerResponse) {
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.IS_LOGIN, true);
         sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.EMAIL, registerResponse.getEmail());
-        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.TOKEN, registerResponse.getId());
-        sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.USER_ID, registerResponse.getId());
+        if (isSocialRegister) {
+            sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.TOKEN, registerResponse.getId());
+            sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.USER_ID, registerResponse.getUserId());
+        } else {
+            sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.TOKEN, registerResponse.getId());
+            sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.USER_ID, registerResponse.getId());
+        }
         Intent intent = new Intent(this, StoreListActivity.class);
         startActivity(intent);
         finish();
@@ -190,7 +195,7 @@ public class RegisterActivity extends BaseActivity implements RegisterView {
 
     @Override
     public void fbLogin(String email, String accessToken) {
-
+        isSocialRegister = true;
         registerPresenter.registerSocialUser(email, accessToken, "facebook", this);
     }
 

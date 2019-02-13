@@ -87,6 +87,8 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
     ScrollView scrollView;
     @BindView(R.id.img_fav)
     ImageView ivFav;
+    @BindView(R.id.img_category)
+    ImageView ivCategory;
     @Inject
     ShopDetailPresenter presenter;
     @Inject
@@ -338,11 +340,8 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             if (storeDetailResponse != null) {
                 double lat = Double.valueOf(storeDetailResponse.getData().get(0).getLatitude());
                 double lng = Double.valueOf(storeDetailResponse.getData().get(0).getLongitude());
-                LatLng latLng;
-                if (lat > 0 && lng > 0)
-                    latLng = new LatLng(lat, lng);
-                else
-                    latLng = new LatLng(47.6062, 122.3321);
+                LatLng latLng = new LatLng(lat, lng);
+
                 markerOptions.position(latLng);
                 googleMap.addMarker(markerOptions);
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
@@ -362,7 +361,12 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.i("******", dayLongName);
+        Glide.with(Objects.requireNonNull(getActivity())).load(storeEntity.getCategory().get(0).getImage_url())
+                .apply(new RequestOptions()
+                        .error(R.drawable.ic_restaurant_menu_black_24dp)
+                        .placeholder(R.drawable.ic_restaurant_menu_black_24dp)
+                        .centerCrop())
+                .into(ivCategory);
 
 
     }
@@ -377,11 +381,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
         if (storeDetailResponse != null) {
             double lat = Double.valueOf(storeDetailResponse.getData().get(0).getLatitude());
             double lng = Double.valueOf(storeDetailResponse.getData().get(0).getLongitude());
-            LatLng latLng;
-            if (lat > 0 && lng > 0)
-                latLng = new LatLng(lat, lng);
-            else
-                latLng = new LatLng(47.6062, 122.3321);
+            LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             googleMap.addMarker(markerOptions);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));

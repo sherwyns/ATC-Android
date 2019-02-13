@@ -1,6 +1,7 @@
 package com.enqos.atc.ui.shoppage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +82,10 @@ public class StorePageAdapter extends BaseAdapter {
             } else {
                 viewHolder.price.setVisibility(View.VISIBLE);
                 viewHolder.tvCall.setVisibility(View.INVISIBLE);
-                viewHolder.price.setText(String.format("$ %s", data.get(i).getPrice()));
+                if (!TextUtils.isEmpty(data.get(i).getPrice()) && data.get(i).getPrice().contains("."))
+                    viewHolder.price.setText(String.format("$ %s", data.get(i).getPrice()));
+                else
+                    viewHolder.price.setText(String.format("%s.00", String.format("$ %s", data.get(i).getPrice())));
             }
         } else {
             viewHolder.price.setVisibility(View.GONE);

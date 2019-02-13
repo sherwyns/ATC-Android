@@ -39,6 +39,7 @@ public class ShopPagePresenter extends BasePresenter implements NetworkApiRespon
     private void groupProducts(StorePageResponse storePageResponse) {
         groupProducts = new HashMap<>();
         categories = new ArrayList<>();
+        categories.add(0, "All");
         for (ProductEntity product :
                 storePageResponse.getData()) {
             if (!groupProducts.containsKey(product.getCategory_name())) {

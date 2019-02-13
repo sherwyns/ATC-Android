@@ -108,7 +108,7 @@ public class ShopListAdapter extends BaseAdapter {
             url = data.get(i).getImage();
 
         Glide.with(viewGroup.getContext()).load(data.get(i).getCategory().get(0).getImage_url())
-                .apply(new RequestOptions().override(250, 180)
+                .apply(new RequestOptions()
                         .error(R.drawable.ic_restaurant_menu_black_24dp)
                         .placeholder(R.drawable.ic_restaurant_menu_black_24dp)
                         .centerCrop())

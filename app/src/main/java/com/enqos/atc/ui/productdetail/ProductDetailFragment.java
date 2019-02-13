@@ -87,14 +87,16 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             } else {
                 tvPrice.setVisibility(View.VISIBLE);
                 tvCall.setVisibility(View.INVISIBLE);
-                tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
+                if (!TextUtils.isEmpty(productEntity.getPrice()) && productEntity.getPrice().contains("."))
+                    tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
+                else
+                    tvPrice.setText(String.format("%s.00", String.format("$ %s", productEntity.getPrice())));
             }
         } else {
             tvPrice.setVisibility(View.GONE);
             tvCall.setVisibility(View.VISIBLE);
         }
-        if (!TextUtils.isEmpty(productEntity.getPrice()))
-            tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
+
         if (!TextUtils.isEmpty(productEntity.getDescription()))
             tvProductDes.setText(productEntity.getDescription());
 
@@ -209,11 +211,24 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
         ProductEntity productEntity = similiarProducts.get(pos);
         if (!TextUtils.isEmpty(productEntity.getTitle()))
             tvProductName.setText(productEntity.getTitle());
-        if (!TextUtils.isEmpty(productEntity.getPrice()))
-            tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
-       /* if (!TextUtils.isEmpty(des))
-            tvProductDes.setText(des);*/
 
+
+        if (!TextUtils.isEmpty(productEntity.getPrice())) {
+            if (productEntity.getPrice().equalsIgnoreCase("0") || productEntity.getPrice().equalsIgnoreCase("0.0")) {
+                tvPrice.setVisibility(View.GONE);
+                tvCall.setVisibility(View.VISIBLE);
+            } else {
+                tvPrice.setVisibility(View.VISIBLE);
+                tvCall.setVisibility(View.INVISIBLE);
+                if (!TextUtils.isEmpty(productEntity.getPrice()) && productEntity.getPrice().contains("."))
+                    tvPrice.setText(String.format("$ %s", productEntity.getPrice()));
+                else
+                    tvPrice.setText(String.format("%s.00", String.format("$ %s", productEntity.getPrice())));
+            }
+        } else {
+            tvPrice.setVisibility(View.GONE);
+            tvCall.setVisibility(View.VISIBLE);
+        }
         Glide.with(Objects.requireNonNull(getActivity())).load(productEntity.getProduct_image())
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
