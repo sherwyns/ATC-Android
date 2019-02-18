@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.data.CreateApiRequest;
+import com.enqos.atc.data.response.BaseResponse;
+import com.enqos.atc.data.response.NetworkApiResponse;
+import com.enqos.atc.data.response.ProductAnalyticsResponse;
 import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.listener.RecyclerViewItemClickListner;
 import com.enqos.atc.listener.StoreActivityListener;
@@ -40,7 +45,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class ProductDetailFragment extends Fragment implements RecyclerViewItemClickListner {
+public class ProductDetailFragment extends Fragment implements RecyclerViewItemClickListner, NetworkApiResponse {
 
     @BindView(R.id.tv_product_name)
     TextView tvProductName;
@@ -130,8 +135,14 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
-        if (productEntity != null)
+        if (productEntity != null) {
+            String accessToken = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.TOKEN);
+            if (!TextUtils.isEmpty(accessToken)) {
+                CreateApiRequest createApiRequest = new CreateApiRequest(this);
+                createApiRequest.createProductAnalyticsRequest(accessToken, productEntity.getStore_id(), productEntity.getId(), productEntity.getTitle());
+            }
             setValues();
+        }
         return view;
     }
 
@@ -235,5 +246,33 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .centerCrop())
                 .into(ivProductImg);
+    }
+
+    @Override
+    public void onSuccess(BaseResponse response) {
+        if (response instanceof ProductAnalyticsResponse) {
+            ProductAnalyticsResponse productAnalyticsResponse = (ProductAnalyticsResponse) response;
+            Log.i("Analytics", productAnalyticsResponse.getData().getMessage());
+        }
+    }
+
+    @Override
+    public void onFailure(String errorMessage, int requestCode, int statusCode) {
+
+    }
+
+    @Override
+    public void onTimeOut(int requestCode) {
+
+    }
+
+    @Override
+    public void onNetworkError(int requestCode) {
+
+    }
+
+    @Override
+    public void onUnknownError(int requestCode, int statusCode, String errorMessage) {
+
     }
 }

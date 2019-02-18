@@ -9,6 +9,7 @@ import com.enqos.atc.data.remote.WebServiceApi;
 import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.GetFavouriteRequest;
 import com.enqos.atc.data.request.LoginRequest;
+import com.enqos.atc.data.request.ProductAnalyticsRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
@@ -18,6 +19,7 @@ import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.NewProductFavResponse;
+import com.enqos.atc.data.response.ProductAnalyticsResponse;
 import com.enqos.atc.data.response.RegisterResponse;
 import com.enqos.atc.data.response.ResetPasswordResponse;
 import com.enqos.atc.data.response.SaveFavouriteResponse;
@@ -415,6 +417,62 @@ public class DataRepository extends BasePresenter {
         return errorMessage;
     }
 
+    @SuppressLint("CheckResult")
+    void productAnalytics(NetworkApiResponse networkApiResponse, String accessToken, ProductAnalyticsRequest productAnalyticsRequest) {
+
+        Observable<ProductAnalyticsResponse> loginResponse = retrofit.create(WebServiceApi.class).productAnalytics(accessToken, productAnalyticsRequest);
+
+        loginResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, productAnalyticsRequest.getRequestCode()), ProductAnalyticsResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        networkApiResponse.onSuccess(null);
+
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void storeAnalytics(NetworkApiResponse networkApiResponse, String accessToken, ProductAnalyticsRequest productAnalyticsRequest) {
+
+        Observable<ProductAnalyticsResponse> loginResponse = retrofit.create(WebServiceApi.class).storeAnalytics(accessToken, productAnalyticsRequest);
+
+        loginResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, productAnalyticsRequest.getRequestCode()), ProductAnalyticsResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        networkApiResponse.onSuccess(null);
+
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
+    void categoryAnalytics(NetworkApiResponse networkApiResponse, String accessToken, ProductAnalyticsRequest productAnalyticsRequest) {
+
+        Observable<ProductAnalyticsResponse> loginResponse = retrofit.create(WebServiceApi.class).categoryAnalytics(accessToken, productAnalyticsRequest);
+
+        loginResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, productAnalyticsRequest.getRequestCode()), ProductAnalyticsResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        networkApiResponse.onSuccess(null);
+
+                    }
+
+                }, error -> {
+                });
+
+    }
     private String getSocialExceptionResponse(Throwable throwable, NetworkApiResponse networkResponse, int requestCode) {
         String errorMessage = "";
         try {

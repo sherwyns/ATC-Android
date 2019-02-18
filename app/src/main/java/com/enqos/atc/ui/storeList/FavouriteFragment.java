@@ -218,6 +218,7 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
     }
 
     private void getFavProdcuts(List<ProductFavEntity> data) {
+
         List<ProductEntity> productEntities = sharedPreferenceManager.getProductFavorites();
         if (productEntities != null) {
             productFavourites = new ArrayList<>();

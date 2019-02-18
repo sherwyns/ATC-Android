@@ -2,7 +2,7 @@ package com.enqos.atc.data.response;
 
 import com.google.gson.annotations.SerializedName;
 
-class SaveFavourite {
+public class SaveFavourite {
 
     @SerializedName("status")
     private String status;

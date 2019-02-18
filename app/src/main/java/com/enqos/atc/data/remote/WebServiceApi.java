@@ -3,6 +3,7 @@ package com.enqos.atc.data.remote;
 import com.enqos.atc.data.request.ChangePasswordRequest;
 import com.enqos.atc.data.request.GetFavouriteRequest;
 import com.enqos.atc.data.request.LoginRequest;
+import com.enqos.atc.data.request.ProductAnalyticsRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
@@ -11,6 +12,7 @@ import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NewProductFavResponse;
+import com.enqos.atc.data.response.ProductAnalyticsResponse;
 import com.enqos.atc.data.response.RegisterResponse;
 import com.enqos.atc.data.response.ResetPasswordResponse;
 import com.enqos.atc.data.response.SaveFavouriteResponse;
@@ -28,6 +30,7 @@ import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -78,4 +81,13 @@ public interface WebServiceApi {
 
     @GET("api/search/by/{search_key}")
     Observable<SearchResponse> getSearch(@Path("search_key") String key);
+
+    @POST("api/service/productimpression")
+    Observable<ProductAnalyticsResponse> productAnalytics(@Header("accesstoken") String accessToken, @Body ProductAnalyticsRequest productAnalyticsRequest);
+
+    @POST("api/service/storeimpression")
+    Observable<ProductAnalyticsResponse> storeAnalytics(@Header("accesstoken") String accessToken, @Body ProductAnalyticsRequest productAnalyticsRequest);
+
+    @POST("api/service/categoryimpression")
+    Observable<ProductAnalyticsResponse> categoryAnalytics(@Header("accesstoken") String accessToken, @Body ProductAnalyticsRequest productAnalyticsRequest);
 }

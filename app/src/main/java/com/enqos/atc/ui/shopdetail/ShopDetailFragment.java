@@ -26,6 +26,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.data.CreateApiRequest;
+import com.enqos.atc.data.response.BaseResponse;
+import com.enqos.atc.data.response.NetworkApiResponse;
+import com.enqos.atc.data.response.ProductAnalyticsResponse;
 import com.enqos.atc.data.response.StoreDetailResponse;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.StoreActivityListener;
@@ -62,7 +66,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMapReadyCallback {
+public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMapReadyCallback, NetworkApiResponse {
 
 
     @BindView(R.id.iv_shop_image)
@@ -133,7 +137,11 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             Bundle bundle = getArguments();
             storeid = bundle.getString(STORE_ID);
             isFavourite = bundle.getBoolean(IS_FAVOURITE);
-
+            String token = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.TOKEN);
+            if(!TextUtils.isEmpty(token)) {
+                CreateApiRequest createApiRequest = new CreateApiRequest(this);
+                createApiRequest.createStoreAnalyticsRequest(token, storeid);
+            }
         }
     }
 
@@ -408,5 +416,33 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             scrollView.setVisibility(View.GONE);
             errorLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onSuccess(BaseResponse response) {
+        if (response instanceof ProductAnalyticsResponse) {
+            ProductAnalyticsResponse productAnalyticsResponse = (ProductAnalyticsResponse) response;
+            Log.i("Analytics", productAnalyticsResponse.getData().getMessage());
+        }
+    }
+
+    @Override
+    public void onFailure(String errorMessage, int requestCode, int statusCode) {
+
+    }
+
+    @Override
+    public void onTimeOut(int requestCode) {
+
+    }
+
+    @Override
+    public void onNetworkError(int requestCode) {
+
+    }
+
+    @Override
+    public void onUnknownError(int requestCode, int statusCode, String errorMessage) {
+
     }
 }

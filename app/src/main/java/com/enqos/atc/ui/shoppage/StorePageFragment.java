@@ -22,6 +22,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
+import com.enqos.atc.data.CreateApiRequest;
+import com.enqos.atc.data.response.BaseResponse;
+import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StorePageResponse;
@@ -45,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class StorePageFragment extends Fragment implements ShopPageView, StoreListener, AdapterView.OnItemClickListener, CategoryItemClickListner {
+public class StorePageFragment extends Fragment implements ShopPageView, StoreListener, AdapterView.OnItemClickListener, CategoryItemClickListner, NetworkApiResponse {
     @BindView(R.id.gridview)
     GridView gridView;
     @BindView(R.id.rv_category)
@@ -145,8 +148,14 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         View view = inflater.inflate(R.layout.fragment_store_page, container, false);
         unbinder = ButterKnife.bind(this, view);
         gridView.setOnItemClickListener(this);
-        if (storeEntity != null)
+        if (storeEntity != null) {
+            String accessToken = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.TOKEN);
+            if(!TextUtils.isEmpty(accessToken)) {
+                CreateApiRequest createApiRequest = new CreateApiRequest(this);
+                createApiRequest.createStoreAnalyticsRequest(accessToken, storeEntity.getId());
+            }
             setValues();
+        }
         return view;
     }
 
@@ -320,6 +329,31 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
 
     @Override
     public void onRemoveFav(int index, boolean isStore) {
+
+    }
+
+    @Override
+    public void onSuccess(BaseResponse response) {
+
+    }
+
+    @Override
+    public void onFailure(String errorMessage, int requestCode, int statusCode) {
+
+    }
+
+    @Override
+    public void onTimeOut(int requestCode) {
+
+    }
+
+    @Override
+    public void onNetworkError(int requestCode) {
+
+    }
+
+    @Override
+    public void onUnknownError(int requestCode, int statusCode, String errorMessage) {
 
     }
 }
