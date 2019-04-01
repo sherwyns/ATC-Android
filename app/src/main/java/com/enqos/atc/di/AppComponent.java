@@ -25,6 +25,8 @@ import com.enqos.atc.ui.search.SearchFragment;
 import com.enqos.atc.ui.storeList.ShopListFragment;
 import com.enqos.atc.ui.storeList.StoreListActivity;
 import com.enqos.atc.ui.storeList.StoreListPresenter;
+import com.enqos.atc.ui.tutorial.TutorialActivity;
+import com.enqos.atc.ui.tutorial.TutorialPresenter;
 
 import javax.inject.Singleton;
 
@@ -83,4 +85,8 @@ public interface AppComponent {
     void inject(FilterPresenter filterPresenter);
 
     void inject(FilterFragment filterFragment);
+
+    void inject(TutorialActivity tutorialActivity);
+
+    void inject(TutorialPresenter tutorialPresenter);
 }

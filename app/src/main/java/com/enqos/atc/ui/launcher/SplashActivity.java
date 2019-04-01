@@ -11,6 +11,7 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.storeList.StoreListActivity;
+import com.enqos.atc.ui.tutorial.TutorialActivity;
 import com.enqos.atc.utils.Constants;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
@@ -18,8 +19,6 @@ import javax.inject.Inject;
 
 public class SplashActivity extends BaseActivity implements SplashView {
 
-    @Inject
-    SharedPreferenceManager sharedPreferenceManager;
     @Inject
     SplashPresenter splashPresenter;
     ImageView logo;
@@ -65,6 +64,14 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @Override
     public void navigateStore() {
         Intent intent = new Intent(SplashActivity.this, StoreListActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void navigateToTutorial() {
+        Intent intent = new Intent(SplashActivity.this, TutorialActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

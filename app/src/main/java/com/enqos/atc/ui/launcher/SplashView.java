@@ -4,4 +4,5 @@ public interface SplashView {
 
     void navigateHome();
     void navigateStore();
+    void navigateToTutorial();
 }

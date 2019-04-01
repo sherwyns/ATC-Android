@@ -63,6 +63,7 @@
             android:name=".ui.login.ForgotPasswordActivity"
             android:theme="@style/AppThemeBlue" />
         <activity android:name=".ui.slidemenu.TermsAndConditionsActivity" />
+        <activity android:name=".ui.tutorial.TutorialActivity"></activity>
     </application>
 
 </manifest>
