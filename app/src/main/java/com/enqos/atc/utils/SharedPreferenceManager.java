@@ -18,6 +18,7 @@ public class SharedPreferenceManager {
     public static final String ATC_PREF_NAME = "ATC_PREF_NAME";
     public static final String EMAIL = "EMAIL";
     public static final String IS_LOGIN = "IS_LOGIN";
+    public static final String IS_TUTORIAL_SHOWN = "IS_TUTORIAL_SHOWN";
     public static final String USER_ID = "USER_ID";
     public static final String TOKEN = "TOKEN";
     public static final String STRING = "STRING";

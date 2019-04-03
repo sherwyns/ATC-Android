@@ -52,6 +52,7 @@
     <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
     <string name="open_until">Open until %s</string>
     <string name="call">Call</string>
+    <string name="skip">Skip</string>
 
 
 </resources>

@@ -21,11 +21,15 @@ public class SplashPresenter extends BasePresenter {
 
     public void navigate(SplashView splashView) {
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
-        /*if (isLogin)
+        boolean isTutorial = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_TUTORIAL_SHOWN);
+
+        if (isLogin)
             splashView.navigateStore();
-        else
-            splashView.navigateHome();*/
-        splashView.navigateToTutorial();
+        else if (!isTutorial) {
+            sharedPreferenceManager.savePreferenceValue(SharedPreferenceManager.IS_TUTORIAL_SHOWN, true);
+            splashView.navigateToTutorial();
+        } else
+            splashView.navigateHome();
     }
 
 }

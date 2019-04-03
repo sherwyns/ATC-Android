@@ -18,7 +18,7 @@ public class TutorialAdapter extends PagerAdapter {
     LayoutInflater layoutInflater;
     List<Integer> resIds;
 
-    public TutorialAdapter(Context context, List<Integer> resIds) {
+    TutorialAdapter(Context context, List<Integer> resIds) {
         this.context = context;
         this.resIds = resIds;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

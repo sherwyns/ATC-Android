@@ -72,7 +72,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @Override
     public void navigateToTutorial() {
         Intent intent = new Intent(SplashActivity.this, TutorialActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
