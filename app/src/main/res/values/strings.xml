@@ -53,6 +53,7 @@
     <string name="open_until">Open until %s</string>
     <string name="call">Call</string>
     <string name="skip">Skip</string>
+    <string name="done">Done</string>
 
 
 </resources>
