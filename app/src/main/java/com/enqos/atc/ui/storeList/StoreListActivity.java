@@ -1,8 +1,12 @@
 package com.enqos.atc.ui.storeList;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,7 +16,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +30,6 @@ import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.myaccount.MyAccountActivity;
 import com.enqos.atc.ui.search.SearchFragment;
-import com.enqos.atc.ui.slidemenu.TermsAndConditionsActivity;
 import com.enqos.atc.utils.Constants;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
@@ -70,10 +72,22 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onCreate(savedInstanceState);
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
+        if (!isPermissionGiven())
+            ActivityCompat.requestPermissions(StoreListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         replaceFragment(R.id.content_frame, ShopListFragment.newInstance(""), false);
 
+    }
+
+    private boolean isPermissionGiven() {
+        return ActivityCompat.checkSelfPermission(StoreListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(StoreListActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
