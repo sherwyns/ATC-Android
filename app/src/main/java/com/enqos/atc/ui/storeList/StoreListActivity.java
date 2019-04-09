@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -72,8 +73,12 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onCreate(savedInstanceState);
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
-        if (!isPermissionGiven())
-            ActivityCompat.requestPermissions(StoreListActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+
+        if (!isPermissionGiven()) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         replaceFragment(R.id.content_frame, ShopListFragment.newInstance(""), false);
@@ -81,13 +86,23 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     }
 
     private boolean isPermissionGiven() {
-        return ActivityCompat.checkSelfPermission(StoreListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(StoreListActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(StoreListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    Toast.makeText(this, "Please enable permission", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "GPS permission allows us to access location data.", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 
     @Override
@@ -168,30 +183,18 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             case R.id.terms_condition:
                 Intent browserIntent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PRIVACY_POLICY_LINK));
                 startActivity(browserIntent1);
-                /*Intent intent1 = new Intent(this, TermsAndConditionsActivity.class);
-                intent1.putExtra("link", "TC");
-                startActivity(intent1);*/
                 break;
             case R.id.help:
                 Intent browserIntent2 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.HELP_LINK));
                 startActivity(browserIntent2);
-               /* Intent intent2 = new Intent(this, TermsAndConditionsActivity.class);
-                intent2.putExtra("link", "HELP");
-                startActivity(intent2);*/
                 break;
             case R.id.privacy:
                 Intent browserIntent3 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PRIVACY_POLICY_LINK));
                 startActivity(browserIntent3);
-               /* Intent intent3 = new Intent(this, TermsAndConditionsActivity.class);
-                intent3.putExtra("link", "PRIVACY");
-                startActivity(intent3);*/
                 break;
             case R.id.about:
                 Intent browserIntent4 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ABOUT_US_LINK));
                 startActivity(browserIntent4);
-               /* Intent intent4 = new Intent(this, TermsAndConditionsActivity.class);
-                intent4.putExtra("link", "ABOUT");
-                startActivity(intent4);*/
                 break;
             case R.id.menu_my_account:
                 drawerLayout.closeDrawer(GravityCompat.START);
