@@ -13,6 +13,7 @@ import com.enqos.atc.data.request.ProductAnalyticsRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
+import com.enqos.atc.data.request.StoreRequest;
 import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
@@ -194,9 +195,9 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    void getStore(NetworkApiResponse networkApiResponse) {
+    void getStore(NetworkApiResponse networkApiResponse, StoreRequest storeRequest) {
 
-        Observable<StoreResponse> storeResponse = retrofit.create(WebServiceApi.class).store();
+        Observable<StoreResponse> storeResponse = retrofit.create(WebServiceApi.class).store(storeRequest);
 
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)
@@ -473,6 +474,7 @@ public class DataRepository extends BasePresenter {
                 });
 
     }
+
     private String getSocialExceptionResponse(Throwable throwable, NetworkApiResponse networkResponse, int requestCode) {
         String errorMessage = "";
         try {

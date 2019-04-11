@@ -30,7 +30,7 @@ import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
-import com.enqos.atc.ui.filter.FilterFragment;
+import com.enqos.atc.ui.filter.FilterActivity;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.myaccount.MyAccountActivity;
@@ -69,7 +69,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
-    private boolean isFilterClicked = false;
     private LocationManager locationManager;
 
 
@@ -101,9 +100,9 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    Toast.makeText(this, "Please enable permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "GPS permission allows us to access location data.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
                 }
             } else
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
@@ -129,8 +128,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     public void replaceFragment(int id, Fragment fragment, boolean isAnim) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        /*if (isAnim)
-            fragmentTransaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);*/
         fragmentTransaction.replace(id, fragment);
         fragmentTransaction.addToBackStack(fragment.getClass().getName());
         fragmentTransaction.commit();
@@ -161,16 +158,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                     onBackPressed();
                 break;
             case R.id.image_right:
-                if (!isFilterClicked) {
-                    isFilterClicked = true;
-                    rightImg.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary));
-                    replaceFragment(FilterFragment.getInstance());
-                } else {
-                    isFilterClicked = false;
-                    rightImg.setColorFilter(ContextCompat.getColor(this, android.R.color.black));
-                    onBackPressed();
-                }
-
+                startActivity(new Intent(this, FilterActivity.class));
                 break;
             case R.id.img_fav:
                 if (!isLogin) {
@@ -251,10 +239,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void changeHeader(int leftResId, String text, int rightResId) {
-        if (!text.equals(getString(R.string.filter_by_category))) {
-            isFilterClicked = false;
-            rightImg.setColorFilter(ContextCompat.getColor(this, android.R.color.black));
-        }
         leftImg.setImageResource(leftResId);
         title.setText(text);
         rightImg.setImageResource(rightResId);
@@ -278,6 +262,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Override
     public void onLocationChanged(Location location) {
 
+        Log.i("Coordinates", location.getLatitude() + ":" + location.getLongitude());
     }
 
     @Override

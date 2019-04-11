@@ -2,7 +2,7 @@ package com.enqos.atc.di;
 
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.DataRepository;
-import com.enqos.atc.ui.filter.FilterFragment;
+import com.enqos.atc.ui.filter.FilterActivity;
 import com.enqos.atc.ui.filter.FilterPresenter;
 import com.enqos.atc.ui.launcher.SplashActivity;
 import com.enqos.atc.ui.launcher.SplashPresenter;
@@ -84,7 +84,7 @@ public interface AppComponent {
 
     void inject(FilterPresenter filterPresenter);
 
-    void inject(FilterFragment filterFragment);
+    void inject(FilterActivity filterFragment);
 
     void inject(TutorialActivity tutorialActivity);
 

@@ -7,6 +7,7 @@ import com.enqos.atc.data.request.ProductAnalyticsRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
+import com.enqos.atc.data.request.StoreRequest;
 import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.NetworkApiResponse;
@@ -50,8 +51,13 @@ public class CreateApiRequest {
         dataRepository.registerUser(networkApiResponse, registerRequest);
     }
 
-    public void createStoreRequest() {
-        dataRepository.getStore(networkApiResponse);
+    public void createStoreRequest(String[] neighbourhood, int[] category, double latitude, double longitude) {
+        StoreRequest storeRequest;
+        if (latitude == 0.0 && longitude == 0.0)
+            storeRequest = new StoreRequest(neighbourhood, category, latitude, longitude);
+        else
+            storeRequest = new StoreRequest(neighbourhood, category);
+        dataRepository.getStore(networkApiResponse, storeRequest);
     }
 
     public void createSaveFavoriteRequest(String userId, String id, String type, String isFavourite) {
@@ -90,8 +96,8 @@ public class CreateApiRequest {
         dataRepository.changePassword(networkApiResponse, accessToken, changePasswordRequest);
     }
 
-    public void createProductAnalyticsRequest(String accessToken, String storeId, String productId,String name) {
-        ProductAnalyticsRequest productAnalyticsRequest = new ProductAnalyticsRequest(storeId, productId,name);
+    public void createProductAnalyticsRequest(String accessToken, String storeId, String productId, String name) {
+        ProductAnalyticsRequest productAnalyticsRequest = new ProductAnalyticsRequest(storeId, productId, name);
         dataRepository.productAnalytics(networkApiResponse, accessToken, productAnalyticsRequest);
     }
 
@@ -101,7 +107,7 @@ public class CreateApiRequest {
     }
 
     public void createCategoryAnalyticsRequest(String accessToken, String storeId, String categoryId) {
-        ProductAnalyticsRequest productAnalyticsRequest = new ProductAnalyticsRequest(storeId,categoryId);
+        ProductAnalyticsRequest productAnalyticsRequest = new ProductAnalyticsRequest(storeId, categoryId);
         dataRepository.categoryAnalytics(networkApiResponse, accessToken, productAnalyticsRequest);
     }
 }

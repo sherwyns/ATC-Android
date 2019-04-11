@@ -69,6 +69,7 @@
             android:theme="@style/AppThemeBlue" />
         <activity android:name=".ui.slidemenu.TermsAndConditionsActivity" />
         <activity android:name=".ui.tutorial.TutorialActivity"></activity>
+        <activity android:name=".ui.filter.FilterActivity" />
     </application>
 
 </manifest>

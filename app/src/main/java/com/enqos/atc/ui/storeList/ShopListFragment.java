@@ -76,7 +76,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         View rootView = inflater.inflate(R.layout.fragment_shope_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         if (TextUtils.isEmpty(selecteCategoryId))
-            storeListPresenter.getStore(this);
+            storeListPresenter.getStore(this, null, null, 0.0, 0.0);
         else {
             allStores = StoreListPresenter.groupStores.get(selecteCategoryId);
 

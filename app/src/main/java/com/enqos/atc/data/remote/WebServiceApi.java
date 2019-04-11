@@ -7,6 +7,7 @@ import com.enqos.atc.data.request.ProductAnalyticsRequest;
 import com.enqos.atc.data.request.RegisterRequest;
 import com.enqos.atc.data.request.ResetPasswordRequest;
 import com.enqos.atc.data.request.SaveFavoriteRequest;
+import com.enqos.atc.data.request.StoreRequest;
 import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
@@ -55,8 +56,8 @@ public interface WebServiceApi {
     @POST("api/Users/change-password?")
     Observable<Void> changePassword(@Query("access_token") String accessToken, @Body ChangePasswordRequest changePasswordRequest);
 
-    @GET("api/Store/getstores")
-    Observable<StoreResponse> store();
+    @POST("api/Store/getstores")
+    Observable<StoreResponse> store(@Body StoreRequest storeRequest);
 
     @POST("api/favorite/list")
     Observable<StoreFavoriteResponse> favorites(@Body GetFavouriteRequest favouriteRequest);
