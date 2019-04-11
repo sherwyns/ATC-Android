@@ -54,6 +54,8 @@
     <string name="call">Call</string>
     <string name="skip">Skip</string>
     <string name="done">Done</string>
+    <string name="category">Category</string>
+    <string name="neighbourhood">Neighbourhood</string>
 
 
 </resources>

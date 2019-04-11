@@ -3,6 +3,9 @@ package com.enqos.atc.ui.storeList;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +46,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener {
+public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener, LocationListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -66,6 +70,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
     private boolean isFilterClicked = false;
+    private LocationManager locationManager;
+
 
     @SuppressWarnings("unchecked")
     @Override
@@ -73,10 +79,13 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onCreate(savedInstanceState);
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
 
-
-        if (!isPermissionGiven()) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
 
         initToolbar();
@@ -85,23 +94,19 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     }
 
-    private boolean isPermissionGiven() {
-        return ActivityCompat.checkSelfPermission(StoreListActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-    }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                     Toast.makeText(this, "Please enable permission", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "GPS permission allows us to access location data.", Toast.LENGTH_LONG).show();
                 }
-            }
+            } else
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
         }
     }
 
@@ -267,6 +272,26 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void clickRight() {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
 
     }
 }

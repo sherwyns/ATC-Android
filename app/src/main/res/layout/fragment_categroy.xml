@@ -1,16 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFAFAFA"
-    tools:context=".ui.filter.FilterFragment">
+    android:background="#F4F4F4">
 
-    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dimen_20dp"
+        android:paddingTop="@dimen/dimen_10dp"
+        android:paddingEnd="@dimen/dimen_20dp"
+        android:paddingBottom="@dimen/dimen_10dp">
+
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:background="@drawable/gradient_blue"
+            android:elevation="5dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingStart="@dimen/dimen_15dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="@dimen/dimen_15dp"
+            android:paddingBottom="3dp"
+            android:text="@string/category"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_12" />
+
+        <TextView
+            android:id="@+id/tv_neighbourhood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:elevation="5dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingStart="@dimen/dimen_15dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="@dimen/dimen_15dp"
+            android:paddingBottom="3dp"
+            android:text="@string/neighbourhood"
+            android:textColor="#787878"
+            android:textSize="@dimen/font_12" />
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false" />
-
-</FrameLayout>
+        android:layout_below="@+id/top_layout" />
+</RelativeLayout>

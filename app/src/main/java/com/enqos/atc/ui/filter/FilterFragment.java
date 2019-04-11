@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -22,11 +24,13 @@ import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.storeList.ShopListFragment;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -36,10 +40,15 @@ public class FilterFragment extends Fragment implements FilterView {
     private Unbinder unbinder;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.tv_category)
+    TextView tvCategory;
+    @BindView(R.id.tv_neighbourhood)
+    TextView tvNeighbourhhod;
     @Inject
     FilterPresenter filterPresenter;
     private StoreActivityListener storeActivityListener;
     private static List<CategoryEntity> categories;
+    private int selectedTab;
 
     public FilterFragment() {
         AtcApplication.getAppComponents().inject(this);
@@ -63,7 +72,6 @@ public class FilterFragment extends Fragment implements FilterView {
         else {
             recyclerView.setAdapter(new FilterAdapter(categories, this));
         }
-        //gridView.setOnItemClickListener(this);
         return view;
     }
 
@@ -86,6 +94,18 @@ public class FilterFragment extends Fragment implements FilterView {
         unbinder.unbind();
     }
 
+    @OnClick({R.id.tv_category, R.id.tv_neighbourhood})
+    public void onClick(View view) {
+        selectedTab = view.getId();
+        switch (view.getId()) {
+            case R.id.tv_category:
+                tabClick(view.getId());
+                break;
+            case R.id.tv_neighbourhood:
+                tabClick(view.getId());
+                break;
+        }
+    }
 
     @Override
     public void onSuccess(CategoryResponse categoryResponse) {
@@ -105,6 +125,27 @@ public class FilterFragment extends Fragment implements FilterView {
     @Override
     public void onError(String message) {
 
+    }
+
+    private void tabClick(int id) {
+
+        switch (id) {
+            case R.id.tv_category:
+                tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
+                tvCategory.setBackgroundResource(R.drawable.gradient_blue);
+
+                tvNeighbourhhod.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
+                tvNeighbourhhod.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
+
+                break;
+            case R.id.tv_neighbourhood:
+                tvNeighbourhhod.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
+                tvNeighbourhhod.setBackgroundResource(R.drawable.gradient_blue);
+
+                tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
+                tvCategory.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
+                break;
+        }
     }
 
     @Override

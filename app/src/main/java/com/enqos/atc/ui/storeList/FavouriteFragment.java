@@ -115,13 +115,7 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
 
         switch (id) {
             case R.id.tv_product:
-                // if (productFavourites == null)
                 presenter.getProductFavourites("product", this);
-//                else {
-//                    productAdapter = new StorePageAdapter(getActivity(), productFavourites);
-//                    gridView.setAdapter(productAdapter);
-//                    productAdapter.setListener(this);
-//                }
 
                 tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvProduct.setBackgroundResource(R.drawable.gradient_blue);
@@ -131,13 +125,7 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
 
                 break;
             case R.id.tv_store:
-                //if (favourites == null) {
                 presenter.getFavourites("store", this);
-                /*} else {
-                    adapter = new ShopListAdapter(getActivity(), favourites);
-                    gridView.setAdapter(adapter);
-                    adapter.setListener(this);
-                }*/
 
                 tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvStore.setBackgroundResource(R.drawable.gradient_blue);
