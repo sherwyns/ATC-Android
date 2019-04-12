@@ -35,6 +35,15 @@ public class FilterPresenter extends BasePresenter implements NetworkApiResponse
 
     }
 
+    void addAllOptionInNeighbourhood(List<CategoryEntity> categories) {
+        if (categories != null) {
+            CategoryEntity allCategory = new CategoryEntity();
+            allCategory.setId("0");
+            allCategory.setName("All");
+            categories.add(0, allCategory);
+        }
+    }
+
     public List<CategoryEntity> getNeibhourhoods() {
         List<CategoryEntity> tempList = new ArrayList<>();
         for (String neighbourhood :

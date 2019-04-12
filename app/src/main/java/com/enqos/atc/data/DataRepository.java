@@ -195,9 +195,9 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    void getStore(NetworkApiResponse networkApiResponse, StoreRequest storeRequest) {
+    void getStore(NetworkApiResponse networkApiResponse, String neighbour, String category, double latitude, double longitude) {
 
-        Observable<StoreResponse> storeResponse = retrofit.create(WebServiceApi.class).store(storeRequest);
+        Observable<StoreResponse> storeResponse = retrofit.create(WebServiceApi.class).store(neighbour, category, latitude, longitude);
 
         storeResponse.subscribeOn(newThread)
                 .observeOn(mainThread)

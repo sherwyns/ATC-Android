@@ -34,12 +34,12 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
         AtcApplication.getAppComponents().inject(this);
     }
 
-    void getStore(StoreListView storeListView,String[] neighbouhood, int[] category,double latitude, double longitude) {
+    void getStore(StoreListView storeListView, String neighbouhood, String category, double latitude, double longitude) {
         this.storeListView = storeListView;
         if (createApiRequest == null)
             createApiRequest = new CreateApiRequest(this);
         try {
-            createApiRequest.createStoreRequest(neighbouhood,category,0.0,0.0);
+            createApiRequest.createStoreRequest(neighbouhood, category, latitude, longitude);
         } catch (Exception e) {
             e.printStackTrace();
         }

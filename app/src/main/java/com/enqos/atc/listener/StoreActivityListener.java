@@ -10,7 +10,12 @@ public interface StoreActivityListener {
     void changeHeader(int leftResId, String text, int rightResId);
 
     Toolbar getToolbar();
-    void clickLeft();
 
-    void clickRight();
+    double getLatitude();
+
+    double getLongitude();
+
+    String getCategories();
+
+    String getNeighbourhoods();
 }

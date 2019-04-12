@@ -56,8 +56,8 @@ public interface WebServiceApi {
     @POST("api/Users/change-password?")
     Observable<Void> changePassword(@Query("access_token") String accessToken, @Body ChangePasswordRequest changePasswordRequest);
 
-    @POST("api/Store/getstores")
-    Observable<StoreResponse> store(@Body StoreRequest storeRequest);
+    @GET("api/Store/getstores")
+    Observable<StoreResponse> store(@Query("neighbourhood") String neighbourhood, @Query("category") String category, @Query("latitude") double latitude, @Query("longitude") double longitude);
 
     @POST("api/favorite/list")
     Observable<StoreFavoriteResponse> favorites(@Body GetFavouriteRequest favouriteRequest);

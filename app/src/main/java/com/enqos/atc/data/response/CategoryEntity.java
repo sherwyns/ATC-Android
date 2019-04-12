@@ -24,6 +24,8 @@ public class CategoryEntity {
         return image_url;
     }
 
+    private boolean isSelected;
+
     public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
@@ -34,4 +36,12 @@ public class CategoryEntity {
     private String name;
     @SerializedName("image_url")
     private String image_url;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }

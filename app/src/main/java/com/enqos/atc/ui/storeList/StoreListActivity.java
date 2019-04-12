@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -70,6 +71,10 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
     private LocationManager locationManager;
+    private String selectedCategories;
+    private String slectedNeighbourhoods;
+    private double latitude, longitude;
+
 
 
     @SuppressWarnings("unchecked")
@@ -148,6 +153,20 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             toolbar.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                assert data != null;
+                selectedCategories = data.getStringExtra("categories");
+                slectedNeighbourhoods = data.getStringExtra("neighbourhoods");
+
+                replaceFragment(ShopListFragment.newInstance(""));
+            }
+        }
+    }
+
     @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.terms_condition, R.id.help, R.id.privacy, R.id.about, R.id.img_fav, R.id.img_search, R.id.img_home})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -158,7 +177,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                     onBackPressed();
                 break;
             case R.id.image_right:
-                startActivity(new Intent(this, FilterActivity.class));
+                startActivityForResult(new Intent(this, FilterActivity.class), 1);
                 break;
             case R.id.img_fav:
                 if (!isLogin) {
@@ -250,18 +269,29 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     }
 
     @Override
-    public void clickLeft() {
-        onBackPressed();
+    public double getLatitude() {
+        return latitude;
     }
 
     @Override
-    public void clickRight() {
+    public double getLongitude() {
+        return longitude;
+    }
 
+    @Override
+    public String getCategories() {
+        return selectedCategories;
+    }
+
+    @Override
+    public String getNeighbourhoods() {
+        return slectedNeighbourhoods;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
         Log.i("Coordinates", location.getLatitude() + ":" + location.getLongitude());
     }
 

@@ -26,6 +26,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     private List<String> neighbourhoods = new ArrayList<>();
     private List<Integer> categories = new ArrayList<>();
     private boolean isCategory;
+    private boolean isBind;
 
     FilterAdapter(List<CategoryEntity> categoryEntities, FilterView filterView, boolean isCategory) {
         this.categoryEntities = categoryEntities;
@@ -45,13 +46,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
         CategoryEntity categoryEntity = categoryEntities.get(i);
         viewHolder.tvCategoryName.setText(categoryEntity.getName());
-        if (isCategory) {
-            if (categories.isEmpty())
-                viewHolder.checkBox.setChecked(false);
+        isBind = true;
+        viewHolder.checkBox.setChecked(categoryEntity.isSelected());
+        isBind = false;
+        if (!isCategory) {
             viewHolder.ivCategory.setVisibility(View.GONE);
         } else {
-            if (neighbourhoods.isEmpty())
-                viewHolder.checkBox.setChecked(false);
             viewHolder.ivCategory.setVisibility(View.VISIBLE);
         }
 
@@ -73,15 +73,45 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
-                if (viewHolder.ivCategory.getVisibility() == View.VISIBLE)
-                    categories.add(Integer.valueOf(categoryEntity.getId()));
-                else
-                    neighbourhoods.add(categoryEntity.getName());
+                if (viewHolder.ivCategory.getVisibility() == View.VISIBLE) {
+                    if (categoryEntity.getName().equals("All"))
+                        selectAllCategories();
+                    else
+                        categories.add(Integer.valueOf(categoryEntity.getId()));
+                } else {
+                    if (categoryEntity.getName().equals("All"))
+                        selectAllNeighbourhood();
+                    else
+                        neighbourhoods.add(categoryEntity.getName());
+                }
             } else {
-                if (viewHolder.ivCategory.getVisibility() == View.VISIBLE)
-                    categories.remove(Integer.valueOf(categoryEntity.getId()));
-                else
-                    neighbourhoods.remove(categoryEntity.getName());
+                if (viewHolder.ivCategory.getVisibility() == View.VISIBLE) {
+                    if (categoryEntity.getName().equals("All"))
+                        clearAllCategories();
+                    else {
+                        categoryEntity.setSelected(false);
+                        if (categoryEntities.get(0).isSelected()) {
+                            categoryEntities.get(0).setSelected(false);
+                            if (!isBind)
+                                notifyDataSetChanged();
+                        }
+
+                        categories.remove(Integer.valueOf(categoryEntity.getId()));
+                    }
+                } else {
+                    if (categoryEntity.getName().equals("All"))
+                        clearAllNeighbourhood();
+                    else {
+                        categoryEntity.setSelected(false);
+                        if (categoryEntities.get(0).isSelected()) {
+                            categoryEntities.get(0).setSelected(false);
+                            if (!isBind)
+                                notifyDataSetChanged();
+                        }
+                        neighbourhoods.remove(categoryEntity.getName());
+                    }
+                }
+
             }
 
         });
@@ -97,10 +127,60 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     }
 
 
-    void clearAll() {
+   /* void clearAll(List<CategoryEntity> categoryEntities, List<CategoryEntity> allNeighbourHoods, FilterAdapter adapter1, FilterAdapter adapter2) {
         categories.clear();
         neighbourhoods.clear();
-        notifyDataSetChanged();
+        for (CategoryEntity category :
+                categoryEntities) {
+            category.setSelected(false);
+        }
+        for (CategoryEntity category :
+                allNeighbourHoods) {
+            category.setSelected(false);
+        }
+        if (!isBind) {
+            adapter1.notifyDataSetChanged();
+            adapter2.notifyDataSetChanged();
+        }
+    }
+*/
+
+    void clearAllCategories() {
+        categories.clear();
+        for (CategoryEntity category :
+                categoryEntities) {
+            category.setSelected(false);
+        }
+        if (!isBind)
+            notifyDataSetChanged();
+    }
+
+    void clearAllNeighbourhood() {
+        neighbourhoods.clear();
+        for (CategoryEntity category :
+                categoryEntities) {
+            category.setSelected(false);
+        }
+        if (!isBind)
+            notifyDataSetChanged();
+    }
+
+    private void selectAllCategories() {
+        for (CategoryEntity category : categoryEntities) {
+            category.setSelected(true);
+            categories.add(Integer.valueOf(category.getId()));
+        }
+        if (!isBind)
+            notifyDataSetChanged();
+    }
+
+    private void selectAllNeighbourhood() {
+        for (CategoryEntity category : categoryEntities) {
+            category.setSelected(true);
+            neighbourhoods.add(category.getName());
+        }
+        if (!isBind)
+            notifyDataSetChanged();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.enqos.atc.ui.filter;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.data.response.CategoryEntity;
 import com.enqos.atc.data.response.CategoryResponse;
+import com.enqos.atc.ui.storeList.StoreListActivity;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +47,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
     FilterPresenter filterPresenter;
     private static List<CategoryEntity> categories;
     private List<CategoryEntity> neighbourhoods;
-    private int selectedTab;
+    private boolean isNeighbourSelected;
     private FilterAdapter categoryAdapter, neighbourhoodAdapter;
 
 
@@ -67,6 +69,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
             filterPresenter.getCategories(this);
         } else {
             neighbourhoods = filterPresenter.getNeibhourhoods();
+            filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
             neighbourhoodAdapter = new FilterAdapter(neighbourhoods, this, false);
             categoryAdapter = new FilterAdapter(categories, this, true);
             recyclerView.setAdapter(categoryAdapter);
@@ -85,7 +88,6 @@ public class FilterActivity extends BaseActivity implements FilterView {
 
     @OnClick({R.id.tv_category, R.id.tv_neighbourhood, R.id.image_right, R.id.clear_all, R.id.apply})
     public void onClick(View view) {
-        selectedTab = view.getId();
         switch (view.getId()) {
             case R.id.tv_category:
                 tabClick(view.getId());
@@ -97,24 +99,38 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 finish();
                 break;
             case R.id.clear_all:
-                if (selectedTab == R.id.tv_category && categoryAdapter != null)
-                    categoryAdapter.clearAll();
-                else if (neighbourhoodAdapter != null)
-                    neighbourhoodAdapter.clearAll();
 
+                if (!isNeighbourSelected) {
+                    if (categoryAdapter != null) {
+                        categoryAdapter.clearAllCategories();
+                    }
+                } else {
+                    if (neighbourhoodAdapter != null)
+                        neighbourhoodAdapter.clearAllNeighbourhood();
+                }
 
                 break;
             case R.id.apply:
+                String selectedNeighours = "", selectedCategories = "";
                 if (neighbourhoodAdapter != null) {
                     List<String> neighbourhoods = neighbourhoodAdapter.getNeighbourhoods();
-                    Log.i("NEIGHBOUR", neighbourhoods.toString());
+                    selectedNeighours = neighbourhoods.toString().replace("[", "").replace("]", "");
+                    Log.i("NEIGHBOUR", selectedNeighours);
                 }
                 if (categoryAdapter != null) {
                     List<Integer> categories = categoryAdapter.getCategories();
-                    Log.i("CATEGORIES", categories.toString());
+                    selectedCategories = categories.toString().replace("[", "").replace("]", "");
+                    Log.i("CATEGORIES", selectedCategories);
                 }
+
+                Intent intent = new Intent(this, StoreListActivity.class);
+                intent.putExtra("categories", selectedCategories);
+                intent.putExtra("neighbourhoods", selectedNeighours);
+                setResult(RESULT_OK, intent);
+                finish();
                 break;
         }
+
     }
 
     @Override
@@ -129,6 +145,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 categories.add(0, allCategory);
             }
             neighbourhoods = filterPresenter.getNeibhourhoods();
+            filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
             neighbourhoodAdapter = new FilterAdapter(neighbourhoods, this, false);
             categoryAdapter = new FilterAdapter(categories, this, true);
             recyclerView.setAdapter(categoryAdapter);
@@ -145,6 +162,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
 
         switch (id) {
             case R.id.tv_category:
+                isNeighbourSelected = false;
                 if (categoryAdapter != null)
                     recyclerView.setAdapter(categoryAdapter);
                 tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
@@ -155,6 +173,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
 
                 break;
             case R.id.tv_neighbourhood:
+                isNeighbourSelected = true;
                 if (neighbourhoodAdapter != null)
                     recyclerView.setAdapter(neighbourhoodAdapter);
                 tvNeighbourhhod.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));

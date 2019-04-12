@@ -76,7 +76,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         View rootView = inflater.inflate(R.layout.fragment_shope_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         if (TextUtils.isEmpty(selecteCategoryId))
-            storeListPresenter.getStore(this, null, null, 0.0, 0.0);
+            storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
         else {
             allStores = StoreListPresenter.groupStores.get(selecteCategoryId);
 
@@ -93,6 +93,10 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         }
         gridView.setOnItemClickListener(this);
         return rootView;
+    }
+
+    public void callStoreAPI(){
+        storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
     }
 
     @Override
