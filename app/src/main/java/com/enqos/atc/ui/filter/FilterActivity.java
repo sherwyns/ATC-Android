@@ -69,7 +69,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
             filterPresenter.getCategories(this);
         } else {
             neighbourhoods = filterPresenter.getNeibhourhoods();
-            filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
+            // filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
             neighbourhoodAdapter = new FilterAdapter(neighbourhoods, this, false);
             categoryAdapter = new FilterAdapter(categories, this, true);
             recyclerView.setAdapter(categoryAdapter);
@@ -138,14 +138,14 @@ public class FilterActivity extends BaseActivity implements FilterView {
         hideLoading();
         if (categoryResponse != null) {
             categories = categoryResponse.getCategoryEntities();
-            if (categories != null) {
+           /* if (categories != null) {
                 CategoryEntity allCategory = new CategoryEntity();
                 allCategory.setId("0");
                 allCategory.setName("All");
                 categories.add(0, allCategory);
-            }
+            }*/
             neighbourhoods = filterPresenter.getNeibhourhoods();
-            filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
+            //filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
             neighbourhoodAdapter = new FilterAdapter(neighbourhoods, this, false);
             categoryAdapter = new FilterAdapter(categories, this, true);
             recyclerView.setAdapter(categoryAdapter);

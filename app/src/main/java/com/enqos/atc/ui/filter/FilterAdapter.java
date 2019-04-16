@@ -55,14 +55,15 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
             viewHolder.ivCategory.setVisibility(View.VISIBLE);
         }
 
-        if (categoryEntity.getName().equalsIgnoreCase("All")) {
+        /*if (categoryEntity.getName().equalsIgnoreCase("All")) {
             Glide.with(viewHolder.itemView.getContext()).load(R.drawable.ic_done_all_black_24dp)
                     .apply(new RequestOptions().override(30, 30)
                             .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                             .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                             .centerCrop())
                     .into(viewHolder.ivCategory);
-        } else if (!TextUtils.isEmpty(categoryEntity.getImage_url())) {
+        } else */
+        if (!TextUtils.isEmpty(categoryEntity.getImage_url())) {
             Glide.with(viewHolder.itemView.getContext()).load(categoryEntity.getImage_url())
                     .apply(new RequestOptions().override(30, 30)
                             .error(R.drawable.ic_photo_size_select_actual_black_24dp)
@@ -74,42 +75,42 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
                 if (viewHolder.ivCategory.getVisibility() == View.VISIBLE) {
-                    if (categoryEntity.getName().equals("All"))
+                    /*if (categoryEntity.getName().equals("All"))
                         selectAllCategories();
-                    else
-                        categories.add(Integer.valueOf(categoryEntity.getId()));
+                    else*/
+                    categories.add(Integer.valueOf(categoryEntity.getId()));
                 } else {
-                    if (categoryEntity.getName().equals("All"))
+                   /* if (categoryEntity.getName().equals("All"))
                         selectAllNeighbourhood();
-                    else
-                        neighbourhoods.add(categoryEntity.getName());
+                    else*/
+                    neighbourhoods.add(categoryEntity.getName());
                 }
             } else {
                 if (viewHolder.ivCategory.getVisibility() == View.VISIBLE) {
-                    if (categoryEntity.getName().equals("All"))
+                   /* if (categoryEntity.getName().equals("All"))
                         clearAllCategories();
-                    else {
-                        categoryEntity.setSelected(false);
-                        if (categoryEntities.get(0).isSelected()) {
-                            categoryEntities.get(0).setSelected(false);
-                            if (!isBind)
-                                notifyDataSetChanged();
-                        }
+                    else {*/
+                    categoryEntity.setSelected(false);
+                    /*if (categoryEntities.get(0).isSelected()) {
+                        categoryEntities.get(0).setSelected(false);
+                        if (!isBind)
+                            notifyDataSetChanged();
+                    }*/
 
-                        categories.remove(Integer.valueOf(categoryEntity.getId()));
-                    }
+                    categories.remove(Integer.valueOf(categoryEntity.getId()));
+                    // }
                 } else {
-                    if (categoryEntity.getName().equals("All"))
+                    /*if (categoryEntity.getName().equals("All"))
                         clearAllNeighbourhood();
-                    else {
-                        categoryEntity.setSelected(false);
-                        if (categoryEntities.get(0).isSelected()) {
-                            categoryEntities.get(0).setSelected(false);
-                            if (!isBind)
-                                notifyDataSetChanged();
-                        }
-                        neighbourhoods.remove(categoryEntity.getName());
-                    }
+                    else {*/
+                    categoryEntity.setSelected(false);
+                    /*if (categoryEntities.get(0).isSelected()) {
+                        categoryEntities.get(0).setSelected(false);
+                        if (!isBind)
+                            notifyDataSetChanged();
+                    }*/
+                    neighbourhoods.remove(categoryEntity.getName());
+                    //}
                 }
 
             }

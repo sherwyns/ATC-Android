@@ -1,6 +1,7 @@
 package com.enqos.atc.ui.storeList;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -14,13 +15,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +65,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @BindView(R.id.image_left)
     ImageView leftImg;
     @BindView(R.id.image_right)
-    ImageView rightImg;
+    FrameLayout rightImg;
     @Inject
     StoreListPresenter storeListPresenter;
     @Inject
@@ -74,7 +75,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     private String selectedCategories;
     private String slectedNeighbourhoods;
     private double latitude, longitude;
-
 
 
     @SuppressWarnings("unchecked")
@@ -98,6 +98,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -109,8 +110,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 } else {
                     Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
                 }
-            } else
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
         }
     }
 
@@ -260,7 +261,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     public void changeHeader(int leftResId, String text, int rightResId) {
         leftImg.setImageResource(leftResId);
         title.setText(text);
-        rightImg.setImageResource(rightResId);
+        rightImg.setBackgroundResource(rightResId);
     }
 
     @Override
