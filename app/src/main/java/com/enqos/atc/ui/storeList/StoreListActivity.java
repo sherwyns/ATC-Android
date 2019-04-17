@@ -19,9 +19,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,7 +65,9 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @BindView(R.id.image_left)
     ImageView leftImg;
     @BindView(R.id.image_right)
-    FrameLayout rightImg;
+    ImageView rightImg;
+    @BindView(R.id.filter_count)
+    TextView filterCount;
     @Inject
     StoreListPresenter storeListPresenter;
     @Inject
@@ -73,7 +75,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     private boolean isLogin;
     private LocationManager locationManager;
     private String selectedCategories;
-    private String slectedNeighbourhoods;
+    private String selectedNeighbourhoods;
     private double latitude, longitude;
 
 
@@ -161,7 +163,18 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             if (requestCode == 1) {
                 assert data != null;
                 selectedCategories = data.getStringExtra("categories");
-                slectedNeighbourhoods = data.getStringExtra("neighbourhoods");
+                selectedNeighbourhoods = data.getStringExtra("neighbourhoods");
+
+                if (TextUtils.isEmpty(selectedCategories) && TextUtils.isEmpty(selectedNeighbourhoods))
+                    filterCount.setVisibility(View.GONE);
+                else {
+                    filterCount.setVisibility(View.VISIBLE);
+                    String[] categories = selectedCategories.split(",");
+                    String[] neighbours = selectedNeighbourhoods.split(",");
+
+                    int count = categories.length + neighbours.length;
+                    filterCount.setText(String.valueOf(count));
+                }
 
                 replaceFragment(ShopListFragment.newInstance(""));
             }
@@ -261,7 +274,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     public void changeHeader(int leftResId, String text, int rightResId) {
         leftImg.setImageResource(leftResId);
         title.setText(text);
-        rightImg.setBackgroundResource(rightResId);
+        rightImg.setImageResource(rightResId);
     }
 
     @Override
@@ -286,7 +299,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public String getNeighbourhoods() {
-        return slectedNeighbourhoods;
+        return selectedNeighbourhoods;
     }
 
     @Override

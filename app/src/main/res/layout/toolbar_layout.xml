@@ -27,7 +27,7 @@
             android:textSize="@dimen/font_16" />
 
         <FrameLayout
-            android:id="@+id/image_right"
+            android:id="@+id/right_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -35,6 +35,7 @@
             android:layout_marginEnd="@dimen/dimen_5dp">
 
             <ImageView
+                android:id="@+id/image_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dimen_15dp"
@@ -49,9 +50,9 @@
                 android:background="@drawable/filter_circle"
                 android:gravity="center"
                 android:padding="2dp"
-                android:text="1"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/font_12" />
+                android:textSize="@dimen/font_12"
+                android:visibility="gone" />
 
 
         </FrameLayout>

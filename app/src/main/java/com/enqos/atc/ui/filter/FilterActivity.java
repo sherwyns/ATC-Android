@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,8 +42,10 @@ public class FilterActivity extends BaseActivity implements FilterView {
     ImageView ivRight;
     @BindView(R.id.title)
     TextView tvTitle;
+    @BindView(R.id.filter_count)
+    TextView filterCount;
     @BindView(R.id.tv_neighbourhood)
-    TextView tvNeighbourhhod;
+    TextView tvNeighbourhood;
     @Inject
     FilterPresenter filterPresenter;
     private static List<CategoryEntity> categories;
@@ -59,6 +62,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ivLeft.setVisibility(View.GONE);
+        filterCount.setVisibility(View.GONE);
         ivRight.setImageResource(R.drawable.ic_close_black_24dp);
         tvTitle.setText(R.string.filters);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -99,7 +103,6 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 finish();
                 break;
             case R.id.clear_all:
-
                 if (!isNeighbourSelected) {
                     if (categoryAdapter != null) {
                         categoryAdapter.clearAllCategories();
@@ -168,16 +171,16 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
                 tvCategory.setBackgroundResource(R.drawable.gradient_blue);
 
-                tvNeighbourhhod.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), R.color.cateoryTextColor));
-                tvNeighbourhhod.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.transparent));
+                tvNeighbourhood.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), R.color.cateoryTextColor));
+                tvNeighbourhood.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.transparent));
 
                 break;
             case R.id.tv_neighbourhood:
                 isNeighbourSelected = true;
                 if (neighbourhoodAdapter != null)
                     recyclerView.setAdapter(neighbourhoodAdapter);
-                tvNeighbourhhod.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
-                tvNeighbourhhod.setBackgroundResource(R.drawable.gradient_blue);
+                tvNeighbourhood.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
+                tvNeighbourhood.setBackgroundResource(R.drawable.gradient_blue);
 
                 tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), R.color.cateoryTextColor));
                 tvCategory.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.transparent));

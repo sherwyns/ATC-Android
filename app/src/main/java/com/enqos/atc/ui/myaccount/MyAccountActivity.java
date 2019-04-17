@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +39,8 @@ public class MyAccountActivity extends BaseActivity implements MyAccountView {
     EditText etCurrentPassword;
     @BindView(R.id.et_new_password)
     EditText etNewPassword;
+    @BindView(R.id.right_layout)
+    FrameLayout right_layout;
     @BindView(R.id.et_confirm_new_password)
     EditText etConfirmPassword;
     @BindView(R.id.change_pass_arrow)
@@ -60,8 +63,8 @@ public class MyAccountActivity extends BaseActivity implements MyAccountView {
 
     private void modifyHeaderViews() {
         imgLeft.setImageResource(R.drawable.ic_keyboard_arrow_left_black_24dp);
-        imgRight.setVisibility(View.GONE);
         title.setText(R.string.my_account);
+        right_layout.setVisibility(View.GONE);
 
         String email = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.EMAIL);
         tvEmail.setText(email);
@@ -136,8 +139,7 @@ public class MyAccountActivity extends BaseActivity implements MyAccountView {
             etCurrentPassword.setText("");
             etNewPassword.setText("");
             Toast.makeText(this, "Password changed Successfully!", Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
     }
