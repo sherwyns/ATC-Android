@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.CreateApiRequest;
@@ -113,7 +114,7 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
-                        .centerCrop())
+                        .override(Target.SIZE_ORIGINAL))
                 .into(ivProductImg);
 
         SimiliarProductsAdapter adapter = new SimiliarProductsAdapter(getActivity(), similiarProducts);

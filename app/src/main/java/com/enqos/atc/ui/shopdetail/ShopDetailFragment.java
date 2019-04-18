@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.CreateApiRequest;
@@ -138,7 +139,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             storeid = bundle.getString(STORE_ID);
             isFavourite = bundle.getBoolean(IS_FAVOURITE);
             String token = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.TOKEN);
-            if(!TextUtils.isEmpty(token)) {
+            if (!TextUtils.isEmpty(token)) {
                 CreateApiRequest createApiRequest = new CreateApiRequest(this);
                 createApiRequest.createStoreAnalyticsRequest(token, storeid);
             }
@@ -305,7 +306,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
-                        .centerCrop())
+                        .override(Target.SIZE_ORIGINAL))
                 .into(shopImg);
 
         if (googleMap != null) {
