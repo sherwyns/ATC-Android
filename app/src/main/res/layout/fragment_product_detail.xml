@@ -108,10 +108,20 @@
             android:textStyle="normal" />
 
         <TextView
+            android:id="@+id/tv_shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:text="shop name"
+            android:textColor="@color/colorLightOrange"
+            android:textSize="@dimen/font_16"
+            android:visibility="gone" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_10dp"
-            android:layout_marginTop="@dimen/dimen_20dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
             android:fontFamily="sans-serif"
             android:letterSpacing="0.02"
             android:text="@string/similar_products"

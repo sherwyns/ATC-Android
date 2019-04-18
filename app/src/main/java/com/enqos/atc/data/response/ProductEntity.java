@@ -8,6 +8,8 @@ public class ProductEntity {
     private String id;
     @SerializedName("store_id")
     private String store_id;
+    @SerializedName("shop_name")
+    private String shop_name;
     @SerializedName("title")
     private String title;
     @SerializedName("price")
@@ -104,5 +106,13 @@ public class ProductEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getShop_name() {
+        return shop_name;
+    }
+
+    public void setShop_name(String shop_name) {
+        this.shop_name = shop_name;
     }
 }

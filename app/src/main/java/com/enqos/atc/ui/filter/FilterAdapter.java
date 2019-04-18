@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.data.response.CategoryEntity;
+import com.enqos.atc.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         this.categoryEntities = categoryEntities;
         this.filterView = filterView;
         this.isCategory = isCategory;
+        checkSelectedFilters();
     }
 
     @NonNull
@@ -39,6 +41,43 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.filter_row_layout, viewGroup, false);
         return new ViewHolder(view);
+    }
+
+    private void checkSelectedFilters() {
+        if (isCategory)
+            checkSelectedCategoryFilters();
+        else
+            checkSelectedNeighbourFilters();
+    }
+
+    private void checkSelectedCategoryFilters() {
+        if (!TextUtils.isEmpty(Constants.CATEGORIES)) {
+            String[] allCategories = Constants.CATEGORIES.split(",");
+            for (String category : allCategories) {
+
+                for (CategoryEntity categoryEntity : categoryEntities) {
+                    if (categoryEntity.getId().trim().equalsIgnoreCase(category.trim())) {
+                        categoryEntity.setSelected(true);
+                        categories.add(Integer.valueOf(category.trim()));
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkSelectedNeighbourFilters() {
+        if (!TextUtils.isEmpty(Constants.NEIGHBOURHOODS)) {
+            String[] categories = Constants.NEIGHBOURHOODS.split(",");
+            for (String category : categories) {
+
+                for (CategoryEntity categoryEntity : categoryEntities) {
+                    if (categoryEntity.getName().trim().equalsIgnoreCase(category.trim())) {
+                        categoryEntity.setSelected(true);
+                        neighbourhoods.add(category);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -147,6 +186,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 */
 
     void clearAllCategories() {
+        Constants.CATEGORIES = "";
         categories.clear();
         for (CategoryEntity category :
                 categoryEntities) {
@@ -157,6 +197,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     }
 
     void clearAllNeighbourhood() {
+        Constants.NEIGHBOURHOODS = "";
         neighbourhoods.clear();
         for (CategoryEntity category :
                 categoryEntities) {

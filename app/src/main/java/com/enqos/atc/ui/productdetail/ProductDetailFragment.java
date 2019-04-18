@@ -31,6 +31,7 @@ import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.listener.RecyclerViewItemClickListner;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.home.HomeActivity;
+import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
 import com.enqos.atc.utils.FavouriteUtility;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
@@ -58,6 +59,8 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     TextView tvPrice;
     @BindView(R.id.tv_call)
     TextView tvCall;
+    @BindView(R.id.tv_shop_name)
+    TextView tvShopName;
     @BindView(R.id.img_fav)
     ImageView ivFav;
     @BindView(R.id.rv_products)
@@ -66,6 +69,7 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     SharedPreferenceManager sharedPreferenceManager;
     private StoreActivityListener listener;
     public ProductEntity productEntity;
+    public boolean isFromSearch = false;
     public List<ProductEntity> similiarProducts;
     private Unbinder unbinder;
 
@@ -83,6 +87,15 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
 
 
     private void setValues() {
+
+        if (isFromSearch) {
+            tvShopName.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(productEntity.getShop_name())) {
+                tvShopName.setText(productEntity.getShop_name());
+            }
+        } else
+            tvShopName.setVisibility(View.GONE);
+
 
         if (!TextUtils.isEmpty(productEntity.getTitle()))
             tvProductName.setText(productEntity.getTitle());
@@ -147,11 +160,15 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
         return view;
     }
 
-    @OnClick({R.id.img_fav})
+    @OnClick({R.id.img_fav, R.id.tv_shop_name})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_fav:
                 saveProduct();
+                break;
+            case R.id.tv_shop_name:
+                if (!TextUtils.isEmpty(productEntity.getStore_id()))
+                    listener.replaceFragment(ShopDetailFragment.newInstance(productEntity.getStore_id(), false));
                 break;
         }
     }
@@ -245,7 +262,7 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
-                        .centerCrop())
+                        .override(Target.SIZE_ORIGINAL))
                 .into(ivProductImg);
     }
 

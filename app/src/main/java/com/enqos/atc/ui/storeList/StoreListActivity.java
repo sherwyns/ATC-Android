@@ -164,20 +164,33 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 assert data != null;
                 selectedCategories = data.getStringExtra("categories");
                 selectedNeighbourhoods = data.getStringExtra("neighbourhoods");
+                Constants.CATEGORIES = selectedCategories;
+                Constants.NEIGHBOURHOODS = selectedNeighbourhoods;
 
                 if (TextUtils.isEmpty(selectedCategories) && TextUtils.isEmpty(selectedNeighbourhoods))
                     filterCount.setVisibility(View.GONE);
                 else {
+                    int count;
                     filterCount.setVisibility(View.VISIBLE);
-                    String[] categories = selectedCategories.split(",");
-                    String[] neighbours = selectedNeighbourhoods.split(",");
+                    if (!TextUtils.isEmpty(selectedNeighbourhoods) && !TextUtils.isEmpty(selectedCategories)) {
+                        String[] categories = selectedCategories.split(",");
+                        String[] neighbours = selectedNeighbourhoods.split(",");
+                        count = categories.length + neighbours.length;
+                    } else if (!TextUtils.isEmpty(selectedCategories)) {
+                        String[] categories = selectedCategories.split(",");
+                        count = categories.length;
+                    } else {
+                        String[] categories = selectedNeighbourhoods.split(",");
+                        count = categories.length;
 
-                    int count = categories.length + neighbours.length;
+                    }
                     filterCount.setText(String.valueOf(count));
                 }
 
                 replaceFragment(ShopListFragment.newInstance(""));
             }
+        } else {
+            filterCount.setVisibility(View.GONE);
         }
     }
 

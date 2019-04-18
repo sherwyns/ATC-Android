@@ -10,4 +10,6 @@ public class Constants {
     public static final String PRIVACY_POLICY_LINK = "https://app.aroundthecorner.store/termsofservice";
     public static final String ABOUT_US_LINK = "https://app.aroundthecorner.store/aboutus";
 
+    public static String CATEGORIES;
+    public static String NEIGHBOURHOODS;
 }
