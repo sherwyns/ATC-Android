@@ -35,6 +35,18 @@ public class FilterPresenter extends BasePresenter implements NetworkApiResponse
 
     }
 
+    void getProductCategories(FilterView filterView) {
+        this.filterView = filterView;
+        try {
+            if (createApiRequest == null)
+                createApiRequest = new CreateApiRequest(this);
+            createApiRequest.createProductCategoriesRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     void addAllOptionInNeighbourhood(List<CategoryEntity> categories) {
         if (categories != null) {
             CategoryEntity allCategory = new CategoryEntity();

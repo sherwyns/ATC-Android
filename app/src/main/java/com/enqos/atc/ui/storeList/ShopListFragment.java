@@ -95,7 +95,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         return rootView;
     }
 
-    public void callStoreAPI(){
+    public void callStoreAPI() {
         storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
     }
 

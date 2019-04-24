@@ -438,6 +438,27 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
+    void getProductsCategories(NetworkApiResponse networkApiResponse) {
+
+        Observable<CategoryResponse> categoriesResponse = retrofit.create(WebServiceApi.class).getProductCategories();
+
+        categoriesResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), CategoryResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
     void storeAnalytics(NetworkApiResponse networkApiResponse, String accessToken, ProductAnalyticsRequest productAnalyticsRequest) {
 
         Observable<ProductAnalyticsResponse> loginResponse = retrofit.create(WebServiceApi.class).storeAnalytics(accessToken, productAnalyticsRequest);

@@ -103,13 +103,15 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
                     .into(viewHolder.ivCategory);
         } else */
         if (!TextUtils.isEmpty(categoryEntity.getImage_url())) {
+            viewHolder.ivCategory.setVisibility(View.VISIBLE);
             Glide.with(viewHolder.itemView.getContext()).load(categoryEntity.getImage_url())
                     .apply(new RequestOptions().override(30, 30)
                             .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                             .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                             .centerCrop())
                     .into(viewHolder.ivCategory);
-        }
+        } else
+            viewHolder.ivCategory.setVisibility(View.GONE);
 
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {

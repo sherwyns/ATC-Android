@@ -10,10 +10,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature android:name="android.hardware.location.gps" />
+
     <meta-data
         android:name="google_analytics_adid_collection_enabled"
         android:value="false" />
-
 
     <application
         android:name=".base.AtcApplication"
@@ -72,7 +72,7 @@
             android:name=".ui.login.ForgotPasswordActivity"
             android:theme="@style/AppThemeBlue" />
         <activity android:name=".ui.slidemenu.TermsAndConditionsActivity" />
-        <activity android:name=".ui.tutorial.TutorialActivity"></activity>
+        <activity android:name=".ui.tutorial.TutorialActivity" />
         <activity android:name=".ui.filter.FilterActivity" />
     </application>
 

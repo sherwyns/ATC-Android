@@ -5,28 +5,79 @@
     android:layout_height="match_parent"
     tools:context=".ui.storeList.ShopListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <GridView
-        android:id="@+id/gridview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:columnWidth="@dimen/dimen_120dp"
-        android:gravity="center"
-        android:horizontalSpacing="@dimen/dimen_10dp"
-        android:numColumns="2"
-        android:padding="@dimen/dimen_10dp"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/dimen_10dp"
-        />
+        android:background="#F4F4F4">
+
+        <LinearLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dimen_20dp"
+            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingEnd="@dimen/dimen_20dp"
+            android:paddingBottom="@dimen/dimen_10dp">
+
+            <TextView
+                android:id="@+id/tv_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:background="@drawable/gradient_blue"
+                android:elevation="5dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingStart="@dimen/dimen_15dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="@dimen/dimen_15dp"
+                android:paddingBottom="3dp"
+                android:text="@string/product"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_12" />
+
+            <TextView
+                android:id="@+id/tv_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:elevation="5dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingStart="@dimen/dimen_15dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="@dimen/dimen_15dp"
+                android:paddingBottom="3dp"
+                android:text="@string/store"
+                android:textColor="#787878"
+                android:textSize="@dimen/font_12" />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/top_layout"
+            android:clipToPadding="false"
+            android:columnWidth="@dimen/dimen_120dp"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/dimen_10dp"
+            android:numColumns="2"
+            android:padding="@dimen/dimen_10dp"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="@dimen/dimen_10dp" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/no_result_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"

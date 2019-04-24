@@ -1,17 +1,9 @@
 package com.enqos.atc.ui.storeList;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,11 +12,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -48,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener, LocationListener {
+public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -73,11 +63,9 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
-    private LocationManager locationManager;
+
     private String selectedCategories;
     private String selectedNeighbourhoods;
-    private double latitude, longitude;
-
 
     @SuppressWarnings("unchecked")
     @Override
@@ -85,14 +73,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onCreate(savedInstanceState);
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
 
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
 
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
@@ -100,22 +81,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
-                }
-            }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
-        }
-    }
 
     @Override
     public void injectDependency() {
@@ -315,25 +280,4 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         return selectedNeighbourhoods;
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        Log.i("Coordinates", location.getLatitude() + ":" + location.getLongitude());
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
 }

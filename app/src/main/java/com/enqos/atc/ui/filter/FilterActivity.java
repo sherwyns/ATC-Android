@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.enqos.atc.R;
@@ -46,13 +47,14 @@ public class FilterActivity extends BaseActivity implements FilterView {
     TextView filterCount;
     @BindView(R.id.tv_neighbourhood)
     TextView tvNeighbourhood;
+    @BindView(R.id.top_layout)
+    LinearLayout topLayout;
     @Inject
     FilterPresenter filterPresenter;
     private static List<CategoryEntity> categories;
     private List<CategoryEntity> neighbourhoods;
     private boolean isNeighbourSelected;
     private FilterAdapter categoryAdapter, neighbourhoodAdapter;
-
 
     public static FilterActivity getInstance() {
         return new FilterActivity();
@@ -61,6 +63,11 @@ public class FilterActivity extends BaseActivity implements FilterView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean isProduct = getIntent().getBooleanExtra("isProduct", false);
+        if (isProduct)
+            topLayout.setVisibility(View.GONE);
+        else
+            topLayout.setVisibility(View.VISIBLE);
         ivLeft.setVisibility(View.GONE);
         filterCount.setVisibility(View.GONE);
         ivRight.setImageResource(R.drawable.ic_close_black_24dp);
@@ -70,7 +77,10 @@ public class FilterActivity extends BaseActivity implements FilterView {
         recyclerView.setLayoutManager(linearLayoutManager);
         if (categories == null || categories.size() == 0) {
             showLoading();
-            filterPresenter.getCategories(this);
+            if (isProduct)
+                filterPresenter.getProductCategories(this);
+            else
+                filterPresenter.getCategories(this);
         } else {
             neighbourhoods = filterPresenter.getNeibhourhoods();
             // filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);

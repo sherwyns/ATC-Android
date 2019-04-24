@@ -14,11 +14,11 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity implements MvpView {
 
     private AppProgressDialog dialog;
+    public double latitude,longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getLayoutId() != 0)
             setContentView(getLayoutId());
         injectDependency();

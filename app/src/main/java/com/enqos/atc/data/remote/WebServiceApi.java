@@ -91,4 +91,7 @@ public interface WebServiceApi {
 
     @POST("api/service/categoryimpression")
     Observable<ProductAnalyticsResponse> categoryAnalytics(@Header("accesstoken") String accessToken, @Body ProductAnalyticsRequest productAnalyticsRequest);
+
+    @GET("api/productcategories/getcategory")
+    Observable<CategoryResponse> getProductCategories();
 }

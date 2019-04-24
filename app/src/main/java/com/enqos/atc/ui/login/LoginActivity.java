@@ -199,4 +199,5 @@ public class LoginActivity extends BaseActivity implements LoginView {
         loginPresenter.authenticateSocialUser(email, password, "facebook", this);
     }
 
+
 }
