@@ -14,6 +14,7 @@ import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
 import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.ProductAnalyticsResponse;
+import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.RegisterResponse;
 import com.enqos.atc.data.response.ResetPasswordResponse;
 import com.enqos.atc.data.response.SaveFavouriteResponse;
@@ -58,6 +59,9 @@ public interface WebServiceApi {
 
     @GET("api/Store/getstores")
     Observable<StoreResponse> store(@Query("neighbourhood") String neighbourhood, @Query("category") String category, @Query("latitude") double latitude, @Query("longitude") double longitude);
+
+    @GET("api/products/getproductlist")
+    Observable<StorePageResponse> productsPagination(@Query("neighbourhood") String neighbourhood, @Query("category") String category, @Query("limit") int limit, @Query("offset") int offset);
 
     @POST("api/favorite/list")
     Observable<StoreFavoriteResponse> favorites(@Body GetFavouriteRequest favouriteRequest);

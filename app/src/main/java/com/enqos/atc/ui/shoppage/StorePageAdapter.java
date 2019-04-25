@@ -113,7 +113,12 @@ public class StorePageAdapter extends BaseAdapter {
 
             }
         });
-        Glide.with(viewGroup.getContext()).load(data.get(i).getProduct_image())
+        String url = "";
+        if (TextUtils.isEmpty(data.get(i).getProduct_image()) && !TextUtils.isEmpty(data.get(i).getImage()))
+            url = data.get(i).getImage();
+        else if (!TextUtils.isEmpty(data.get(i).getProduct_image()))
+            url = data.get(i).getProduct_image();
+        Glide.with(viewGroup.getContext()).load(url)
                 .apply(new RequestOptions().override(250, 180)
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)

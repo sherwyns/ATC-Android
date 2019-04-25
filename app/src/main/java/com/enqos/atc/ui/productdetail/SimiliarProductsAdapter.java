@@ -62,8 +62,12 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
             viewHolder.price.setVisibility(View.GONE);
             viewHolder.tvCall.setVisibility(View.VISIBLE);
         }
-
-        Glide.with(context).load(product.getProduct_image())
+        String url = "";
+        if (TextUtils.isEmpty(product.getProduct_image()) && !TextUtils.isEmpty(product.getImage()))
+            url = product.getImage();
+        else if (!TextUtils.isEmpty(product.getProduct_image()))
+            url = product.getProduct_image();
+        Glide.with(context).load(url)
                 .apply(new RequestOptions()
                         //.override(150, 180)
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)

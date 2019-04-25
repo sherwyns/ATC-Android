@@ -23,6 +23,7 @@ import com.enqos.atc.data.response.ProductFavEntity;
 import com.enqos.atc.data.response.ProductFavoriteEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreFavoriteEntity;
+import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
@@ -250,5 +251,10 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
         productAdapter = new StorePageAdapter(getActivity(), productFavourites);
         gridView.setAdapter(productAdapter);
         productAdapter.setListener(this);
+    }
+
+    @Override
+    public void productsResponse(StorePageResponse storePageResponse) {
+
     }
 }

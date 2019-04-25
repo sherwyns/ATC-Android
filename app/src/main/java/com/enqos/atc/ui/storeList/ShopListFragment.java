@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -20,22 +24,27 @@ import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.NewStoreFavouriteEntity;
 import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.StoreEntity;
+import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
+import com.enqos.atc.ui.productdetail.ProductDetailFragment;
+import com.enqos.atc.ui.shoppage.StorePageAdapter;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
 import com.enqos.atc.utils.FavouriteUtility;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ShopListFragment extends Fragment implements StoreListView, StoreListener, AdapterView.OnItemClickListener {
@@ -45,15 +54,27 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     GridView gridView;
     @BindView(R.id.no_result_layout)
     LinearLayout noResultLayout;
+    @BindView(R.id.tv_product)
+    TextView tvProduct;
+    @BindView(R.id.tv_store)
+    TextView tvStore;
     @Inject
     StoreListPresenter storeListPresenter;
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     private Unbinder unbinder;
     private ShopListAdapter shopListAdapter;
+    private StorePageAdapter productsAdapter;
     private StoreActivityListener listener;
     private List<StoreEntity> allStores;
+    private List<ProductEntity> allProducts = new ArrayList<>();
     private String selecteCategoryId;
+    public boolean isProductSelected = true;
+    private int limit = 10;
+    private int offset;
+    private boolean isNavigated;
+    private boolean isFirstTime = true;
+    private boolean isLoading;
     private static final String CATEGORY_ID = "categoryId";
 
     public ShopListFragment() {
@@ -75,28 +96,69 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_shope_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-        if (TextUtils.isEmpty(selecteCategoryId))
-            storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
-        else {
-            allStores = StoreListPresenter.groupStores.get(selecteCategoryId);
 
-            if (allStores == null || allStores.size() == 0) {
-                noResultLayout.setVisibility(View.VISIBLE);
-            } else {
-                noResultLayout.setVisibility(View.GONE);
-                shopListAdapter = new ShopListAdapter(getActivity(), allStores);
-                shopListAdapter.setListener(this);
-                gridView.setAdapter(shopListAdapter);
-            }
+        if (isProductSelected) {
+            setListener();
+            tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
+            tvProduct.setBackgroundResource(R.drawable.gradient_blue);
+            tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
+            tvStore.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
+            ///callProdcuts();
+        } else {
+            tabClick(R.id.tv_store);
+            /*if (TextUtils.isEmpty(selecteCategoryId))
+                storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
+            else {
+                allStores = StoreListPresenter.groupStores.get(selecteCategoryId);
 
-
+                if (allStores == null || allStores.size() == 0) {
+                    noResultLayout.setVisibility(View.VISIBLE);
+                } else {
+                    noResultLayout.setVisibility(View.GONE);
+                    shopListAdapter = new ShopListAdapter(getActivity(), allStores);
+                    shopListAdapter.setListener(this);
+                    gridView.setAdapter(shopListAdapter);
+                }
+            }*/
         }
         gridView.setOnItemClickListener(this);
         return rootView;
     }
 
-    public void callStoreAPI() {
+    private void callProdcuts() {
+        isLoading = true;
+        ((StoreListActivity) getActivity()).showLoading();
+        storeListPresenter.getProducts(this, listener.getNeighbourhoods(), listener.getCategories(), limit, offset);
+    }
+
+    private void callStore() {
+        ((StoreListActivity) getActivity()).showLoading();
         storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
+    }
+
+    private void tabClick(int id) {
+
+        switch (id) {
+            case R.id.tv_product:
+                isProductSelected = true;
+                callProdcuts();
+                tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
+                tvProduct.setBackgroundResource(R.drawable.gradient_blue);
+
+                tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
+                tvStore.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
+
+                break;
+            case R.id.tv_store:
+                isProductSelected = false;
+                callStore();
+                tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
+                tvStore.setBackgroundResource(R.drawable.gradient_blue);
+
+                tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
+                tvProduct.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
+                break;
+        }
     }
 
     @Override
@@ -136,12 +198,12 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void showMessage(String message) {
-
+        isLoading = false;
     }
 
     @Override
     public void storeResponse(StoreResponse storeResponse, List<NewStoreFavouriteEntity> data) {
-
+        ((StoreListActivity) getActivity()).hideLoading();
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
 
         if (isLogin) {
@@ -181,6 +243,22 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     }
 
+    @Override
+    public void productsResponse(StorePageResponse storePageResponse) {
+        isLoading = false;
+        ((StoreListActivity) getActivity()).hideLoading();
+        allProducts.addAll(storePageResponse.getData());
+        productAdapter();
+    }
+
+    private void productAdapter() {
+        if (productsAdapter == null || isNavigated) {
+            productsAdapter = new StorePageAdapter(getActivity(), allProducts);
+            gridView.setAdapter(productsAdapter);
+        } else
+            productsAdapter.notifyDataSetChanged();
+
+    }
 
     @Override
     public void onSaveStoreFavorite(StoreEntity storeEntity, boolean isFav, int pos) {
@@ -233,12 +311,62 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     }
 
+    @OnClick({R.id.tv_store, R.id.tv_product})
+    public void onClick(View v) {
+        isNavigated = true;
+        switch (v.getId()) {
+            case R.id.tv_product:
+                if (!isProductSelected)
+                    tabClick(v.getId());
+                break;
+            case R.id.tv_store:
+                if (isProductSelected)
+                    tabClick(v.getId());
+                break;
+        }
+    }
+
+    private void setListener() {
+
+        gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (isProductSelected) {
+                    if (gridView.getLastVisiblePosition() + 1 == totalItemCount && !isLoading) {
+                        isLoading = true;
+                        if (!isFirstTime)
+                            offset = offset + 10;
+                        isFirstTime = false;
+                        callProdcuts();
+                        Log.i("*****", "BOTTOM");
+                    } else {
+                        isLoading = false;
+                    }
+                }
+            }
+        });
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         if (listener != null) {
-            StorePageFragment storePageFragment = StorePageFragment.newInstance();
-            storePageFragment.storeEntity = allStores.get(i);
-            listener.replaceFragment(storePageFragment);
+            if (isProductSelected) {
+                isNavigated = true;
+                ProductEntity product = allProducts.get(i);
+                ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
+                productDetailFragment.productEntity = product;
+                productDetailFragment.similiarProducts = allProducts;
+                listener.replaceFragment(productDetailFragment);
+            } else {
+                StorePageFragment storePageFragment = StorePageFragment.newInstance();
+                storePageFragment.storeEntity = allStores.get(i);
+                listener.replaceFragment(storePageFragment);
+            }
         }
     }
 }

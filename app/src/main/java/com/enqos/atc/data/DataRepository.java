@@ -349,6 +349,28 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
+    void getProductsPagination(NetworkApiResponse networkApiResponse, String neighborhood, String category, int limit, int offSet) {
+
+        Observable<StorePageResponse> storeDetailResponse = retrofit.create(WebServiceApi.class).productsPagination(neighborhood, category, limit, offSet);
+
+        storeDetailResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StorePageResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
     void getSearch(NetworkApiResponse networkApiResponse, String key) {
 
         Observable<SearchResponse> storeDetailResponse = retrofit.create(WebServiceApi.class).getSearch(key);

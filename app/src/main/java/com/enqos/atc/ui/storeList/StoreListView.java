@@ -2,6 +2,7 @@ package com.enqos.atc.ui.storeList;
 
 import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.NewStoreFavouriteEntity;
+import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface StoreListView {
 
     void favProductResponse(NewProductFavResponse response);
 
+    void productsResponse(StorePageResponse storePageResponse);
 }

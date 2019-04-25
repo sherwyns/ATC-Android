@@ -10,6 +10,7 @@ import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.data.response.StoreFavoriteResponse;
+import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.utils.SharedPreferenceManager;
 
@@ -40,6 +41,17 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
             createApiRequest = new CreateApiRequest(this);
         try {
             createApiRequest.createStoreRequest(neighbouhood, category, latitude, longitude);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void getProducts(StoreListView storeListView, String neighbouhood, String category, int limit, int offset) {
+        this.storeListView = storeListView;
+        if (createApiRequest == null)
+            createApiRequest = new CreateApiRequest(this);
+        try {
+            createApiRequest.createProductListRequest(neighbouhood, category, limit, offset);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,6 +92,8 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
                 storeListView.storeResponse(storeResponse, storeFavoriteResponse.getData());
         } else if (response instanceof NewProductFavResponse) {
             storeListView.favProductResponse((NewProductFavResponse) response);
+        } else if (response instanceof StorePageResponse) {
+            storeListView.productsResponse((StorePageResponse) response);
         }
 
     }

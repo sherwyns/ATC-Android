@@ -66,6 +66,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     private String selectedCategories;
     private String selectedNeighbourhoods;
+    private ShopListFragment shopListFragment;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -77,7 +78,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
-        replaceFragment(R.id.content_frame, ShopListFragment.newInstance(""), false);
+        shopListFragment = ShopListFragment.newInstance("");
+        replaceFragment(R.id.content_frame, shopListFragment, false);
 
     }
 
@@ -152,7 +154,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                     filterCount.setText(String.valueOf(count));
                 }
 
-                replaceFragment(ShopListFragment.newInstance(""));
+                replaceFragment(shopListFragment);
             }
         } else {
             filterCount.setVisibility(View.GONE);
@@ -169,7 +171,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                     onBackPressed();
                 break;
             case R.id.image_right:
-                startActivityForResult(new Intent(this, FilterActivity.class), 1);
+                if (shopListFragment != null)
+                    onFilterClick(shopListFragment.isProductSelected);
                 break;
             case R.id.img_fav:
                 if (!isLogin) {
@@ -223,7 +226,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             switch (view.getId()) {
                 case R.id.img_home:
                     toolbar.setVisibility(View.VISIBLE);
-                    replaceFragment(R.id.content_frame, ShopListFragment.newInstance(""), false);
+                    replaceFragment(R.id.content_frame, shopListFragment, false);
                     break;
                 case R.id.img_search:
                     toolbar.setVisibility(View.GONE);
@@ -278,6 +281,13 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Override
     public String getNeighbourhoods() {
         return selectedNeighbourhoods;
+    }
+
+    @Override
+    public void onFilterClick(boolean isProduct) {
+        Intent intent = new Intent(this, FilterActivity.class);
+        intent.putExtra("isProduct", isProduct);
+        startActivityForResult(intent, 1);
     }
 
 }

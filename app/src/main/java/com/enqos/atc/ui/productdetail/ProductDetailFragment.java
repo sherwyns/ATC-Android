@@ -123,7 +123,12 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
         else
             ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-        Glide.with(Objects.requireNonNull(getActivity())).load(productEntity.getProduct_image())
+        String url = "";
+        if (TextUtils.isEmpty(productEntity.getProduct_image()) && !TextUtils.isEmpty(productEntity.getImage()))
+            url = productEntity.getImage();
+        else if (!TextUtils.isEmpty(productEntity.getProduct_image()))
+            url = productEntity.getProduct_image();
+        Glide.with(Objects.requireNonNull(getActivity())).load(url)
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
@@ -258,7 +263,13 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             tvPrice.setVisibility(View.GONE);
             tvCall.setVisibility(View.VISIBLE);
         }
-        Glide.with(Objects.requireNonNull(getActivity())).load(productEntity.getProduct_image())
+        String url = "";
+        if (TextUtils.isEmpty(productEntity.getProduct_image()) && !TextUtils.isEmpty(productEntity.getImage()))
+            url = productEntity.getImage();
+        else if (!TextUtils.isEmpty(productEntity.getProduct_image()))
+            url = productEntity.getProduct_image();
+
+        Glide.with(Objects.requireNonNull(getActivity())).load(url)
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)

@@ -24,6 +24,8 @@ public class ProductEntity {
     private String category_image;
     @SerializedName("description")
     private String description;
+    @SerializedName("image")
+    private String image;
 
     public boolean isFavourite() {
         return isFavourite;
@@ -114,5 +116,13 @@ public class ProductEntity {
 
     public void setShop_name(String shop_name) {
         this.shop_name = shop_name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

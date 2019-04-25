@@ -105,6 +105,10 @@ public class CreateApiRequest {
         dataRepository.storeAnalytics(networkApiResponse, accessToken, productAnalyticsRequest);
     }
 
+    public void createProductListRequest(String neighborhood, String category, int limit, int offSet) {
+        dataRepository.getProductsPagination(networkApiResponse, neighborhood, category, limit, offSet);
+    }
+
     public void createCategoryAnalyticsRequest(String accessToken, String storeId, String categoryId) {
         ProductAnalyticsRequest productAnalyticsRequest = new ProductAnalyticsRequest(storeId, categoryId);
         dataRepository.categoryAnalytics(networkApiResponse, accessToken, productAnalyticsRequest);
