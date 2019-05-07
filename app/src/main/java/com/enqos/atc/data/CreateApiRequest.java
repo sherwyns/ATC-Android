@@ -54,6 +54,9 @@ public class CreateApiRequest {
     public void createStoreRequest(String neighbourhood, String category, double latitude, double longitude) {
         dataRepository.getStore(networkApiResponse, neighbourhood, category, latitude, longitude);
     }
+    public void createStoreRequest(String neighbourhood, String category) {
+        dataRepository.getStore(networkApiResponse, neighbourhood, category);
+    }
 
     public void createSaveFavoriteRequest(String userId, String id, String type, String isFavourite) {
         SaveFavoriteRequest saveFavoriteRequest = new SaveFavoriteRequest(userId, id, type, isFavourite);

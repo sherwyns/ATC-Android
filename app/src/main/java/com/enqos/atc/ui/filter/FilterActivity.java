@@ -54,7 +54,8 @@ public class FilterActivity extends BaseActivity implements FilterView {
     private static List<CategoryEntity> categories;
     private List<CategoryEntity> neighbourhoods;
     private boolean isNeighbourSelected;
-    private FilterAdapter categoryAdapter, neighbourhoodAdapter;
+    private FilterAdapter categoryAdapter;
+    private NeibourHoodFilterAdapter neighbourhoodAdapter;
 
     public static FilterActivity getInstance() {
         return new FilterActivity();
@@ -83,9 +84,8 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 filterPresenter.getCategories(this);
         } else {
             neighbourhoods = filterPresenter.getNeibhourhoods();
-            // filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
-            neighbourhoodAdapter = new FilterAdapter(neighbourhoods, this, false);
-            categoryAdapter = new FilterAdapter(categories, this, true);
+            neighbourhoodAdapter = new NeibourHoodFilterAdapter(neighbourhoods, this);
+            categoryAdapter = new FilterAdapter(categories, this);
             recyclerView.setAdapter(categoryAdapter);
         }
     }
@@ -113,15 +113,10 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 finish();
                 break;
             case R.id.clear_all:
-                if (!isNeighbourSelected) {
-                    if (categoryAdapter != null) {
-                        categoryAdapter.clearAllCategories();
-                    }
-                } else {
-                    if (neighbourhoodAdapter != null)
-                        neighbourhoodAdapter.clearAllNeighbourhood();
-                }
-
+                if (categoryAdapter != null)
+                    categoryAdapter.clearAllCategories();
+                if (neighbourhoodAdapter != null)
+                    neighbourhoodAdapter.clearAllNeighbourhood();
                 break;
             case R.id.apply:
                 String selectedNeighours = "", selectedCategories = "";
@@ -151,16 +146,9 @@ public class FilterActivity extends BaseActivity implements FilterView {
         hideLoading();
         if (categoryResponse != null) {
             categories = categoryResponse.getCategoryEntities();
-           /* if (categories != null) {
-                CategoryEntity allCategory = new CategoryEntity();
-                allCategory.setId("0");
-                allCategory.setName("All");
-                categories.add(0, allCategory);
-            }*/
             neighbourhoods = filterPresenter.getNeibhourhoods();
-            //filterPresenter.addAllOptionInNeighbourhood(neighbourhoods);
-            neighbourhoodAdapter = new FilterAdapter(neighbourhoods, this, false);
-            categoryAdapter = new FilterAdapter(categories, this, true);
+            neighbourhoodAdapter = new NeibourHoodFilterAdapter(neighbourhoods, this);
+            categoryAdapter = new FilterAdapter(categories, this);
             recyclerView.setAdapter(categoryAdapter);
         }
 
@@ -176,8 +164,8 @@ public class FilterActivity extends BaseActivity implements FilterView {
         switch (id) {
             case R.id.tv_category:
                 isNeighbourSelected = false;
-                if (categoryAdapter != null)
-                    recyclerView.setAdapter(categoryAdapter);
+                categoryAdapter = new FilterAdapter(categories, this);
+                recyclerView.setAdapter(categoryAdapter);
                 tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
                 tvCategory.setBackgroundResource(R.drawable.gradient_blue);
 
@@ -187,8 +175,8 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 break;
             case R.id.tv_neighbourhood:
                 isNeighbourSelected = true;
-                if (neighbourhoodAdapter != null)
-                    recyclerView.setAdapter(neighbourhoodAdapter);
+                neighbourhoodAdapter = new NeibourHoodFilterAdapter(neighbourhoods, this);
+                recyclerView.setAdapter(neighbourhoodAdapter);
                 tvNeighbourhood.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
                 tvNeighbourhood.setBackgroundResource(R.drawable.gradient_blue);
 

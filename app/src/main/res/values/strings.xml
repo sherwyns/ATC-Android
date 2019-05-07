@@ -59,6 +59,7 @@
     <string name="clear_all">Clear All</string>
     <string name="apply">Apply</string>
     <string name="filters">Filters</string>
+    <string name="store_near_you">Stores near you</string>
 
 
 </resources>

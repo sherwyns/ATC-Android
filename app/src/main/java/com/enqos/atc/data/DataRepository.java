@@ -217,6 +217,28 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
+    void getStore(NetworkApiResponse networkApiResponse, String neighbour, String category) {
+
+        Observable<StoreResponse> storeResponse = retrofit.create(WebServiceApi.class).store(neighbour, category);
+
+        storeResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), StoreResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+
+                }, error -> {
+                });
+
+    }
+
+    @SuppressLint("CheckResult")
     void saveFavorite(NetworkApiResponse networkApiResponse, SaveFavoriteRequest favoriteRequest) {
 
         Observable<SaveFavouriteResponse> storeResponse = retrofit.create(WebServiceApi.class).saveFavorite(favoriteRequest);

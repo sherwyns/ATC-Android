@@ -20,4 +20,5 @@ public interface StoreActivityListener {
     String getNeighbourhoods();
 
     void onFilterClick(boolean isProduct);
+
 }

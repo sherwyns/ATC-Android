@@ -1,7 +1,5 @@
 package com.enqos.atc.ui.storeList;
 
-import android.text.TextUtils;
-
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BasePresenter;
 import com.enqos.atc.data.CreateApiRequest;
@@ -40,7 +38,10 @@ public class StoreListPresenter extends BasePresenter implements NetworkApiRespo
         if (createApiRequest == null)
             createApiRequest = new CreateApiRequest(this);
         try {
-            createApiRequest.createStoreRequest(neighbouhood, category, latitude, longitude);
+            if (latitude == 0.0 && longitude == 0.0)
+                createApiRequest.createStoreRequest(neighbouhood, category);
+            else
+                createApiRequest.createStoreRequest(neighbouhood, category, latitude, longitude);
         } catch (Exception e) {
             e.printStackTrace();
         }

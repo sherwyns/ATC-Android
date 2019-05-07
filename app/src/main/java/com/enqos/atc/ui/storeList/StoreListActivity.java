@@ -1,9 +1,18 @@
 package com.enqos.atc.ui.storeList;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,9 +21,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -24,6 +35,7 @@ import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.filter.FilterActivity;
 import com.enqos.atc.ui.home.HomeActivity;
+import com.enqos.atc.ui.launcher.SplashActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.myaccount.MyAccountActivity;
 import com.enqos.atc.ui.search.SearchFragment;
@@ -38,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener {
+public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener, LocationListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -63,10 +75,11 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
-
+    private LocationManager locationManager;
     private String selectedCategories;
     private String selectedNeighbourhoods;
     private ShopListFragment shopListFragment;
+    private boolean isLocationDetected = false;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -74,8 +87,13 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onCreate(savedInstanceState);
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
-
-
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 1.0f, this);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         shopListFragment = ShopListFragment.newInstance("");
@@ -105,7 +123,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(id, fragment);
         fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     private void initToolbar() {
@@ -131,8 +149,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 assert data != null;
                 selectedCategories = data.getStringExtra("categories");
                 selectedNeighbourhoods = data.getStringExtra("neighbourhoods");
-                Constants.CATEGORIES = selectedCategories;
-                Constants.NEIGHBOURHOODS = selectedNeighbourhoods;
+                selectedCategories = selectedCategories.replaceAll(", ",",");
+                selectedNeighbourhoods = selectedNeighbourhoods.replaceAll(", ",",");
 
                 if (TextUtils.isEmpty(selectedCategories) && TextUtils.isEmpty(selectedNeighbourhoods))
                     filterCount.setVisibility(View.GONE);
@@ -153,7 +171,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                     }
                     filterCount.setText(String.valueOf(count));
                 }
-
+                shopListFragment = ShopListFragment.newInstance("");
                 replaceFragment(shopListFragment);
             }
         } else {
@@ -283,6 +301,23 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         return selectedNeighbourhoods;
     }
 
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
+                }
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
+        }
+    }
+
     @Override
     public void onFilterClick(boolean isProduct) {
         Intent intent = new Intent(this, FilterActivity.class);
@@ -290,4 +325,36 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         startActivityForResult(intent, 1);
     }
 
+
+    @Override
+    public void onLocationChanged(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        if (!isLocationDetected) {
+            title.setText(R.string.store_near_you);
+            isLocationDetected = true;
+            shopListFragment = ShopListFragment.newInstance("");
+            replaceFragment(R.id.content_frame, shopListFragment, false);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
 }

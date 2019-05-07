@@ -21,16 +21,16 @@ import com.enqos.atc.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder> {
+public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFilterAdapter.ViewHolder> {
     private List<CategoryEntity> categoryEntities;
     private FilterView filterView;
-    private static List<Integer> categories = new ArrayList<>();
+    private static List<String> neighbourhoods = new ArrayList<>();
     private boolean isBind;
 
-    FilterAdapter(List<CategoryEntity> categoryEntities, FilterView filterView) {
+    NeibourHoodFilterAdapter(List<CategoryEntity> categoryEntities, FilterView filterView) {
         this.categoryEntities = categoryEntities;
         this.filterView = filterView;
-        checkSelectedCategoryFilters();
+        checkSelectedNeighbourFilters();
     }
 
     @NonNull
@@ -40,56 +40,45 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
-
-    private void checkSelectedCategoryFilters() {
-        for (int category : categories) {
+    private void checkSelectedNeighbourFilters() {
+        for (String category : neighbourhoods) {
             for (CategoryEntity categoryEntity : categoryEntities) {
-                if (Integer.valueOf(categoryEntity.getId()) == category) {
+                if (categoryEntity.getName().equalsIgnoreCase(category)) {
                     categoryEntity.setSelected(true);
                 }
             }
-
         }
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+
         CategoryEntity categoryEntity = categoryEntities.get(i);
         viewHolder.tvCategoryName.setText(categoryEntity.getName());
         isBind = true;
         viewHolder.checkBox.setChecked(categoryEntity.isSelected());
         isBind = false;
-        Glide.with(viewHolder.itemView.getContext()).load(categoryEntity.getImage_url())
-                .apply(new RequestOptions().override(30, 30)
-                        .error(R.drawable.ic_photo_size_select_actual_black_24dp)
-                        .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
-                        .centerCrop())
-                .into(viewHolder.ivCategory);
-
-
+        viewHolder.ivCategory.setVisibility(View.GONE);
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
-
-
-                categories.add(Integer.valueOf(categoryEntity.getId()));
-
+                neighbourhoods.add(categoryEntity.getName());
             } else {
                 categoryEntity.setSelected(false);
-                categories.remove(Integer.valueOf(categoryEntity.getId()));
-
+                neighbourhoods.remove(categoryEntity.getName());
             }
 
         });
 
     }
 
-    List<Integer> getCategories() {
-        return categories;
+
+    List<String> getNeighbourhoods() {
+        return neighbourhoods;
     }
 
-
-    void clearAllCategories() {
-        categories.clear();
+    void clearAllNeighbourhood() {
+        neighbourhoods.clear();
         for (CategoryEntity category :
                 categoryEntities) {
             category.setSelected(false);

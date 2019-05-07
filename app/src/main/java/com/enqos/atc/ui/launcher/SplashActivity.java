@@ -26,11 +26,10 @@ import com.enqos.atc.utils.Constants;
 
 import javax.inject.Inject;
 
-public class SplashActivity extends BaseActivity implements SplashView, LocationListener {
+public class SplashActivity extends BaseActivity implements SplashView {
 
     @Inject
     SplashPresenter splashPresenter;
-    private LocationManager locationManager;
     private ImageView logo;
 
     @Override
@@ -38,10 +37,8 @@ public class SplashActivity extends BaseActivity implements SplashView, Location
         super.onCreate(savedInstanceState);
         splashPresenter.attachView(this);
         logo = findViewById(R.id.splash_logo);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
             new Handler().postDelayed(() -> splashPresenter.navigate(SplashActivity.this), 2000);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
@@ -63,7 +60,6 @@ public class SplashActivity extends BaseActivity implements SplashView, Location
                     Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
                 }
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
         }
         splashPresenter.navigate(SplashActivity.this);
     }
@@ -111,26 +107,4 @@ public class SplashActivity extends BaseActivity implements SplashView, Location
         finish();
     }
 
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        Log.i("Coordinates", location.getLatitude() + ":" + location.getLongitude());
-    }
 }

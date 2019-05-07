@@ -60,6 +60,9 @@ public interface WebServiceApi {
     @GET("api/Store/getstores")
     Observable<StoreResponse> store(@Query("neighbourhood") String neighbourhood, @Query("category") String category, @Query("latitude") double latitude, @Query("longitude") double longitude);
 
+    @GET("api/Store/getstores")
+    Observable<StoreResponse> store(@Query("neighbourhood") String neighbourhood, @Query("category") String category);
+
     @GET("api/products/getproductlist")
     Observable<StorePageResponse> productsPagination(@Query("neighbourhood") String neighbourhood, @Query("category") String category, @Query("limit") int limit, @Query("offset") int offset);
 
