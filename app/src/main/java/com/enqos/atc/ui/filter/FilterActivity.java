@@ -54,7 +54,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
     private static List<CategoryEntity> categories;
     private List<CategoryEntity> neighbourhoods;
     private boolean isNeighbourSelected;
-    private FilterAdapter categoryAdapter;
+    private ParentFiterAdapter categoryAdapter;
     private NeibourHoodFilterAdapter neighbourhoodAdapter;
 
     public static FilterActivity getInstance() {
@@ -85,7 +85,8 @@ public class FilterActivity extends BaseActivity implements FilterView {
         } else {
             neighbourhoods = filterPresenter.getNeibhourhoods();
             neighbourhoodAdapter = new NeibourHoodFilterAdapter(neighbourhoods, this);
-            categoryAdapter = new FilterAdapter(categories, this);
+            categoryAdapter = new ParentFiterAdapter(this, categories);
+
             recyclerView.setAdapter(categoryAdapter);
         }
     }
@@ -114,9 +115,9 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 break;
             case R.id.clear_all:
                 if (categoryAdapter != null)
-                    categoryAdapter.clearAllCategories();
-                if (neighbourhoodAdapter != null)
-                    neighbourhoodAdapter.clearAllNeighbourhood();
+                    //categoryAdapter.clearAllCategories();
+                    if (neighbourhoodAdapter != null)
+                        neighbourhoodAdapter.clearAllNeighbourhood();
                 break;
             case R.id.apply:
                 String selectedNeighours = "", selectedCategories = "";
@@ -126,9 +127,9 @@ public class FilterActivity extends BaseActivity implements FilterView {
                     Log.i("NEIGHBOUR", selectedNeighours);
                 }
                 if (categoryAdapter != null) {
-                    List<Integer> categories = categoryAdapter.getCategories();
+                    /*List<Integer> categories = categoryAdapter.getCategories();
                     selectedCategories = categories.toString().replace("[", "").replace("]", "");
-                    Log.i("CATEGORIES", selectedCategories);
+                    Log.i("CATEGORIES", selectedCategories);*/
                 }
 
                 Intent intent = new Intent(this, StoreListActivity.class);
@@ -148,7 +149,8 @@ public class FilterActivity extends BaseActivity implements FilterView {
             categories = categoryResponse.getCategoryEntities();
             neighbourhoods = filterPresenter.getNeibhourhoods();
             neighbourhoodAdapter = new NeibourHoodFilterAdapter(neighbourhoods, this);
-            categoryAdapter = new FilterAdapter(categories, this);
+            categoryAdapter = new ParentFiterAdapter(this, categories);
+            //categoryAdapter.setData(categories);
             recyclerView.setAdapter(categoryAdapter);
         }
 
@@ -164,7 +166,7 @@ public class FilterActivity extends BaseActivity implements FilterView {
         switch (id) {
             case R.id.tv_category:
                 isNeighbourSelected = false;
-                categoryAdapter = new FilterAdapter(categories, this);
+                categoryAdapter = new ParentFiterAdapter(this, categories);
                 recyclerView.setAdapter(categoryAdapter);
                 tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
                 tvCategory.setBackgroundResource(R.drawable.gradient_blue);
@@ -179,7 +181,6 @@ public class FilterActivity extends BaseActivity implements FilterView {
                 recyclerView.setAdapter(neighbourhoodAdapter);
                 tvNeighbourhood.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.white));
                 tvNeighbourhood.setBackgroundResource(R.drawable.gradient_blue);
-
                 tvCategory.setTextColor(ContextCompat.getColor(Objects.requireNonNull(this), R.color.cateoryTextColor));
                 tvCategory.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(this), android.R.color.transparent));
                 break;

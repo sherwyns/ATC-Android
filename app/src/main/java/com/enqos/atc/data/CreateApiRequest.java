@@ -85,8 +85,8 @@ public class CreateApiRequest {
         dataRepository.getCategories(networkApiResponse);
     }
 
-    public void createProductCategoriesRequest() {
-        dataRepository.getProductsCategories(networkApiResponse);
+    public void createProductCategoriesRequest(String id) {
+        dataRepository.getProductsCategories(networkApiResponse,id);
     }
 
     public void createSearchRequest(String key) {

@@ -40,11 +40,21 @@ public class FilterPresenter extends BasePresenter implements NetworkApiResponse
         try {
             if (createApiRequest == null)
                 createApiRequest = new CreateApiRequest(this);
-            createApiRequest.createProductCategoriesRequest();
+            createApiRequest.createProductCategoriesRequest("0");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    void getProductCategories(String id) {
+        try {
+            if (createApiRequest == null)
+                createApiRequest = new CreateApiRequest(this);
+            createApiRequest.createProductCategoriesRequest(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     void addAllOptionInNeighbourhood(List<CategoryEntity> categories) {
@@ -69,10 +79,9 @@ public class FilterPresenter extends BasePresenter implements NetworkApiResponse
 
     @Override
     public void onSuccess(BaseResponse response) {
-
-        if (filterView != null && response instanceof CategoryResponse)
+        if (filterView != null && response instanceof CategoryResponse) {
             filterView.onSuccess((CategoryResponse) response);
-
+        }
     }
 
     @Override

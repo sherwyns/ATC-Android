@@ -482,9 +482,9 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    void getProductsCategories(NetworkApiResponse networkApiResponse) {
+    void getProductsCategories(NetworkApiResponse networkApiResponse,String id) {
 
-        Observable<CategoryResponse> categoriesResponse = retrofit.create(WebServiceApi.class).getProductCategories();
+        Observable<CategoryResponse> categoriesResponse = retrofit.create(WebServiceApi.class).getProductCategories(id);
 
         categoriesResponse.subscribeOn(newThread)
                 .observeOn(mainThread)

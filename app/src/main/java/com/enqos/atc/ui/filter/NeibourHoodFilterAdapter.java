@@ -59,7 +59,6 @@ public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFi
         isBind = true;
         viewHolder.checkBox.setChecked(categoryEntity.isSelected());
         isBind = false;
-        viewHolder.ivCategory.setVisibility(View.GONE);
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
                 neighbourhoods.add(categoryEntity.getName());
@@ -94,13 +93,13 @@ public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFi
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCategoryName;
-        ImageView ivCategory;
+        ImageView ivExpand;
         CheckBox checkBox;
 
         ViewHolder(@NonNull View view) {
             super(view);
             tvCategoryName = view.findViewById(R.id.tv_category);
-            ivCategory = view.findViewById(R.id.iv_category);
+            ivExpand = view.findViewById(R.id.iv_category);
             checkBox = view.findViewById(R.id.check_box);
         }
     }

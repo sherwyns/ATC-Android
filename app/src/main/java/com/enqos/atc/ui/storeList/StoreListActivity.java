@@ -149,8 +149,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 assert data != null;
                 selectedCategories = data.getStringExtra("categories");
                 selectedNeighbourhoods = data.getStringExtra("neighbourhoods");
-                selectedCategories = selectedCategories.replaceAll(", ",",");
-                selectedNeighbourhoods = selectedNeighbourhoods.replaceAll(", ",",");
+                selectedCategories = selectedCategories.replaceAll(", ", ",");
+                selectedNeighbourhoods = selectedNeighbourhoods.replaceAll(", ", ",");
 
                 if (TextUtils.isEmpty(selectedCategories) && TextUtils.isEmpty(selectedNeighbourhoods))
                     filterCount.setVisibility(View.GONE);
@@ -313,8 +313,9 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 } else {
                     Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
                 }
-            }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
+            } else
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
+
         }
     }
 

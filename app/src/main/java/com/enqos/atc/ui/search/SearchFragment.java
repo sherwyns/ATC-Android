@@ -106,6 +106,8 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
             listener.getToolbar().setVisibility(View.GONE);
             listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline);
         }
+        if (!stores.isEmpty() || !products.isEmpty())
+            showSearch();
     }
 
     @Override
@@ -233,6 +235,16 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
         } else
             productsAdapter.notifyDataSetChanged();
 
+
+    }
+
+    private void showSearch() {
+
+        shopAdapter = new ShopListAdapter(getActivity(), stores);
+        gridView1.setAdapter(shopAdapter);
+
+        productsAdapter = new StorePageAdapter(getActivity(), products);
+        gridView2.setAdapter(productsAdapter);
 
     }
 

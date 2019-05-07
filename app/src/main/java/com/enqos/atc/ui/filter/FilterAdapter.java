@@ -2,35 +2,50 @@ package com.enqos.atc.ui.filter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.data.response.CategoryEntity;
-import com.enqos.atc.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder> {
     private List<CategoryEntity> categoryEntities;
-    private FilterView filterView;
     private static List<Integer> categories = new ArrayList<>();
+    private ParentFiterAdapter parentFiterAdapter;
     private boolean isBind;
 
-    FilterAdapter(List<CategoryEntity> categoryEntities, FilterView filterView) {
-        this.categoryEntities = categoryEntities;
-        this.filterView = filterView;
+
+    FilterAdapter(ParentFiterAdapter parentFiterAdapter) {
+        this.parentFiterAdapter = parentFiterAdapter;
         checkSelectedCategoryFilters();
+
+    }
+
+    public void setData(List<CategoryEntity> categoryEntities, boolean isAll) {
+        for (CategoryEntity category :
+                categoryEntities) {
+            category.setSelected(isAll);
+        }
+        this.categoryEntities = categoryEntities;
+        if (!isBind)
+            notifyDataSetChanged();
+    }
+
+    void allChecked(List<CategoryEntity> categoryEntities, boolean isChecked) {
+        for (CategoryEntity category :
+                categoryEntities) {
+            category.setSelected(isChecked);
+        }
+        this.categoryEntities = categoryEntities;
+        if (!isBind)
+            notifyDataSetChanged();
     }
 
     @NonNull
@@ -59,25 +74,19 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         isBind = true;
         viewHolder.checkBox.setChecked(categoryEntity.isSelected());
         isBind = false;
-        Glide.with(viewHolder.itemView.getContext()).load(categoryEntity.getImage_url())
-                .apply(new RequestOptions().override(30, 30)
-                        .error(R.drawable.ic_photo_size_select_actual_black_24dp)
-                        .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
-                        .centerCrop())
-                .into(viewHolder.ivCategory);
-
-
+        viewHolder.ivCategory.setVisibility(View.GONE);
+        viewHolder.tvCount.setVisibility(View.GONE);
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
-
-
                 categories.add(Integer.valueOf(categoryEntity.getId()));
-
             } else {
                 categoryEntity.setSelected(false);
                 categories.remove(Integer.valueOf(categoryEntity.getId()));
-
             }
+
+        });
+
+        viewHolder.ivCategory.setOnClickListener(view -> {
 
         });
 
@@ -106,12 +115,14 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCategoryName;
         ImageView ivCategory;
+        TextView tvCount;
         CheckBox checkBox;
 
         ViewHolder(@NonNull View view) {
             super(view);
             tvCategoryName = view.findViewById(R.id.tv_category);
             ivCategory = view.findViewById(R.id.iv_category);
+            tvCount = view.findViewById(R.id.tv_count);
             checkBox = view.findViewById(R.id.check_box);
         }
     }

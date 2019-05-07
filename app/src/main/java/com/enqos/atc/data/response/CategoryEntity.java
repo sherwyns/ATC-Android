@@ -1,8 +1,11 @@
 package com.enqos.atc.data.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class CategoryEntity {
+public class CategoryEntity implements Parcelable {
 
     public String getId() {
         return id;
@@ -43,5 +46,15 @@ public class CategoryEntity {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
     }
 }
