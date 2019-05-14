@@ -37,13 +37,15 @@ public class MultiFilterActivity extends BaseActivity implements MultiFilterView
     TextView tvNeighbourhood;
     @Inject
     MultiFilterPresenter multiFilterPresenter;
-    private List<CategoryEntity> parentCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showLoading();
-        multiFilterPresenter.getProductCategories(this, "0");
+        if (ConstantManager.parentItems.isEmpty())
+            multiFilterPresenter.getProductCategories(this, "0");
+        else
+            setFinalCategories(ConstantManager.parentItems);
         expandableListView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
             if (expandableListView.isGroupExpanded(groupPosition))
                 expandableListView.collapseGroup(groupPosition);
@@ -71,6 +73,8 @@ public class MultiFilterActivity extends BaseActivity implements MultiFilterView
                 Log.i("******", "CATEGORIES-->" + ConstantManager.parentItems.size());
                 break;
             case R.id.clear_all:
+                ConstantManager.parentItems.clear();
+                finish();
                 break;
         }
     }
@@ -88,7 +92,6 @@ public class MultiFilterActivity extends BaseActivity implements MultiFilterView
     @Override
     public void setFinalCategories(List<CategoryEntity> parentCategories) {
         hideLoading();
-        this.parentCategories = parentCategories;
         MultiFilterAdapter adapter = new MultiFilterAdapter(this, parentCategories);
         expandableListView.setAdapter(adapter);
     }

@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -300,16 +301,21 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Override
     public String getCategories() {
         StringBuilder selectedCategories = new StringBuilder();
+        String result = "";
         for (CategoryEntity categoryEntity : ConstantManager.parentItems) {
             if (categoryEntity.isSelected()) {
-                selectedCategories.append(categoryEntity.getId());
+                selectedCategories.append(categoryEntity.getId()).append(",");
             } else if (categoryEntity.getSelectedCount() > 0) {
                 for (CategoryEntity childCategory : categoryEntity.getAllChildren()) {
-                    selectedCategories.append(childCategory.getId());
+                    if (childCategory.isSelected())
+                        selectedCategories.append(childCategory.getId()).append(",");
                 }
             }
         }
-        return selectedCategories.toString();
+        if (selectedCategories.length() > 0)
+            result = selectedCategories.deleteCharAt(selectedCategories.length() - 1).toString();
+        Log.i("*******", "CATEGORIES---->" + result);
+        return result;
     }
 
     @Override
