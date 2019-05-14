@@ -74,6 +74,7 @@
         <activity android:name=".ui.slidemenu.TermsAndConditionsActivity" />
         <activity android:name=".ui.tutorial.TutorialActivity" />
         <activity android:name=".ui.filter.FilterActivity" />
+        <activity android:name=".ui.filter.multifilter.MultiFilterActivity" />
     </application>
 
 </manifest>

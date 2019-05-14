@@ -18,6 +18,7 @@ import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
+import com.enqos.atc.data.response.NeighbourhoodResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.ProductAnalyticsResponse;
@@ -482,7 +483,7 @@ public class DataRepository extends BasePresenter {
     }
 
     @SuppressLint("CheckResult")
-    void getProductsCategories(NetworkApiResponse networkApiResponse,String id) {
+    void getProductsCategories(NetworkApiResponse networkApiResponse, String id) {
 
         Observable<CategoryResponse> categoriesResponse = retrofit.create(WebServiceApi.class).getProductCategories(id);
 
@@ -501,6 +502,28 @@ public class DataRepository extends BasePresenter {
                 });
 
     }
+
+    @SuppressLint("CheckResult")
+    void getNeighbourhoods(NetworkApiResponse networkApiResponse) {
+
+        Observable<NeighbourhoodResponse> categoriesResponse = retrofit.create(WebServiceApi.class).getNeighourhoods();
+
+        categoriesResponse.subscribeOn(newThread)
+                .observeOn(mainThread)
+                .onErrorReturn(throwable -> new Gson().fromJson(getExceptionResponse(throwable, networkApiResponse, 12), NeighbourhoodResponse.class))
+                .subscribe(response -> {
+                    if (response != null) {
+                        if (response.getError() != null) {
+                            networkApiResponse.onFailure(response.getError().getMessage(), response.getError().getRequestCode(), response.getError().getStatusCode());
+                        } else {
+                            networkApiResponse.onSuccess(response);
+                        }
+                    }
+                }, error -> {
+                });
+
+    }
+
 
     @SuppressLint("CheckResult")
     void storeAnalytics(NetworkApiResponse networkApiResponse, String accessToken, ProductAnalyticsRequest productAnalyticsRequest) {
@@ -585,4 +608,6 @@ public class DataRepository extends BasePresenter {
             return e.getMessage();
         }
     }
+
+
 }

@@ -1,12 +1,10 @@
 package com.enqos.atc.data.response;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
-public class CategoryEntity implements Parcelable {
+import java.util.List;
 
+public class CategoryEntity {
     public String getId() {
         return id;
     }
@@ -39,6 +37,9 @@ public class CategoryEntity implements Parcelable {
     private String name;
     @SerializedName("image_url")
     private String image_url;
+    private int childs;
+    private int selectedCount;
+    private List<CategoryEntity> allChildren;
 
     public boolean isSelected() {
         return isSelected;
@@ -48,13 +49,27 @@ public class CategoryEntity implements Parcelable {
         isSelected = selected;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public List<CategoryEntity> getAllChildren() {
+        return allChildren;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void setAllChildren(List<CategoryEntity> allChildren) {
+        this.allChildren = allChildren;
+    }
 
+    public int getChilds() {
+        return childs;
+    }
+
+    public void setChilds(int childs) {
+        this.childs = childs;
+    }
+
+    public int getSelectedCount() {
+        return selectedCount;
+    }
+
+    public void setSelectedCount(int selectedCount) {
+        this.selectedCount = selectedCount;
     }
 }

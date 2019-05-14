@@ -16,18 +16,19 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
 import com.enqos.atc.data.response.CategoryEntity;
+import com.enqos.atc.data.response.Neighbourhood;
 import com.enqos.atc.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFilterAdapter.ViewHolder> {
-    private List<CategoryEntity> categoryEntities;
+    private List<Neighbourhood> categoryEntities;
     private FilterView filterView;
     private static List<String> neighbourhoods = new ArrayList<>();
     private boolean isBind;
 
-    NeibourHoodFilterAdapter(List<CategoryEntity> categoryEntities, FilterView filterView) {
+    NeibourHoodFilterAdapter(List<Neighbourhood> categoryEntities, FilterView filterView) {
         this.categoryEntities = categoryEntities;
         this.filterView = filterView;
         checkSelectedNeighbourFilters();
@@ -42,8 +43,8 @@ public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFi
 
     private void checkSelectedNeighbourFilters() {
         for (String category : neighbourhoods) {
-            for (CategoryEntity categoryEntity : categoryEntities) {
-                if (categoryEntity.getName().equalsIgnoreCase(category)) {
+            for (Neighbourhood categoryEntity : categoryEntities) {
+                if (categoryEntity.getNeighbourhood().equalsIgnoreCase(category)) {
                     categoryEntity.setSelected(true);
                 }
             }
@@ -54,17 +55,17 @@ public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        CategoryEntity categoryEntity = categoryEntities.get(i);
-        viewHolder.tvCategoryName.setText(categoryEntity.getName());
+        Neighbourhood categoryEntity = categoryEntities.get(i);
+        viewHolder.tvCategoryName.setText(categoryEntity.getNeighbourhood());
         isBind = true;
         viewHolder.checkBox.setChecked(categoryEntity.isSelected());
         isBind = false;
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             if (checked) {
-                neighbourhoods.add(categoryEntity.getName());
+                neighbourhoods.add(categoryEntity.getNeighbourhood());
             } else {
                 categoryEntity.setSelected(false);
-                neighbourhoods.remove(categoryEntity.getName());
+                neighbourhoods.remove(categoryEntity.getNeighbourhood());
             }
 
         });
@@ -78,7 +79,7 @@ public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFi
 
     void clearAllNeighbourhood() {
         neighbourhoods.clear();
-        for (CategoryEntity category :
+        for (Neighbourhood category :
                 categoryEntities) {
             category.setSelected(false);
         }

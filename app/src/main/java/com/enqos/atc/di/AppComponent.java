@@ -4,6 +4,8 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.DataRepository;
 import com.enqos.atc.ui.filter.FilterActivity;
 import com.enqos.atc.ui.filter.FilterPresenter;
+import com.enqos.atc.ui.filter.multifilter.MultiFilterActivity;
+import com.enqos.atc.ui.filter.multifilter.MultiFilterPresenter;
 import com.enqos.atc.ui.launcher.SplashActivity;
 import com.enqos.atc.ui.launcher.SplashPresenter;
 import com.enqos.atc.ui.login.ForgotPassPresenter;
@@ -33,7 +35,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {AppModule.class, NetModule.class,SharedPreferenceModule.class})
+@Component(modules = {AppModule.class, NetModule.class, SharedPreferenceModule.class})
 public interface AppComponent {
 
     void inject(AtcApplication application);
@@ -89,4 +91,8 @@ public interface AppComponent {
     void inject(TutorialActivity tutorialActivity);
 
     void inject(TutorialPresenter tutorialPresenter);
+
+    void inject(MultiFilterActivity multiFilterActivity);
+
+    void inject(MultiFilterPresenter multiFilterPresenter);
 }

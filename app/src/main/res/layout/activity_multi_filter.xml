@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4">
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/toolbar_layout" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/dimen_10dp"
+        android:paddingEnd="@dimen/dimen_20dp"
+        android:paddingStart="@dimen/dimen_20dp"
+        android:paddingTop="@dimen/dimen_10dp">
+
+        <TextView
+            android:id="@+id/tv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:background="@drawable/gradient_blue"
+            android:elevation="5dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingEnd="@dimen/dimen_15dp"
+            android:paddingStart="@dimen/dimen_15dp"
+            android:paddingTop="5dp"
+            android:text="@string/category"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_12" />
+
+        <TextView
+            android:id="@+id/tv_neighbourhood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:elevation="5dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingEnd="@dimen/dimen_15dp"
+            android:paddingStart="@dimen/dimen_15dp"
+            android:paddingTop="5dp"
+            android:text="@string/neighbourhood"
+            android:textColor="#787878"
+            android:textSize="@dimen/font_12" />
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/lv_expandable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_layout"
+        android:layout_below="@+id/top_layout"
+        android:groupIndicator="@null" />
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:elevation="@dimen/dimen_5dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/clear_all"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:padding="@dimen/dimen_15dp"
+            android:text="@string/clear_all"
+            android:textSize="@dimen/font_16" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dimen_5dp"
+            android:layout_marginTop="@dimen/dimen_5dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/apply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:padding="@dimen/dimen_15dp"
+            android:text="@string/apply"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/font_16" />
+    </LinearLayout>
+</RelativeLayout>

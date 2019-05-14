@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
@@ -28,6 +29,7 @@ import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
+import com.enqos.atc.ui.filter.FilterActivity;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.productdetail.ProductDetailFragment;
@@ -62,6 +64,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     StoreListPresenter storeListPresenter;
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
+    private String selectedNeighbourhoods, selectedCategories;
     private Unbinder unbinder;
     private ShopListAdapter shopListAdapter;
     private StorePageAdapter productsAdapter;
@@ -69,10 +72,10 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     private List<StoreEntity> allStores;
     private List<ProductEntity> allProducts = new ArrayList<>();
     private String selecteCategoryId;
-    public boolean isProductSelected = true;
+    public static boolean isProductSelected = true;
     private int limit = 10;
     private int offset;
-    private boolean isNavigated;
+    private static boolean isNavigated;
     private boolean isFirstTime = true;
     private boolean isLoading;
     private static final String CATEGORY_ID = "categoryId";
@@ -96,14 +99,15 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_shope_list, container, false);
         unbinder = ButterKnife.bind(this, rootView);
-
+        isNavigated = true;
+        setListener();
         if (isProductSelected) {
-            setListener();
+            tabClick(R.id.tv_product);
             tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
             tvProduct.setBackgroundResource(R.drawable.gradient_blue);
             tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
             tvStore.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
-            callProdcuts();
+            callProdcuts(true);
         } else {
             tabClick(R.id.tv_store);
             if (TextUtils.isEmpty(selecteCategoryId))
@@ -124,23 +128,24 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         return rootView;
     }
 
-    private void callProdcuts() {
+    private void callProdcuts(boolean showLoading) {
         isLoading = true;
-        ((StoreListActivity) getActivity()).showLoading();
-        storeListPresenter.getProducts(this, listener.getNeighbourhoods(), listener.getCategories(), limit, offset);
+        if (showLoading)
+            ((StoreListActivity) getActivity()).showLoading();
+        storeListPresenter.getProducts(this, selectedNeighbourhoods, selectedCategories, limit, offset);
     }
 
     private void callStore() {
         ((StoreListActivity) getActivity()).showLoading();
-        storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
+        storeListPresenter.getStore(this, selectedNeighbourhoods, selectedCategories, listener.getLatitude(), listener.getLongitude());
     }
 
     private void tabClick(int id) {
-
         switch (id) {
             case R.id.tv_product:
                 isProductSelected = true;
-                callProdcuts();
+                listener.changeHeader(R.drawable.ic_menu_black_24dp, "Products", R.drawable.ic_filter_outline);
+                callProdcuts(true);
                 tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvProduct.setBackgroundResource(R.drawable.gradient_blue);
 
@@ -150,6 +155,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 break;
             case R.id.tv_store:
                 isProductSelected = false;
+                listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline);
                 callStore();
                 tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvStore.setBackgroundResource(R.drawable.gradient_blue);
@@ -172,16 +178,20 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     public void onAttach(Context context) {
         super.onAttach(context);
         listener = (StoreActivityListener) context;
-
-
+        selectedNeighbourhoods = listener.getNeighbourhoods();
+        selectedCategories = listener.getCategories();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (listener != null) {
-            if (listener.getLatitude() == 0.0 && listener.getLongitude() == 0.0)
-                listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store), R.drawable.ic_filter_outline);
+            if (listener.getLatitude() == 0.0 && listener.getLongitude() == 0.0) {
+                if (isProductSelected)
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.products), R.drawable.ic_filter_outline);
+                else
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store), R.drawable.ic_filter_outline);
+            }
         }
     }
 
@@ -200,6 +210,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     @Override
     public void showMessage(String message) {
         isLoading = false;
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -247,14 +258,19 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void productsResponse(StorePageResponse storePageResponse) {
-        isLoading = false;
+
         ((StoreListActivity) getActivity()).hideLoading();
         allProducts.addAll(storePageResponse.getData());
+        if (allProducts.isEmpty()) {
+            isLoading = true;
+            showMessage("No products found");
+        } else
+            isLoading = false;
         productAdapter();
     }
 
     private void productAdapter() {
-        if (productsAdapter == null || isNavigated) {
+        if (productsAdapter == null || isNavigated && gridView != null) {
             productsAdapter = new StorePageAdapter(getActivity(), allProducts);
             gridView.setAdapter(productsAdapter);
         } else
@@ -304,8 +320,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     }
 
     @Override
-    public void onSaveProductFavorite(ProductEntity productFavoriteEntity, boolean isFav,
-                                      int pos) {
+    public void onSaveProductFavorite(ProductEntity productFavoriteEntity, boolean isFav, int pos) {
 
     }
 
@@ -314,17 +329,39 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
     @OnClick({R.id.tv_store, R.id.tv_product})
     public void onClick(View v) {
         isNavigated = true;
+        noResultLayout.setVisibility(View.GONE);
         switch (v.getId()) {
             case R.id.tv_product:
-                if (!isProductSelected)
+                if (!isProductSelected) {
+                    offset = 0;
+                    listener.setCount("");
+                    if (FilterActivity.categories != null)
+                        FilterActivity.categories.clear();
+                    selectedCategories = "";
+                    selectedNeighbourhoods = "";
                     tabClick(v.getId());
+                }
+
+
                 break;
             case R.id.tv_store:
-                if (isProductSelected)
+                if (isProductSelected) {
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline);
+                    listener.setCount("");
+                    if (FilterActivity.categories != null)
+                        FilterActivity.categories.clear();
+                    selectedCategories = "";
+                    selectedNeighbourhoods = "";
                     tabClick(v.getId());
+                }
                 break;
         }
     }
@@ -340,12 +377,13 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (isProductSelected) {
-                    if (gridView.getLastVisiblePosition() + 1 == totalItemCount && !isLoading) {
+                    if (gridView.getLastVisiblePosition() + 1 == totalItemCount && !isLoading && !allProducts.isEmpty()) {
                         isLoading = true;
                         if (!isFirstTime)
                             offset = offset + 10;
                         isFirstTime = false;
-                        callProdcuts();
+                        isNavigated = false;
+                        callProdcuts(false);
                         Log.i("*****", "BOTTOM");
                     } else {
                         isLoading = false;

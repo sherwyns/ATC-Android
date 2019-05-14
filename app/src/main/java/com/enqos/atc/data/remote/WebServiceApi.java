@@ -12,6 +12,7 @@ import com.enqos.atc.data.request.UpdateFavoriteRequest;
 import com.enqos.atc.data.response.CategoryResponse;
 import com.enqos.atc.data.response.FavoriteResponse;
 import com.enqos.atc.data.response.LoginResponse;
+import com.enqos.atc.data.response.NeighbourhoodResponse;
 import com.enqos.atc.data.response.NewProductFavResponse;
 import com.enqos.atc.data.response.ProductAnalyticsResponse;
 import com.enqos.atc.data.response.ProductEntity;
@@ -86,6 +87,9 @@ public interface WebServiceApi {
 
     @GET("api/categories/list")
     Observable<CategoryResponse> getCategories();
+
+    @GET("api/store/getneighbourhood")
+    Observable<NeighbourhoodResponse> getNeighourhoods();
 
     @GET("api/search/by/{search_key}")
     Observable<SearchResponse> getSearch(@Path("search_key") String key);

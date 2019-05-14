@@ -17,32 +17,36 @@ import java.util.List;
 
 public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder> {
     private List<CategoryEntity> categoryEntities;
-    private static List<Integer> categories = new ArrayList<>();
+    public static List<Integer> categories = new ArrayList<>();
     private ParentFiterAdapter parentFiterAdapter;
     private boolean isBind;
-
+    private TextView tvCount;
 
     FilterAdapter(ParentFiterAdapter parentFiterAdapter) {
         this.parentFiterAdapter = parentFiterAdapter;
-        checkSelectedCategoryFilters();
-
     }
 
-    public void setData(List<CategoryEntity> categoryEntities, boolean isAll) {
+    public void setData(List<CategoryEntity> categoryEntities, boolean isAll, TextView tvCount) {
         for (CategoryEntity category :
                 categoryEntities) {
             category.setSelected(isAll);
         }
+        this.tvCount = tvCount;
         this.categoryEntities = categoryEntities;
+        checkSelectedCategoryFilters();
         if (!isBind)
             notifyDataSetChanged();
     }
 
-    void allChecked(List<CategoryEntity> categoryEntities, boolean isChecked) {
+    void allChecked(String id, List<CategoryEntity> categoryEntities, boolean isChecked) {
         for (CategoryEntity category :
                 categoryEntities) {
             category.setSelected(isChecked);
         }
+        if (isChecked)
+            categories.add(Integer.valueOf(id));
+        else
+            categories.remove(Integer.valueOf(id));
         this.categoryEntities = categoryEntities;
         if (!isBind)
             notifyDataSetChanged();
@@ -55,15 +59,30 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
-
     private void checkSelectedCategoryFilters() {
-        for (int category : categories) {
-            for (CategoryEntity categoryEntity : categoryEntities) {
-                if (Integer.valueOf(categoryEntity.getId()) == category) {
-                    categoryEntity.setSelected(true);
+        if (categories != null) {
+            for (int category : categories) {
+                for (CategoryEntity categoryEntity : categoryEntities) {
+                    if (Integer.valueOf(categoryEntity.getId()) == category) {
+                        categoryEntity.setSelected(true);
+                    }
                 }
             }
+            parentFiterAdapter.setCategories(categories);
+        }
+    }
 
+    void clearAllCategories() {
+        if (categories != null) {
+            categories.clear();
+            if (ParentFiterAdapter.categories != null)
+                ParentFiterAdapter.categories.clear();
+            for (CategoryEntity category :
+                    categoryEntities) {
+                category.setSelected(false);
+            }
+            if (!isBind)
+                notifyDataSetChanged();
         }
     }
 
@@ -83,28 +102,21 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
                 categoryEntity.setSelected(false);
                 categories.remove(Integer.valueOf(categoryEntity.getId()));
             }
-
+            if (categories.isEmpty())
+                tvCount.setVisibility(View.GONE);
+            else {
+                if (categories.size() >= categoryEntities.size())
+                    tvCount.setText("All");
+                else
+                    tvCount.setText(String.valueOf(categories.size()));
+                tvCount.setVisibility(View.VISIBLE);
+            }
+            parentFiterAdapter.setCategories(categories);
         });
-
-        viewHolder.ivCategory.setOnClickListener(view -> {
-
-        });
-
     }
 
-    List<Integer> getCategories() {
+    public List<Integer> getCategories() {
         return categories;
-    }
-
-
-    void clearAllCategories() {
-        categories.clear();
-        for (CategoryEntity category :
-                categoryEntities) {
-            category.setSelected(false);
-        }
-        if (!isBind)
-            notifyDataSetChanged();
     }
 
     @Override

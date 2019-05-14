@@ -54,6 +54,7 @@ public class CreateApiRequest {
     public void createStoreRequest(String neighbourhood, String category, double latitude, double longitude) {
         dataRepository.getStore(networkApiResponse, neighbourhood, category, latitude, longitude);
     }
+
     public void createStoreRequest(String neighbourhood, String category) {
         dataRepository.getStore(networkApiResponse, neighbourhood, category);
     }
@@ -86,7 +87,11 @@ public class CreateApiRequest {
     }
 
     public void createProductCategoriesRequest(String id) {
-        dataRepository.getProductsCategories(networkApiResponse,id);
+        dataRepository.getProductsCategories(networkApiResponse, id);
+    }
+
+    public void createNeighbourhoodRequest() {
+        dataRepository.getNeighbourhoods(networkApiResponse);
     }
 
     public void createSearchRequest(String key) {

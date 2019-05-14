@@ -9,7 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -21,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,12 +28,14 @@ import android.widget.Toast;
 import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
+import com.enqos.atc.data.response.CategoryEntity;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.filter.FilterActivity;
+import com.enqos.atc.ui.filter.multifilter.ConstantManager;
+import com.enqos.atc.ui.filter.multifilter.MultiFilterActivity;
 import com.enqos.atc.ui.home.HomeActivity;
-import com.enqos.atc.ui.launcher.SplashActivity;
 import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.myaccount.MyAccountActivity;
 import com.enqos.atc.ui.search.SearchFragment;
@@ -85,6 +85,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -96,8 +97,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         }
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
-        shopListFragment = ShopListFragment.newInstance("");
-        replaceFragment(R.id.content_frame, shopListFragment, false);
+
 
     }
 
@@ -111,6 +111,13 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     protected void onDestroy() {
         super.onDestroy();
         storeListPresenter.detachView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        shopListFragment = ShopListFragment.newInstance("");
+        replaceFragment(R.id.content_frame, shopListFragment, false);
     }
 
     @Override
@@ -146,12 +153,12 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
+
                 assert data != null;
                 selectedCategories = data.getStringExtra("categories");
                 selectedNeighbourhoods = data.getStringExtra("neighbourhoods");
                 selectedCategories = selectedCategories.replaceAll(", ", ",");
                 selectedNeighbourhoods = selectedNeighbourhoods.replaceAll(", ", ",");
-
                 if (TextUtils.isEmpty(selectedCategories) && TextUtils.isEmpty(selectedNeighbourhoods))
                     filterCount.setVisibility(View.GONE);
                 else {
@@ -265,7 +272,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void replaceFragment(Fragment fragment) {
-
         replaceFragment(R.id.content_frame, fragment, false);
     }
 
@@ -293,7 +299,17 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public String getCategories() {
-        return selectedCategories;
+        StringBuilder selectedCategories = new StringBuilder();
+        for (CategoryEntity categoryEntity : ConstantManager.parentItems) {
+            if (categoryEntity.isSelected()) {
+                selectedCategories.append(categoryEntity.getId());
+            } else if (categoryEntity.getSelectedCount() > 0) {
+                for (CategoryEntity childCategory : categoryEntity.getAllChildren()) {
+                    selectedCategories.append(childCategory.getId());
+                }
+            }
+        }
+        return selectedCategories.toString();
     }
 
     @Override
@@ -321,9 +337,18 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void onFilterClick(boolean isProduct) {
-        Intent intent = new Intent(this, FilterActivity.class);
+        Intent intent = new Intent(this, MultiFilterActivity.class);
         intent.putExtra("isProduct", isProduct);
         startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void setCount(String text) {
+        if (TextUtils.isEmpty(text))
+            filterCount.setVisibility(View.GONE);
+        else
+            filterCount.setVisibility(View.VISIBLE);
+        filterCount.setText(text);
     }
 
 

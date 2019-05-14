@@ -21,4 +21,6 @@ public interface StoreActivityListener {
 
     void onFilterClick(boolean isProduct);
 
+    void setCount(String text);
+
 }

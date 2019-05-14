@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -59,6 +60,8 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     TextView tvPrice;
     @BindView(R.id.tv_call)
     TextView tvCall;
+    @BindView(R.id.rl_shop_name)
+    RelativeLayout rlShopName;
     @BindView(R.id.tv_shop_name)
     TextView tvShopName;
     @BindView(R.id.img_fav)
@@ -87,16 +90,13 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
 
 
     private void setValues() {
-
         if (isFromSearch) {
-            tvShopName.setVisibility(View.VISIBLE);
+            rlShopName.setVisibility(View.VISIBLE);
             if (!TextUtils.isEmpty(productEntity.getShop_name())) {
                 tvShopName.setText(productEntity.getShop_name());
             }
         } else
-            tvShopName.setVisibility(View.GONE);
-
-
+            rlShopName.setVisibility(View.GONE);
         if (!TextUtils.isEmpty(productEntity.getTitle()))
             tvProductName.setText(productEntity.getTitle());
         if (!TextUtils.isEmpty(productEntity.getPrice())) {
@@ -124,10 +124,10 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
         else
             ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         String url = "";
-        if (TextUtils.isEmpty(productEntity.getProduct_image()) && !TextUtils.isEmpty(productEntity.getImage()))
+        if (TextUtils.isEmpty(productEntity.getImage_medium()) && !TextUtils.isEmpty(productEntity.getImage()))
             url = productEntity.getImage();
-        else if (!TextUtils.isEmpty(productEntity.getProduct_image()))
-            url = productEntity.getProduct_image();
+        else if (!TextUtils.isEmpty(productEntity.getImage_medium()))
+            url = productEntity.getImage_medium();
         Glide.with(Objects.requireNonNull(getActivity())).load(url)
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
@@ -165,13 +165,13 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
         return view;
     }
 
-    @OnClick({R.id.img_fav, R.id.tv_shop_name})
+    @OnClick({R.id.img_fav, R.id.rl_shop_name})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_fav:
                 saveProduct();
                 break;
-            case R.id.tv_shop_name:
+            case R.id.rl_shop_name:
                 if (!TextUtils.isEmpty(productEntity.getStore_id()))
                     listener.replaceFragment(ShopDetailFragment.newInstance(productEntity.getStore_id(), false));
                 break;
@@ -264,10 +264,10 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             tvCall.setVisibility(View.VISIBLE);
         }
         String url = "";
-        if (TextUtils.isEmpty(productEntity.getProduct_image()) && !TextUtils.isEmpty(productEntity.getImage()))
+        if (TextUtils.isEmpty(productEntity.getImage_medium()) && !TextUtils.isEmpty(productEntity.getImage()))
             url = productEntity.getImage();
-        else if (!TextUtils.isEmpty(productEntity.getProduct_image()))
-            url = productEntity.getProduct_image();
+        else if (!TextUtils.isEmpty(productEntity.getImage_medium()))
+            url = productEntity.getImage_medium();
 
         Glide.with(Objects.requireNonNull(getActivity())).load(url)
                 .apply(new RequestOptions()

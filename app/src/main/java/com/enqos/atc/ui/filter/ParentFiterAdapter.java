@@ -4,12 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,22 +22,22 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ParentFiterAdapter extends RecyclerView.Adapter<ParentFiterAdapter.ViewHolder> implements NetworkApiResponse {
-
     private final List<CategoryEntity> categoryEntities;
     private FilterAdapter filterAdapter;
     private Context context;
     private ViewHolder viewHolder;
     private String id;
     private HashMap<String, List<CategoryEntity>> allCategories;
+    public static List<Integer> categories;
     private CreateApiRequest createApiRequest;
     private boolean isBind;
 
-    public ParentFiterAdapter(Context context, List<CategoryEntity> categoryEntities) {
+    ParentFiterAdapter(Context context, List<CategoryEntity> categoryEntities) {
         this.categoryEntities = categoryEntities;
         this.context = context;
         allCategories = new HashMap<>();
         createApiRequest = new CreateApiRequest(this);
-
+        checkSelectedCategoryFilters();
     }
 
     @NonNull
@@ -47,6 +45,18 @@ public class ParentFiterAdapter extends RecyclerView.Adapter<ParentFiterAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.parent_filter_layout, viewGroup, false);
         return new ViewHolder(view);
+    }
+
+    private void checkSelectedCategoryFilters() {
+        if (categories != null) {
+            for (int category : categories) {
+                for (CategoryEntity categoryEntity : categoryEntities) {
+                    if (Integer.valueOf(categoryEntity.getId()) == category) {
+                        categoryEntity.setSelected(true);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -57,9 +67,18 @@ public class ParentFiterAdapter extends RecyclerView.Adapter<ParentFiterAdapter.
         viewHolder.checkBox.setChecked(categoryEntity.isSelected());
         isBind = false;
         viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (viewHolder.recyclerView.getVisibility() == View.VISIBLE)
-                viewHolder.filterAdapter.allChecked(allCategories.get(categoryEntity.getId()), b);
+            if (viewHolder.recyclerView.getVisibility() == View.VISIBLE) {
+                viewHolder.filterAdapter.allChecked(categoryEntity.getId(), allCategories.get(categoryEntity.getId()), b);
+                categories = viewHolder.filterAdapter.getCategories();
+            } else {
+                categories = viewHolder.filterAdapter.getCategories();
+                categories.add(Integer.valueOf(categoryEntity.getId()));
+            }
         });
+        if (categoryEntity.getChilds() > 0)
+            viewHolder.ivCategory.setVisibility(View.VISIBLE);
+        else
+            viewHolder.ivCategory.setVisibility(View.GONE);
         viewHolder.ivCategory.setOnClickListener(view -> {
             if (viewHolder.recyclerView.getVisibility() == View.VISIBLE)
                 viewHolder.recyclerView.setVisibility(View.GONE);
@@ -67,16 +86,13 @@ public class ParentFiterAdapter extends RecyclerView.Adapter<ParentFiterAdapter.
                 viewHolder.recyclerView.setVisibility(View.VISIBLE);
             id = categoryEntity.getId();
             if (allCategories.containsKey(id))
-                viewHolder.filterAdapter.setData(allCategories.get(id), viewHolder.checkBox.isChecked());
+                viewHolder.filterAdapter.setData(allCategories.get(id), viewHolder.checkBox.isChecked(), viewHolder.tvCount);
             else {
                 ParentFiterAdapter.this.viewHolder = viewHolder;
                 createApiRequest.createProductCategoriesRequest(id);
             }
         });
     }
-
-
-
 
     @Override
     public int getItemCount() {
@@ -87,33 +103,47 @@ public class ParentFiterAdapter extends RecyclerView.Adapter<ParentFiterAdapter.
     public void onSuccess(BaseResponse response) {
         if (response instanceof CategoryResponse) {
             CategoryResponse categoryResponse = (CategoryResponse) response;
-            if (categoryResponse.getCategoryEntities().isEmpty())
-                viewHolder.ivCategory.setVisibility(View.GONE);
-            else
-                viewHolder.ivCategory.setVisibility(View.VISIBLE);
             allCategories.put(id, categoryResponse.getCategoryEntities());
-            viewHolder.filterAdapter.setData(categoryResponse.getCategoryEntities(), viewHolder.checkBox.isChecked());
+            viewHolder.filterAdapter.setData(categoryResponse.getCategoryEntities(), viewHolder.checkBox.isChecked(), viewHolder.tvCount);
         }
     }
 
     @Override
     public void onFailure(String errorMessage, int requestCode, int statusCode) {
-
     }
 
     @Override
     public void onTimeOut(int requestCode) {
-
     }
 
     @Override
     public void onNetworkError(int requestCode) {
-
     }
 
     @Override
     public void onUnknownError(int requestCode, int statusCode, String errorMessage) {
+    }
 
+    public void setCategories(List<Integer> categories) {
+        this.categories = categories;
+    }
+
+    public List<Integer> getCategories() {
+        return categories;
+    }
+
+    public void clearAllCategories() {
+        if (categories != null) {
+            categories.clear();
+            for (CategoryEntity category :
+                    categoryEntities) {
+                category.setSelected(false);
+            }
+            if (!isBind)
+                notifyDataSetChanged();
+        }
+        if (filterAdapter != null)
+            filterAdapter.clearAllCategories();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

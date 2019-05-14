@@ -6,6 +6,7 @@ import com.enqos.atc.data.CreateApiRequest;
 import com.enqos.atc.data.response.BaseResponse;
 import com.enqos.atc.data.response.CategoryEntity;
 import com.enqos.atc.data.response.CategoryResponse;
+import com.enqos.atc.data.response.NeighbourhoodResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 
 import java.util.ArrayList;
@@ -66,22 +67,23 @@ public class FilterPresenter extends BasePresenter implements NetworkApiResponse
         }
     }
 
-    public List<CategoryEntity> getNeibhourhoods() {
-        List<CategoryEntity> tempList = new ArrayList<>();
-        for (String neighbourhood :
-                neighbourhoods) {
-            CategoryEntity categoryEntity = new CategoryEntity();
-            categoryEntity.setName(neighbourhood);
-            tempList.add(categoryEntity);
+    public void getNeibhourhoods() {
+        try {
+            if (createApiRequest == null)
+                createApiRequest = new CreateApiRequest(this);
+            createApiRequest.createNeighbourhoodRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return tempList;
     }
 
     @Override
     public void onSuccess(BaseResponse response) {
         if (filterView != null && response instanceof CategoryResponse) {
-            filterView.onSuccess((CategoryResponse) response);
-        }
+            CategoryResponse categoryResponse = (CategoryResponse) response;
+            filterView.onSuccess(categoryResponse);
+        } else if (filterView != null && response instanceof NeighbourhoodResponse)
+            filterView.onSuccess((NeighbourhoodResponse) response);
     }
 
     @Override
