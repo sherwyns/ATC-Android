@@ -61,6 +61,7 @@
     <string name="apply">Apply</string>
     <string name="filters">Filters</string>
     <string name="store_near_you">Stores near you</string>
+    <string name="products_near_you">Products near you</string>
 
 
 </resources>

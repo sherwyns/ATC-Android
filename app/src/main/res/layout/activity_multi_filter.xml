@@ -67,6 +67,14 @@
         android:layout_below="@+id/top_layout"
         android:groupIndicator="@null" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_layout"
+        android:layout_below="@+id/top_layout"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"

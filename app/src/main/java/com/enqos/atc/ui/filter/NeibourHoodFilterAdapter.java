@@ -2,36 +2,26 @@ package com.enqos.atc.ui.filter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.enqos.atc.R;
-import com.enqos.atc.data.response.CategoryEntity;
 import com.enqos.atc.data.response.Neighbourhood;
-import com.enqos.atc.utils.Constants;
+import com.enqos.atc.ui.filter.multifilter.ConstantManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFilterAdapter.ViewHolder> {
     private List<Neighbourhood> categoryEntities;
-    private FilterView filterView;
-    private static List<String> neighbourhoods = new ArrayList<>();
-    private boolean isBind;
+    private boolean isProduct;
 
-    NeibourHoodFilterAdapter(List<Neighbourhood> categoryEntities, FilterView filterView) {
+    public NeibourHoodFilterAdapter(List<Neighbourhood> categoryEntities, boolean isProduct) {
         this.categoryEntities = categoryEntities;
-        this.filterView = filterView;
-        checkSelectedNeighbourFilters();
+        this.isProduct = isProduct;
     }
 
     @NonNull
@@ -41,50 +31,17 @@ public class NeibourHoodFilterAdapter extends RecyclerView.Adapter<NeibourHoodFi
         return new ViewHolder(view);
     }
 
-    private void checkSelectedNeighbourFilters() {
-        for (String category : neighbourhoods) {
-            for (Neighbourhood categoryEntity : categoryEntities) {
-                if (categoryEntity.getNeighbourhood().equalsIgnoreCase(category)) {
-                    categoryEntity.setSelected(true);
-                }
-            }
-        }
-
-    }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-
         Neighbourhood categoryEntity = categoryEntities.get(i);
         viewHolder.tvCategoryName.setText(categoryEntity.getNeighbourhood());
-        isBind = true;
+        viewHolder.ivExpand.setVisibility(View.GONE);
         viewHolder.checkBox.setChecked(categoryEntity.isSelected());
-        isBind = false;
-        viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> {
-            if (checked) {
-                neighbourhoods.add(categoryEntity.getNeighbourhood());
-            } else {
-                categoryEntity.setSelected(false);
-                neighbourhoods.remove(categoryEntity.getNeighbourhood());
-            }
-
-        });
-
-    }
-
-
-    List<String> getNeighbourhoods() {
-        return neighbourhoods;
-    }
-
-    void clearAllNeighbourhood() {
-        neighbourhoods.clear();
-        for (Neighbourhood category :
-                categoryEntities) {
-            category.setSelected(false);
-        }
-        if (!isBind)
-            notifyDataSetChanged();
+        viewHolder.checkBox.setOnCheckedChangeListener((compoundButton, checked) -> categoryEntity.setSelected(checked));
+        if (isProduct)
+            ConstantManager.neighbourhoods = categoryEntities;
+        else
+            ConstantManager.storeNeighbours = categoryEntities;
     }
 
     @Override

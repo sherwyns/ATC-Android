@@ -1,5 +1,6 @@
 package com.enqos.atc.ui.storeList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -29,9 +31,8 @@ import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
-import com.enqos.atc.ui.filter.FilterActivity;
+import com.enqos.atc.ui.filter.multifilter.ConstantManager;
 import com.enqos.atc.ui.home.HomeActivity;
-import com.enqos.atc.ui.login.LoginActivity;
 import com.enqos.atc.ui.productdetail.ProductDetailFragment;
 import com.enqos.atc.ui.shoppage.StorePageAdapter;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
@@ -50,8 +51,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ShopListFragment extends Fragment implements StoreListView, StoreListener, AdapterView.OnItemClickListener {
-
-
     @BindView(R.id.gridview)
     GridView gridView;
     @BindView(R.id.no_result_layout)
@@ -92,7 +91,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         return shopListFragment;
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,11 +105,10 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
             tvProduct.setBackgroundResource(R.drawable.gradient_blue);
             tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
             tvStore.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
-            callProdcuts(true);
         } else {
             tabClick(R.id.tv_store);
             if (TextUtils.isEmpty(selecteCategoryId))
-                storeListPresenter.getStore(this, listener.getNeighbourhoods(), listener.getCategories(), listener.getLatitude(), listener.getLongitude());
+                storeListPresenter.getStore(this, selectedNeighbourhoods, selectedCategories, listener.getLatitude(), listener.getLongitude());
             else {
                 allStores = StoreListPresenter.groupStores.get(selecteCategoryId);
                 if (allStores == null || allStores.size() == 0) {
@@ -148,10 +145,8 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 callProdcuts(true);
                 tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvProduct.setBackgroundResource(R.drawable.gradient_blue);
-
                 tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
                 tvStore.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
-
                 break;
             case R.id.tv_store:
                 isProductSelected = false;
@@ -159,7 +154,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 callStore();
                 tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvStore.setBackgroundResource(R.drawable.gradient_blue);
-
                 tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.cateoryTextColor));
                 tvProduct.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.transparent));
                 break;
@@ -178,8 +172,13 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     public void onAttach(Context context) {
         super.onAttach(context);
         listener = (StoreActivityListener) context;
-        selectedNeighbourhoods = listener.getNeighbourhoods();
-        selectedCategories = listener.getCategories();
+        if (isProductSelected) {
+            selectedNeighbourhoods = listener.getNeighbourhoods(ConstantManager.neighbourhoods);
+            selectedCategories = listener.getCategories(ConstantManager.categories);
+        } else {
+            selectedNeighbourhoods = listener.getNeighbourhoods(ConstantManager.storeNeighbours);
+            selectedCategories = listener.getCategories(ConstantManager.storeCategories);
+        }
     }
 
     @Override
@@ -206,7 +205,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         unbinder.unbind();
     }
 
-
     @Override
     public void showMessage(String message) {
         isLoading = false;
@@ -218,7 +216,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                                       storeResponse, List<NewStoreFavouriteEntity> data) {
         ((StoreListActivity) getActivity()).hideLoading();
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
-
         if (isLogin) {
             List<StoreEntity> stores = null;
             if (data != null) {
@@ -235,7 +232,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         } else {
             this.allStores = storeResponse.getData();
         }
-
         if (allStores == null || allStores.size() == 0) {
             noResultLayout.setVisibility(View.VISIBLE);
         } else {
@@ -248,17 +244,14 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void favStoreResponse(List<NewStoreFavouriteEntity> data) {
-
     }
 
     @Override
     public void favProductResponse(NewProductFavResponse response) {
-
     }
 
     @Override
     public void productsResponse(StorePageResponse storePageResponse) {
-
         ((StoreListActivity) getActivity()).hideLoading();
         allProducts.addAll(storePageResponse.getData());
         if (allProducts.isEmpty()) {
@@ -275,7 +268,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
             gridView.setAdapter(productsAdapter);
         } else
             productsAdapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -283,11 +275,9 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
             String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
-
             StoreEntity removeEnity = null;
             List<StoreEntity> fav = sharedPreferenceManager.getFavorites();
             if (fav != null) {
-
                 if (isFav) {
                     storeEntity.setFavourite(true);
                     fav.add(storeEntity);
@@ -311,7 +301,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 favorite.add(storeEntity);
                 sharedPreferenceManager.saveFavourites(favorite);
             }
-
             FavouriteUtility.saveFavourite(userId, storeEntity.getId(), "store", isFav ? "1" : "0");
             shopListAdapter.notifyDataSetChanged();
         } else {
@@ -321,12 +310,10 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void onSaveProductFavorite(ProductEntity productFavoriteEntity, boolean isFav, int pos) {
-
     }
 
     @Override
     public void onRemoveFav(int index, boolean isStore) {
-
     }
 
     @Override
@@ -341,48 +328,48 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         switch (v.getId()) {
             case R.id.tv_product:
                 if (!isProductSelected) {
+                    if (allProducts != null)
+                        allProducts.clear();
                     offset = 0;
                     listener.setCount("");
-                    if (FilterActivity.categories != null)
-                        FilterActivity.categories.clear();
-                    selectedCategories = "";
-                    selectedNeighbourhoods = "";
+                    selectedNeighbourhoods = listener.getNeighbourhoods(ConstantManager.neighbourhoods);
+                    selectedCategories = listener.getCategories(ConstantManager.categories);
                     tabClick(v.getId());
                 }
-
-
                 break;
             case R.id.tv_store:
                 if (isProductSelected) {
+                    if (allProducts != null)
+                        allProducts.clear();
                     listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline);
                     listener.setCount("");
-                    if (FilterActivity.categories != null)
-                        FilterActivity.categories.clear();
-                    selectedCategories = "";
-                    selectedNeighbourhoods = "";
+                    selectedNeighbourhoods = listener.getNeighbourhoods(ConstantManager.storeNeighbours);
+                    selectedCategories = listener.getCategories(ConstantManager.storeCategories);
                     tabClick(v.getId());
                 }
                 break;
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setListener() {
-
+        gridView.setOnTouchListener((view, motionEvent) -> {
+            isNavigated = false;
+            return false;
+        });
         gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
-
             }
 
             @Override
             public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (isProductSelected) {
+                if (isProductSelected && allProducts.size() > 8) {
                     if (gridView.getLastVisiblePosition() + 1 == totalItemCount && !isLoading && !allProducts.isEmpty()) {
                         isLoading = true;
                         if (!isFirstTime)
                             offset = offset + 10;
                         isFirstTime = false;
-                        isNavigated = false;
                         callProdcuts(false);
                         Log.i("*****", "BOTTOM");
                     } else {
@@ -401,7 +388,6 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 ProductEntity product = allProducts.get(i);
                 ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
                 productDetailFragment.productEntity = product;
-                productDetailFragment.similiarProducts = allProducts;
                 listener.replaceFragment(productDetailFragment);
             } else {
                 StorePageFragment storePageFragment = StorePageFragment.newInstance();

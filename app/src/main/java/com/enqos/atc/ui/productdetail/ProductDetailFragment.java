@@ -1,6 +1,5 @@
 package com.enqos.atc.ui.productdetail;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +27,7 @@ import com.enqos.atc.data.response.BaseResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
 import com.enqos.atc.data.response.ProductAnalyticsResponse;
 import com.enqos.atc.data.response.ProductEntity;
+import com.enqos.atc.data.response.StorePageResponse;
 import com.enqos.atc.listener.RecyclerViewItemClickListner;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.home.HomeActivity;
@@ -47,9 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-
 public class ProductDetailFragment extends Fragment implements RecyclerViewItemClickListner, NetworkApiResponse {
-
     @BindView(R.id.tv_product_name)
     TextView tvProductName;
     @BindView(R.id.tv_product_des)
@@ -76,27 +73,19 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     public List<ProductEntity> similiarProducts;
     private Unbinder unbinder;
 
-
     @Inject
     public ProductDetailFragment() {
         AtcApplication.getAppComponents().inject(this);
     }
 
-
     public static ProductDetailFragment newInstance() {
-
         return new ProductDetailFragment();
     }
 
-
     private void setValues() {
-        if (isFromSearch) {
-            rlShopName.setVisibility(View.VISIBLE);
-            if (!TextUtils.isEmpty(productEntity.getShop_name())) {
-                tvShopName.setText(productEntity.getShop_name());
-            }
-        } else
-            rlShopName.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(productEntity.getShop_name())) {
+            tvShopName.setText(productEntity.getShop_name());
+        }
         if (!TextUtils.isEmpty(productEntity.getTitle()))
             tvProductName.setText(productEntity.getTitle());
         if (!TextUtils.isEmpty(productEntity.getPrice())) {
@@ -115,39 +104,37 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             tvPrice.setVisibility(View.GONE);
             tvCall.setVisibility(View.VISIBLE);
         }
-
         if (!TextUtils.isEmpty(productEntity.getDescription()))
             tvProductDes.setText(productEntity.getDescription());
-
         if (productEntity.isFavourite())
             ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
         else
             ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         String url = "";
-        if (TextUtils.isEmpty(productEntity.getImage_medium()) && !TextUtils.isEmpty(productEntity.getImage()))
+        if (TextUtils.isEmpty(productEntity.getProduct_image()) && !TextUtils.isEmpty(productEntity.getImage()))
             url = productEntity.getImage();
-        else if (!TextUtils.isEmpty(productEntity.getImage_medium()))
-            url = productEntity.getImage_medium();
+        else if (!TextUtils.isEmpty(productEntity.getProduct_image()))
+            url = productEntity.getProduct_image();
         Glide.with(Objects.requireNonNull(getActivity())).load(url)
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .override(Target.SIZE_ORIGINAL))
                 .into(ivProductImg);
-
-        SimiliarProductsAdapter adapter = new SimiliarProductsAdapter(getActivity(), similiarProducts);
-        adapter.setListener(this);
+        if (similiarProducts != null) {
+            SimiliarProductsAdapter adapter = new SimiliarProductsAdapter(getActivity(), similiarProducts);
+            adapter.setListener(this);
+            rvProducts.setAdapter(adapter);
+        } else {
+            CreateApiRequest createApiRequest = new CreateApiRequest(this);
+            createApiRequest.createStorePageRequest(productEntity.getStore_id());
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvProducts.setLayoutManager(layoutManager);
         SnapHelper snapHelper = new LinearSnapHelper();
-
         snapHelper.attachToRecyclerView(rvProducts);
-        rvProducts.setAdapter(adapter);
-
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -200,14 +187,12 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     }
 
     private void saveProduct() {
-
         boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
         if (isLogin) {
             String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
             ProductEntity removeEnity = null;
             List<ProductEntity> prodFav = sharedPreferenceManager.getProductFavorites();
             if (prodFav != null) {
-
                 if (!productEntity.isFavourite()) {
                     ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
                     productEntity.setFavourite(true);
@@ -233,7 +218,6 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                 favorite.add(productEntity);
                 sharedPreferenceManager.saveProductFavourites(favorite);
             }
-
             FavouriteUtility.saveFavourite(userId, productEntity.getId(), "product", !productEntity.isFavourite() ? "1" : "0");
         } else {
             startActivity(new Intent(getActivity(), HomeActivity.class));
@@ -245,8 +229,6 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
         ProductEntity productEntity = similiarProducts.get(pos);
         if (!TextUtils.isEmpty(productEntity.getTitle()))
             tvProductName.setText(productEntity.getTitle());
-
-
         if (!TextUtils.isEmpty(productEntity.getPrice())) {
             if (productEntity.getPrice().equalsIgnoreCase("0") || productEntity.getPrice().equalsIgnoreCase("0.0")) {
                 tvPrice.setVisibility(View.GONE);
@@ -264,11 +246,10 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             tvCall.setVisibility(View.VISIBLE);
         }
         String url = "";
-        if (TextUtils.isEmpty(productEntity.getImage_medium()) && !TextUtils.isEmpty(productEntity.getImage()))
+        if (TextUtils.isEmpty(productEntity.getProduct_image()) && !TextUtils.isEmpty(productEntity.getImage()))
             url = productEntity.getImage();
-        else if (!TextUtils.isEmpty(productEntity.getImage_medium()))
-            url = productEntity.getImage_medium();
-
+        else if (!TextUtils.isEmpty(productEntity.getProduct_image()))
+            url = productEntity.getProduct_image();
         Glide.with(Objects.requireNonNull(getActivity())).load(url)
                 .apply(new RequestOptions()
                         .error(R.drawable.ic_photo_size_select_actual_black_24dp)
@@ -282,26 +263,28 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
         if (response instanceof ProductAnalyticsResponse) {
             ProductAnalyticsResponse productAnalyticsResponse = (ProductAnalyticsResponse) response;
             Log.i("Analytics", productAnalyticsResponse.getData().getMessage());
+        } else if (response instanceof StorePageResponse) {
+            StorePageResponse pageResponse = (StorePageResponse) response;
+            similiarProducts = pageResponse.getData();
+            SimiliarProductsAdapter adapter = new SimiliarProductsAdapter(getActivity(), similiarProducts);
+            adapter.setListener(this);
+            rvProducts.setAdapter(adapter);
         }
     }
 
     @Override
     public void onFailure(String errorMessage, int requestCode, int statusCode) {
-
     }
 
     @Override
     public void onTimeOut(int requestCode) {
-
     }
 
     @Override
     public void onNetworkError(int requestCode) {
-
     }
 
     @Override
     public void onUnknownError(int requestCode, int statusCode, String errorMessage) {
-
     }
 }

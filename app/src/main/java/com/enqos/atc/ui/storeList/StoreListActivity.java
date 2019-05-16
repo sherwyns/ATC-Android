@@ -10,7 +10,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,11 +29,10 @@ import com.enqos.atc.R;
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.base.BaseActivity;
 import com.enqos.atc.data.response.CategoryEntity;
+import com.enqos.atc.data.response.Neighbourhood;
 import com.enqos.atc.data.response.StoreEntity;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
-import com.enqos.atc.ui.filter.FilterActivity;
-import com.enqos.atc.ui.filter.multifilter.ConstantManager;
 import com.enqos.atc.ui.filter.multifilter.MultiFilterActivity;
 import com.enqos.atc.ui.home.HomeActivity;
 import com.enqos.atc.ui.login.LoginActivity;
@@ -52,7 +50,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener, LocationListener {
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -77,16 +74,15 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
     private LocationManager locationManager;
-    private String selectedCategories;
-    private String selectedNeighbourhoods;
     private ShopListFragment shopListFragment;
     private boolean isLocationDetected = false;
+    private int totalFilterCount;
+    private boolean isBackPressed;
 
     @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -98,10 +94,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         }
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
-
-
     }
-
 
     @Override
     public void injectDependency() {
@@ -139,66 +132,28 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(false);
-
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        isBackPressed = true;
         if (toolbar.getVisibility() == View.GONE)
             toolbar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-
-                assert data != null;
-                selectedCategories = data.getStringExtra("categories");
-                selectedNeighbourhoods = data.getStringExtra("neighbourhoods");
-                selectedCategories = selectedCategories.replaceAll(", ", ",");
-                selectedNeighbourhoods = selectedNeighbourhoods.replaceAll(", ", ",");
-                if (TextUtils.isEmpty(selectedCategories) && TextUtils.isEmpty(selectedNeighbourhoods))
-                    filterCount.setVisibility(View.GONE);
-                else {
-                    int count;
-                    filterCount.setVisibility(View.VISIBLE);
-                    if (!TextUtils.isEmpty(selectedNeighbourhoods) && !TextUtils.isEmpty(selectedCategories)) {
-                        String[] categories = selectedCategories.split(",");
-                        String[] neighbours = selectedNeighbourhoods.split(",");
-                        count = categories.length + neighbours.length;
-                    } else if (!TextUtils.isEmpty(selectedCategories)) {
-                        String[] categories = selectedCategories.split(",");
-                        count = categories.length;
-                    } else {
-                        String[] categories = selectedNeighbourhoods.split(",");
-                        count = categories.length;
-
-                    }
-                    filterCount.setText(String.valueOf(count));
-                }
-                shopListFragment = ShopListFragment.newInstance("");
-                replaceFragment(shopListFragment);
-            }
-        } else {
-            filterCount.setVisibility(View.GONE);
-        }
     }
 
     @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.terms_condition, R.id.help, R.id.privacy, R.id.about, R.id.img_fav, R.id.img_search, R.id.img_home})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
-                if (title.getText().toString().equals(getString(R.string.store)) || title.getText().toString().equals(getString(R.string.favourites)) || title.getText().toString().equals(getString(R.string.search)) || title.getText().toString().equals(getString(R.string.filter_by_category)))
+                if (title.getText().toString().equals(getString(R.string.store)) || title.getText().toString().equals(getString(R.string.products)) || title.getText().toString().equals(getString(R.string.store_near_you)) || title.getText().toString().equals(getString(R.string.products_near_you)) || title.getText().toString().equals(getString(R.string.favourites)) || title.getText().toString().equals(getString(R.string.search)) || title.getText().toString().equals(getString(R.string.filter_by_category)))
                     drawerLayout.openDrawer(GravityCompat.START);
                 else
                     onBackPressed();
                 break;
             case R.id.image_right:
                 if (shopListFragment != null)
-                    onFilterClick(shopListFragment.isProductSelected);
+                    onFilterClick(ShopListFragment.isProductSelected);
                 break;
             case R.id.img_fav:
                 if (!isLogin) {
@@ -241,16 +196,15 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
-
         }
     }
 
     private void onMenuClick(View view, String titleStr) {
         if (!title.getText().toString().equals(titleStr)) {
             title.setText(titleStr);
-
             switch (view.getId()) {
                 case R.id.img_home:
+                    isBackPressed = true;
                     toolbar.setVisibility(View.VISIBLE);
                     replaceFragment(R.id.content_frame, shopListFragment, false);
                     break;
@@ -299,10 +253,10 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     }
 
     @Override
-    public String getCategories() {
+    public String getCategories(List<CategoryEntity> categoryEntities) {
         StringBuilder selectedCategories = new StringBuilder();
         String result = "";
-        for (CategoryEntity categoryEntity : ConstantManager.parentItems) {
+        for (CategoryEntity categoryEntity : categoryEntities) {
             if (categoryEntity.isSelected()) {
                 selectedCategories.append(categoryEntity.getId()).append(",");
             } else if (categoryEntity.getSelectedCount() > 0) {
@@ -315,19 +269,41 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         if (selectedCategories.length() > 0)
             result = selectedCategories.deleteCharAt(selectedCategories.length() - 1).toString();
         Log.i("*******", "CATEGORIES---->" + result);
+        if (!result.isEmpty()) {
+            String[] count = result.split(",");
+            totalFilterCount += count.length;
+        }
+        if (totalFilterCount > 0)
+            filterCount.setVisibility(View.VISIBLE);
+        else
+            filterCount.setVisibility(View.GONE);
+        filterCount.setText(String.valueOf(totalFilterCount));
         return result;
     }
 
     @Override
-    public String getNeighbourhoods() {
-        return selectedNeighbourhoods;
+    public String getNeighbourhoods(List<Neighbourhood> categoryEntities) {
+        StringBuilder selectedCategories = new StringBuilder();
+        String result = "";
+        for (Neighbourhood categoryEntity : categoryEntities) {
+            if (categoryEntity.isSelected()) {
+                selectedCategories.append(categoryEntity.getNeighbourhood()).append(",");
+            }
+        }
+        if (selectedCategories.length() > 0)
+            result = selectedCategories.deleteCharAt(selectedCategories.length() - 1).toString();
+        Log.i("*******", "NEIGHBOURHOOD---->" + result);
+        if (!result.isEmpty()) {
+            String[] count = result.split(",");
+            totalFilterCount += count.length;
+        }
+        return result;
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
@@ -337,26 +313,31 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 }
             } else
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
-
         }
     }
 
     @Override
     public void onFilterClick(boolean isProduct) {
+        totalFilterCount = 0;
         Intent intent = new Intent(this, MultiFilterActivity.class);
         intent.putExtra("isProduct", isProduct);
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 
     @Override
     public void setCount(String text) {
-        if (TextUtils.isEmpty(text))
+        if (TextUtils.isEmpty(text)) {
+            totalFilterCount = 0;
             filterCount.setVisibility(View.GONE);
-        else
+        } else
             filterCount.setVisibility(View.VISIBLE);
         filterCount.setText(text);
     }
 
+    @Override
+    public boolean isOnBackPressed() {
+        return isBackPressed;
+    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -377,16 +358,13 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-
     }
 
     @Override
     public void onProviderEnabled(String s) {
-
     }
 
     @Override
     public void onProviderDisabled(String s) {
-
     }
 }

@@ -63,10 +63,10 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
             viewHolder.tvCall.setVisibility(View.VISIBLE);
         }
         String url = "";
-        if (TextUtils.isEmpty(product.getProduct_image()) && !TextUtils.isEmpty(product.getImage()))
+        if (TextUtils.isEmpty(product.getImage_medium()) && !TextUtils.isEmpty(product.getImage()))
             url = product.getImage();
-        else if (!TextUtils.isEmpty(product.getProduct_image()))
-            url = product.getProduct_image();
+        else if (!TextUtils.isEmpty(product.getImage_medium()))
+            url = product.getImage_medium();
         Glide.with(context).load(url)
                 .apply(new RequestOptions()
                         //.override(150, 180)

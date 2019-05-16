@@ -15,6 +15,8 @@ public class ProductEntity {
     @SerializedName("price")
     private String price;
     @SerializedName("image_small")
+    private String image_small;
+    @SerializedName("product_image")
     private String product_image;
     @SerializedName("image_medium")
     private String image_medium;
@@ -134,5 +136,13 @@ public class ProductEntity {
 
     public void setImage_medium(String image_medium) {
         this.image_medium = image_medium;
+    }
+
+    public String getImage_small() {
+        return image_small;
+    }
+
+    public void setImage_small(String image_small) {
+        this.image_small = image_small;
     }
 }

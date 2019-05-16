@@ -110,7 +110,7 @@ public class MultiFilterAdapter extends BaseExpandableListAdapter {
             }
             notifyDataSetChanged();
         });
-        ConstantManager.parentItems = parentItems;
+        ConstantManager.categories = parentItems;
         return convertView;
     }
 

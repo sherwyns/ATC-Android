@@ -2,7 +2,6 @@ package com.enqos.atc.di;
 
 import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.DataRepository;
-import com.enqos.atc.ui.filter.FilterActivity;
 import com.enqos.atc.ui.filter.FilterPresenter;
 import com.enqos.atc.ui.filter.multifilter.MultiFilterActivity;
 import com.enqos.atc.ui.filter.multifilter.MultiFilterPresenter;
@@ -85,8 +84,6 @@ public interface AppComponent {
     void inject(ForgotPasswordActivity forgotPasswordActivity);
 
     void inject(FilterPresenter filterPresenter);
-
-    void inject(FilterActivity filterFragment);
 
     void inject(TutorialActivity tutorialActivity);
 

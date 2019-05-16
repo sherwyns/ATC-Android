@@ -6,7 +6,9 @@ import com.enqos.atc.data.CreateApiRequest;
 import com.enqos.atc.data.response.BaseResponse;
 import com.enqos.atc.data.response.CategoryEntity;
 import com.enqos.atc.data.response.CategoryResponse;
+import com.enqos.atc.data.response.NeighbourhoodResponse;
 import com.enqos.atc.data.response.NetworkApiResponse;
+import com.enqos.atc.ui.filter.FilterView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +16,19 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class MultiFilterPresenter extends BasePresenter implements NetworkApiResponse {
-    private MultiFilterView filterView;
     private CreateApiRequest createApiRequest;
     private CategoryEntity parentCategory;
     private int size = 0;
     private List<CategoryEntity> parentCategories;
     private List<CategoryEntity> finalParentCategories = new ArrayList<>();
+    private MultiFilterView filterView;
 
     @Inject
     MultiFilterPresenter() {
         AtcApplication.getAppComponents().inject(this);
     }
 
-    void getProductCategories(MultiFilterView filterView, String id) {
-        this.filterView = filterView;
+    void getProductCategories(String id) {
         try {
             if (createApiRequest == null)
                 createApiRequest = new CreateApiRequest(this);
@@ -37,11 +38,21 @@ public class MultiFilterPresenter extends BasePresenter implements NetworkApiRes
         }
     }
 
-    private void getProductCategories(String id) {
+    void getCategories() {
         try {
             if (createApiRequest == null)
                 createApiRequest = new CreateApiRequest(this);
-            createApiRequest.createProductCategoriesRequest(id);
+            createApiRequest.createCategoriesRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void getNeibhourhoods() {
+        try {
+            if (createApiRequest == null)
+                createApiRequest = new CreateApiRequest(this);
+            createApiRequest.createNeighbourhoodRequest();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,6 +80,8 @@ public class MultiFilterPresenter extends BasePresenter implements NetworkApiRes
                     setParentCategories(size, parentCategories);
                 }
             }
+        } else if (response instanceof NeighbourhoodResponse) {
+            filterView.onNeighbourHoodSuccess((NeighbourhoodResponse) response);
         }
     }
 
@@ -86,5 +99,9 @@ public class MultiFilterPresenter extends BasePresenter implements NetworkApiRes
 
     @Override
     public void onUnknownError(int requestCode, int statusCode, String errorMessage) {
+    }
+
+    public void setFilterView(MultiFilterView filterView) {
+        this.filterView = filterView;
     }
 }
