@@ -310,6 +310,41 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
 
     @Override
     public void onSaveProductFavorite(ProductEntity productFavoriteEntity, boolean isFav, int pos) {
+        boolean isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
+        if (isLogin) {
+            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
+            ProductEntity removeEnity = null;
+            List<ProductEntity> prodFav = sharedPreferenceManager.getProductFavorites();
+            if (prodFav != null) {
+                if (isFav) {
+                    productFavoriteEntity.setFavourite(true);
+                    prodFav.add(productFavoriteEntity);
+                } else {
+                    for (ProductEntity product :
+                            prodFav) {
+                        if (productFavoriteEntity.getId().equals(product.getId())) {
+                            product.setFavourite(false);
+                            removeEnity = product;
+                        } else {
+                            product.setFavourite(true);
+                        }
+                    }
+                }
+                if (removeEnity != null)
+                    prodFav.remove(removeEnity);
+                sharedPreferenceManager.saveProductFavourites(prodFav);
+            } else {
+                List<ProductEntity> favorite = new ArrayList<>();
+                productFavoriteEntity.setFavourite(true);
+                favorite.add(productFavoriteEntity);
+                sharedPreferenceManager.saveProductFavourites(favorite);
+            }
+            FavouriteUtility.saveFavourite(userId, allProducts.get(pos).getId(), "product", isFav ? "1" : "0");
+            productsAdapter.notifyDataSetChanged();
+
+        } else {
+            startActivity(new Intent(getActivity(), HomeActivity.class));
+        }
     }
 
     @Override

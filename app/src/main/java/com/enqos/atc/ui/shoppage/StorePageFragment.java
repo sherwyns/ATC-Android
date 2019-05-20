@@ -150,7 +150,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         gridView.setOnItemClickListener(this);
         if (storeEntity != null) {
             String accessToken = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.TOKEN);
-            if(!TextUtils.isEmpty(accessToken)) {
+            if (!TextUtils.isEmpty(accessToken)) {
                 CreateApiRequest createApiRequest = new CreateApiRequest(this);
                 createApiRequest.createStoreAnalyticsRequest(accessToken, storeEntity.getId());
             }
