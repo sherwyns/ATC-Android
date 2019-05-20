@@ -46,6 +46,11 @@ public class SimiliarProductsAdapter extends RecyclerView.Adapter<SimiliarProduc
         if (!TextUtils.isEmpty(product.getTitle()))
             viewHolder.name.setText(product.getTitle());
 
+        if (product.isFavourite())
+            viewHolder.favImg.setImageResource(R.drawable.ic_favorite_black_24dp);
+        else
+            viewHolder.favImg.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+
         if (!TextUtils.isEmpty(products.get(i).getPrice())) {
             if (products.get(i).getPrice().equalsIgnoreCase("0") || products.get(i).getPrice().equalsIgnoreCase("0.0")) {
                 viewHolder.price.setVisibility(View.GONE);

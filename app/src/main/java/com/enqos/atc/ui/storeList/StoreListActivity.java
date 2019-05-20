@@ -142,7 +142,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
             toolbar.setVisibility(View.VISIBLE);
     }
 
-    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.terms_condition, R.id.help, R.id.privacy, R.id.about, R.id.img_fav, R.id.img_search, R.id.img_home})
+    @OnClick({R.id.image_right, R.id.image_left, R.id.menu_my_account, R.id.terms_condition, R.id.help, R.id.privacy, R.id.about, R.id.img_fav, R.id.img_search, R.id.home_layout})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_left:
@@ -162,8 +162,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                 } else
                     onMenuClick(view, getString(R.string.favourites));
                 break;
-            case R.id.img_home:
-                onMenuClick(view, getString(R.string.store));
+            case R.id.home_layout:
+                onMenuClick(view, getString(R.string.products_near_you));
                 break;
             case R.id.img_search:
                 onMenuClick(view, getString(R.string.search));
@@ -203,7 +203,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         if (!title.getText().toString().equals(titleStr)) {
             title.setText(titleStr);
             switch (view.getId()) {
-                case R.id.img_home:
+                case R.id.home_layout:
                     isBackPressed = true;
                     toolbar.setVisibility(View.VISIBLE);
                     replaceFragment(R.id.content_frame, shopListFragment, false);

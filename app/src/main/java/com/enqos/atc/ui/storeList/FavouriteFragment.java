@@ -28,6 +28,7 @@ import com.enqos.atc.data.response.StoreResponse;
 import com.enqos.atc.listener.FavoriteListener;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.listener.StoreListener;
+import com.enqos.atc.ui.productdetail.ProductDetailFragment;
 import com.enqos.atc.ui.shopdetail.ShopDetailFragment;
 import com.enqos.atc.ui.shoppage.StorePageAdapter;
 import com.enqos.atc.ui.shoppage.StorePageFragment;
@@ -160,20 +161,20 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
 
     @Override
     public void onRemoveFav(int index, boolean isStore) {
-        if (favourites != null) {
-            String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
-            if (isStore) {
-                FavouriteUtility.saveFavourite(userId, favourites.get(index).getId(), "store", "0");
-                favourites.remove(index);
-                sharedPreferenceManager.saveFavourites(favourites);
-                adapter.notifyDataSetChanged();
-            } else {
-                FavouriteUtility.saveFavourite(userId, productFavourites.get(index).getId(), "product", "0");
-                productFavourites.remove(index);
-                sharedPreferenceManager.saveProductFavourites(productFavourites);
-                productAdapter.notifyDataSetChanged();
-            }
+
+        String userId = (String) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.STRING, SharedPreferenceManager.USER_ID);
+        if (isStore && favourites != null) {
+            FavouriteUtility.saveFavourite(userId, favourites.get(index).getId(), "store", "0");
+            favourites.remove(index);
+            sharedPreferenceManager.saveFavourites(favourites);
+            adapter.notifyDataSetChanged();
+        } else if (!isStore && productFavourites != null) {
+            FavouriteUtility.saveFavourite(userId, productFavourites.get(index).getId(), "product", "0");
+            productFavourites.remove(index);
+            sharedPreferenceManager.saveProductFavourites(productFavourites);
+            productAdapter.notifyDataSetChanged();
         }
+
     }
 
 
@@ -184,6 +185,11 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
                 StorePageFragment storePageFragment = StorePageFragment.newInstance();
                 storePageFragment.storeEntity = favourites.get(i);
                 listener.replaceFragment(storePageFragment);
+            } else {
+                ProductEntity product = productFavourites.get(i);
+                ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
+                productDetailFragment.productEntity = product;
+                listener.replaceFragment(productDetailFragment);
             }
 
         }
@@ -214,7 +220,7 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
             for (ProductEntity product :
                     productEntities) {
                 for (ProductFavEntity fav : data) {
-                    if (product.getStore_id().equals(fav.getProduct_id()) && fav.getFavorite().equals("1")) {
+                    if (product.getId().equals(fav.getProduct_id()) && fav.getFavorite().equals("1")) {
                         product.setFavourite(true);
                         productFavourites.add(product);
                     }

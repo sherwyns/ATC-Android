@@ -264,7 +264,6 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
                 ProductEntity product = products.get(i);
                 ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
                 productDetailFragment.productEntity = product;
-                productDetailFragment.similiarProducts = products;
                 productDetailFragment.isFromSearch = true;
                 listener.replaceFragment(productDetailFragment);
                 break;

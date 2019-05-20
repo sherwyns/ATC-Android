@@ -69,8 +69,8 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     SharedPreferenceManager sharedPreferenceManager;
     private StoreActivityListener listener;
     public ProductEntity productEntity;
+    private List<ProductEntity> similiarProducts;
     public boolean isFromSearch = false;
-    public List<ProductEntity> similiarProducts;
     private Unbinder unbinder;
 
     @Inject
@@ -121,14 +121,10 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                         .placeholder(R.drawable.ic_photo_size_select_actual_black_24dp)
                         .override(Target.SIZE_ORIGINAL))
                 .into(ivProductImg);
-        if (similiarProducts != null) {
-            SimiliarProductsAdapter adapter = new SimiliarProductsAdapter(getActivity(), similiarProducts);
-            adapter.setListener(this);
-            rvProducts.setAdapter(adapter);
-        } else {
-            CreateApiRequest createApiRequest = new CreateApiRequest(this);
-            createApiRequest.createStorePageRequest(productEntity.getStore_id());
-        }
+
+        CreateApiRequest createApiRequest = new CreateApiRequest(this);
+        createApiRequest.createStorePageRequest(productEntity.getStore_id());
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvProducts.setLayoutManager(layoutManager);
@@ -198,27 +194,35 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
                     productEntity.setFavourite(true);
                     prodFav.add(productEntity);
                 } else {
-                    ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-                    for (ProductEntity product :
-                            prodFav) {
-                        if (productEntity.getId().equals(product.getId())) {
-                            product.setFavourite(false);
-                            removeEnity = product;
-                        } else {
-                            product.setFavourite(true);
+                    if (prodFav.isEmpty()) {
+                        removeEnity = productEntity;
+                        productEntity.setFavourite(false);
+                    } else {
+                        for (ProductEntity product :
+                                prodFav) {
+                            if (productEntity.getId().equals(product.getId())) {
+                                removeEnity = product;
+                                product.setFavourite(false);
+                                productEntity.setFavourite(false);
+                            } else {
+                                product.setFavourite(true);
+                            }
                         }
                     }
+                    ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 }
+
                 if (removeEnity != null)
                     prodFav.remove(removeEnity);
                 sharedPreferenceManager.saveProductFavourites(prodFav);
             } else {
+                ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
                 List<ProductEntity> favorite = new ArrayList<>();
                 productEntity.setFavourite(true);
                 favorite.add(productEntity);
                 sharedPreferenceManager.saveProductFavourites(favorite);
             }
-            FavouriteUtility.saveFavourite(userId, productEntity.getId(), "product", !productEntity.isFavourite() ? "1" : "0");
+            FavouriteUtility.saveFavourite(userId, productEntity.getId(), "product", productEntity.isFavourite() ? "1" : "0");
         } else {
             startActivity(new Intent(getActivity(), HomeActivity.class));
         }
@@ -245,6 +249,10 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
             tvPrice.setVisibility(View.GONE);
             tvCall.setVisibility(View.VISIBLE);
         }
+        if (productEntity.isFavourite())
+            ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
+        else
+            ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         String url = "";
         if (TextUtils.isEmpty(productEntity.getProduct_image()) && !TextUtils.isEmpty(productEntity.getImage()))
             url = productEntity.getImage();
@@ -266,9 +274,25 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
         } else if (response instanceof StorePageResponse) {
             StorePageResponse pageResponse = (StorePageResponse) response;
             similiarProducts = pageResponse.getData();
+            setFavourite();
             SimiliarProductsAdapter adapter = new SimiliarProductsAdapter(getActivity(), similiarProducts);
             adapter.setListener(this);
             rvProducts.setAdapter(adapter);
+        }
+    }
+
+    private void setFavourite() {
+        List<ProductEntity> productEntities = sharedPreferenceManager.getProductFavorites();
+        if (similiarProducts != null && productEntities != null) {
+
+            for (ProductEntity productEntity : similiarProducts) {
+                for (ProductEntity productEntity1 : productEntities) {
+                    if (productEntity1.isFavourite() && productEntity1.getId().equals(productEntity.getId()))
+                        productEntity.setFavourite(true);
+                    else
+                        productEntity.setFavourite(false);
+                }
+            }
         }
     }
 

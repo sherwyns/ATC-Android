@@ -34,7 +34,7 @@
     <string name="enter_new_password">Enter New Password</string>
     <string name="re_enter_new_password">Re-enter New Password</string>
     <string name="sign_out">Sign out</string>
-    <string name="product">Product</string>
+    <string name="product">Products</string>
     <string name="products">Products</string>
     <string name="store">Stores</string>
     <string name="favourites">Favorites</string>
@@ -60,7 +60,7 @@
     <string name="clear_all">Clear All</string>
     <string name="apply">Apply</string>
     <string name="filters">Filters</string>
-    <string name="store_near_you">All Stores</string>
+    <string name="store_near_you">Stores near you</string>
     <string name="products_near_you">All Products</string>
 
 

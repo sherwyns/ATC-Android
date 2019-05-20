@@ -213,7 +213,6 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         ProductEntity product = allProducts.get(i);
         ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
         productDetailFragment.productEntity = product;
-        productDetailFragment.similiarProducts = allProducts;
         listener.replaceFragment(productDetailFragment);
     }
 
