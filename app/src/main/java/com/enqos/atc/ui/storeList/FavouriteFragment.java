@@ -97,7 +97,7 @@ public class FavouriteFragment extends Fragment implements StoreListener, StoreL
     public void onResume() {
         super.onResume();
         if (listener != null)
-            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.favourites), R.drawable.ic_filter_outline);
+            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.favourites), R.drawable.ic_filter_outline,false);
     }
 
     @OnClick({R.id.tv_store, R.id.tv_product})

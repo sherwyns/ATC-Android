@@ -11,7 +11,7 @@ import java.util.List;
 public interface StoreActivityListener {
     void replaceFragment(Fragment fragment);
 
-    void changeHeader(int leftResId, String text, int rightResId);
+    void changeHeader(int leftResId, String text, int rightResId,boolean isShow);
 
     Toolbar getToolbar();
 

@@ -231,9 +231,13 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     }
 
     @Override
-    public void changeHeader(int leftResId, String text, int rightResId) {
+    public void changeHeader(int leftResId, String text, int rightResId, boolean isShow) {
         leftImg.setImageResource(leftResId);
         title.setText(text);
+        if (isShow)
+            rightImg.setVisibility(View.VISIBLE);
+        else
+            rightImg.setVisibility(View.GONE);
         rightImg.setImageResource(rightResId);
     }
 

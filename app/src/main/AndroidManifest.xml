@@ -35,16 +35,20 @@
         </activity>
         <activity
             android:name=".ui.storeList.StoreListActivity"
-            android:label="@string/title_activity_store_list" />
+            android:label="@string/title_activity_store_list"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.login.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBlue"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.home.HomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBlue" />
         <activity
             android:name=".ui.register.RegisterActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBlue"
             android:windowSoftInputMode="stateHidden" />
 
@@ -66,14 +70,24 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
-        <activity android:name=".ui.myaccount.MyAccountActivity" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.myaccount.MyAccountActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.login.ForgotPasswordActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeBlue" />
-        <activity android:name=".ui.slidemenu.TermsAndConditionsActivity" />
-        <activity android:name=".ui.tutorial.TutorialActivity" />
-        <activity android:name=".ui.filter.multifilter.MultiFilterActivity" />
+        <activity
+            android:name=".ui.slidemenu.TermsAndConditionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.tutorial.TutorialActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.filter.multifilter.MultiFilterActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

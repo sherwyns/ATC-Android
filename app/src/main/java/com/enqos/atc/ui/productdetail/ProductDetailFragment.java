@@ -171,9 +171,9 @@ public class ProductDetailFragment extends Fragment implements RecyclerViewItemC
     public void onResume() {
         super.onResume();
         if (listener != null && productEntity != null && productEntity.getTitle() != null)
-            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, productEntity.getTitle(), R.drawable.ic_filter_outline);
+            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, productEntity.getTitle(), R.drawable.ic_filter_outline,false);
         else if (listener != null)
-            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, "Product", R.drawable.ic_filter_outline);
+            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, "Product", R.drawable.ic_filter_outline,false);
     }
 
     @Override

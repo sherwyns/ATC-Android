@@ -141,7 +141,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         switch (id) {
             case R.id.tv_product:
                 isProductSelected = true;
-                listener.changeHeader(R.drawable.ic_menu_black_24dp, "All Products", R.drawable.ic_filter_outline);
+                listener.changeHeader(R.drawable.ic_menu_black_24dp, "All Products", R.drawable.ic_filter_outline,true);
                 callProdcuts(true);
                 tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvProduct.setBackgroundResource(R.drawable.gradient_blue);
@@ -150,7 +150,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 break;
             case R.id.tv_store:
                 isProductSelected = false;
-                listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline);
+                listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline,true);
                 callStore();
                 tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvStore.setBackgroundResource(R.drawable.gradient_blue);
@@ -187,9 +187,9 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         if (listener != null) {
             if (listener.getLatitude() == 0.0 && listener.getLongitude() == 0.0) {
                 if (isProductSelected)
-                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.products_near_you), R.drawable.ic_filter_outline);
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.products_near_you), R.drawable.ic_filter_outline,true);
                 else
-                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store), R.drawable.ic_filter_outline);
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store), R.drawable.ic_filter_outline,true);
             }
         }
     }
@@ -400,7 +400,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 if (isProductSelected) {
                     if (allProducts != null)
                         allProducts.clear();
-                    listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline);
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline,true);
                     listener.setCount("");
                     selectedNeighbourhoods = listener.getNeighbourhoods(ConstantManager.storeNeighbours);
                     selectedCategories = listener.getCategories(ConstantManager.storeCategories);

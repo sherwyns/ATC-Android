@@ -104,7 +104,7 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
         super.onResume();
         if (listener != null) {
             listener.getToolbar().setVisibility(View.GONE);
-            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline);
+            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline,true);
         }
         if (!stores.isEmpty() || !products.isEmpty())
             showSearch();

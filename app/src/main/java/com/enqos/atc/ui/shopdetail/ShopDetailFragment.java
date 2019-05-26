@@ -277,7 +277,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
     public void onResume() {
         super.onResume();
         if (listener != null)
-            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, "Shop Detail", R.drawable.ic_filter_outline);
+            listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, "Shop Detail", R.drawable.ic_filter_outline, false);
         if (!TextUtils.isEmpty(storeid))
             presenter.callStoreDetail(this, storeid);
     }

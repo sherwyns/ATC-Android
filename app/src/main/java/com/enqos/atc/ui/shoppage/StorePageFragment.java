@@ -102,7 +102,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
         else
             storeName = "Shops";
 
-        listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, storeName, R.drawable.ic_filter_outline);
+        listener.changeHeader(R.drawable.ic_keyboard_arrow_left_black_24dp, storeName, R.drawable.ic_filter_outline, false);
         tvShopName.setText(storeName);
         tvNeighbour.setText(storeEntity.getNeighbourhood());
 
