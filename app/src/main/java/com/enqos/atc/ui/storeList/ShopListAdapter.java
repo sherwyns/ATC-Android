@@ -107,12 +107,14 @@ public class ShopListAdapter extends BaseAdapter {
         else
             url = data.get(i).getImage();
 
-        Glide.with(viewGroup.getContext()).load(data.get(i).getCategory().get(0).getImage_url())
-                .apply(new RequestOptions()
-                        .error(R.drawable.ic_restaurant_menu_black_24dp)
-                        .placeholder(R.drawable.ic_restaurant_menu_black_24dp)
-                        .centerCrop())
-                .into(viewHolder.ivCategory);
+        if (data.get(i).getCategory() != null && !data.get(i).getCategory().isEmpty()) {
+            Glide.with(viewGroup.getContext()).load(data.get(i).getCategory().get(0).getImage_url())
+                    .apply(new RequestOptions()
+                            .error(R.drawable.ic_restaurant_menu_black_24dp)
+                            .placeholder(R.drawable.ic_restaurant_menu_black_24dp)
+                            .centerCrop())
+                    .into(viewHolder.ivCategory);
+        }
 
         Glide.with(viewGroup.getContext()).load(url)
                 .apply(new RequestOptions().override(250, 180)

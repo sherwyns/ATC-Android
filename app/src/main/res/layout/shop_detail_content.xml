@@ -76,27 +76,16 @@
                     android:id="@+id/img_fav"
                     android:layout_width="@dimen/dimen_35dp"
                     android:layout_height="@dimen/dimen_35dp"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/dimen_5dp"
-                    android:layout_toStartOf="@+id/img_arrow"
-                    android:background="@drawable/white_round"
-                    android:elevation="@dimen/dimen_5dp"
-                    android:padding="@dimen/dimen_5dp"
-                    android:src="@drawable/ic_favorite_border_black_24dp"
-                    android:tint="@android:color/holo_red_light" />
-
-                <ImageView
-                    android:id="@+id/img_arrow"
-                    android:layout_width="@dimen/dimen_35dp"
-                    android:layout_height="@dimen/dimen_35dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="@dimen/dimen_5dp"
                     android:background="@drawable/white_round"
                     android:elevation="@dimen/dimen_5dp"
                     android:padding="@dimen/dimen_5dp"
-                    android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                    android:src="@drawable/ic_favorite_border_black_24dp"
                     android:tint="@android:color/holo_red_light" />
+
+
             </RelativeLayout>
 
         </LinearLayout>

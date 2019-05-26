@@ -6,8 +6,8 @@ android {
         applicationId "com.enqos.atc"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 19
-        versionName "1.9"
+        versionCode 20
+        versionName "1.9.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

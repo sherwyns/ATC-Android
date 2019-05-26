@@ -64,8 +64,12 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     private Timer timer;
     private List<StoreEntity> stores = new ArrayList<>();
     private List<ProductEntity> products = new ArrayList<>();
+    private List<StoreEntity> allStores = new ArrayList<>();
+    private List<ProductEntity> allProducts = new ArrayList<>();
     private ShopListAdapter shopAdapter;
     private StorePageAdapter productsAdapter;
+    private ArrayList<StoreEntity> tempStore;
+    private List<ProductEntity> tempProduct;
 
 
     @Inject
@@ -104,7 +108,7 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
         super.onResume();
         if (listener != null) {
             listener.getToolbar().setVisibility(View.GONE);
-            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline,true);
+            listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline, true);
         }
         if (!stores.isEmpty() || !products.isEmpty())
             showSearch();
@@ -173,23 +177,41 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     }
 
     private void showMoreStore() {
+        stores.clear();
         if (gridView2.getVisibility() == View.VISIBLE) {
+
+            stores.addAll(allStores);
             ivStoreArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+            rlProduct.setVisibility(View.GONE);
             gridView2.setVisibility(View.GONE);
         } else {
+
+
+            stores.addAll(tempStore);
             ivStoreArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
+            rlProduct.setVisibility(View.VISIBLE);
             gridView2.setVisibility(View.VISIBLE);
         }
+        shopAdapter.notifyDataSetChanged();
     }
 
     private void showMoreProducts() {
+        products.clear();
         if (gridView1.getVisibility() == View.VISIBLE) {
+
+            products.addAll(allProducts);
             ivProductArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+            rlStore.setVisibility(View.GONE);
             gridView1.setVisibility(View.GONE);
         } else {
+
+            products.addAll(tempProduct);
+
             ivProductArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
+            rlStore.setVisibility(View.VISIBLE);
             gridView1.setVisibility(View.VISIBLE);
         }
+        productsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -208,8 +230,30 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     public void searchResponse(SearchResponse searchResponse) {
         stores.clear();
         products.clear();
-        stores.addAll(searchResponse.getData().get(0).getStores());
-        products.addAll(searchResponse.getData().get(0).getProducts());
+        tempStore = new ArrayList<>();
+        tempProduct = new ArrayList<>();
+        allStores.addAll(searchResponse.getData().get(0).getStores());
+        allProducts.addAll(searchResponse.getData().get(0).getProducts());
+        if (searchResponse.getData().get(0).getStores().size() > 3) {
+            for (int i = 0; i < 3; i++) {
+                tempStore.add(searchResponse.getData().get(0).getStores().get(i));
+            }
+        }
+        if (searchResponse.getData().get(0).getProducts().size() > 3) {
+            for (int i = 0; i < 3; i++) {
+                tempProduct.add(searchResponse.getData().get(0).getProducts().get(i));
+            }
+        }
+
+        if (!tempStore.isEmpty())
+            stores.addAll(tempStore);
+        else
+            stores.addAll(allStores);
+        if (!tempProduct.isEmpty())
+            products.addAll(tempProduct);
+        else
+            products.addAll(allProducts);
+
 
         if (!stores.isEmpty()) {
             if (rlStore.getVisibility() == View.GONE)
@@ -234,7 +278,6 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
             gridView2.setAdapter(productsAdapter);
         } else
             productsAdapter.notifyDataSetChanged();
-
 
     }
 
