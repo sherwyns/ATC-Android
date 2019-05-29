@@ -131,9 +131,11 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
 
         switch (v.getId()) {
             case R.id.rl_store:
+                if(allStores != null && allStores.size() > 3)
                 showMoreStore();
                 break;
             case R.id.rl_product:
+                if(allProducts != null && allProducts.size() > 3)
                 showMoreProducts();
                 break;
         }
@@ -230,6 +232,8 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     public void searchResponse(SearchResponse searchResponse) {
         stores.clear();
         products.clear();
+        allStores.clear();
+        allProducts.clear();
         tempStore = new ArrayList<>();
         tempProduct = new ArrayList<>();
         allStores.addAll(searchResponse.getData().get(0).getStores());
