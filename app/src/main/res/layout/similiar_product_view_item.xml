@@ -76,7 +76,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/dimen_10dp"
-                android:background="@drawable/rounded_rectangle"
                 android:paddingStart="@dimen/dimen_20dp"
                 android:paddingTop="@dimen/dimen_5dp"
                 android:paddingEnd="@dimen/dimen_20dp"

@@ -318,7 +318,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             googleMap.addMarker(markerOptions);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
         }
 
         if (isFavourite)
@@ -353,7 +353,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
 
                 markerOptions.position(latLng);
                 googleMap.addMarker(markerOptions);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
             }
         }
 
@@ -393,7 +393,7 @@ public class ShopDetailFragment extends Fragment implements ShopDetailView, OnMa
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             googleMap.addMarker(markerOptions);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
         }
 
 

@@ -74,7 +74,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     private List<ProductEntity> allProducts = new ArrayList<>();
     private StoreActivityListener listener;
     private StorePageAdapter storePageAdapter;
-
+    private String storeName;
 
     @Inject
     public StorePageFragment() {
@@ -94,7 +94,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     }
 
     private void setValues() {
-        String storeName;
+
         if (!TextUtils.isEmpty(storeEntity.getShop_name()))
             storeName = storeEntity.getShop_name();
         else if (!TextUtils.isEmpty(storeEntity.getName()))
@@ -211,6 +211,7 @@ public class StorePageFragment extends Fragment implements ShopPageView, StoreLi
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         ProductEntity product = allProducts.get(i);
+        product.setShop_name(storeName);
         ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
         productDetailFragment.productEntity = product;
         listener.replaceFragment(productDetailFragment);

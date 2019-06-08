@@ -56,6 +56,8 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
     GridView gridView;
     @BindView(R.id.no_result_layout)
     LinearLayout noResultLayout;
+    @BindView(R.id.no_results)
+    TextView tvNoResults;
     @BindView(R.id.tv_product)
     TextView tvProduct;
     @BindView(R.id.tv_store)
@@ -141,7 +143,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         switch (id) {
             case R.id.tv_product:
                 isProductSelected = true;
-                listener.changeHeader(R.drawable.ic_menu_black_24dp, "All Products", R.drawable.ic_filter_outline,true);
+                listener.changeHeader(R.drawable.ic_menu_black_24dp, "All Products", R.drawable.ic_filter_outline, true);
                 callProdcuts(true);
                 tvProduct.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvProduct.setBackgroundResource(R.drawable.gradient_blue);
@@ -150,7 +152,10 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 break;
             case R.id.tv_store:
                 isProductSelected = false;
-                listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline,true);
+                if (listener.getLatitude() == 0 && listener.getLongitude() == 0)
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline, true);
+                else
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store_near_you), R.drawable.ic_filter_outline, true);
                 callStore();
                 tvStore.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), android.R.color.white));
                 tvStore.setBackgroundResource(R.drawable.gradient_blue);
@@ -187,9 +192,13 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         if (listener != null) {
             if (listener.getLatitude() == 0.0 && listener.getLongitude() == 0.0) {
                 if (isProductSelected)
-                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.products_near_you), R.drawable.ic_filter_outline,true);
-                else
-                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store), R.drawable.ic_filter_outline,true);
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.products_near_you), R.drawable.ic_filter_outline, true);
+                else {
+                    if (listener.getLatitude() == 0 && listener.getLongitude() == 0)
+                        listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store), R.drawable.ic_filter_outline, true);
+                    else
+                        listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.store_near_you), R.drawable.ic_filter_outline, true);
+                }
             }
         }
     }
@@ -233,6 +242,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
             this.allStores = storeResponse.getData();
         }
         if (allStores == null || allStores.size() == 0) {
+            tvNoResults.setText("No stores found");
             noResultLayout.setVisibility(View.VISIBLE);
         } else {
             noResultLayout.setVisibility(View.GONE);
@@ -278,7 +288,8 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
         }
         if (allProducts.isEmpty()) {
             isLoading = true;
-            showMessage("No products found");
+            tvNoResults.setText("No products found");
+            noResultLayout.setVisibility(View.VISIBLE);
         } else
             isLoading = false;
         productAdapter();
@@ -400,7 +411,7 @@ public class ShopListFragment extends Fragment implements StoreListView, StoreLi
                 if (isProductSelected) {
                     if (allProducts != null)
                         allProducts.clear();
-                    listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline,true);
+                    listener.changeHeader(R.drawable.ic_menu_black_24dp, "Stores", R.drawable.ic_filter_outline, true);
                     listener.setCount("");
                     selectedNeighbourhoods = listener.getNeighbourhoods(ConstantManager.storeNeighbours);
                     selectedCategories = listener.getCategories(ConstantManager.storeCategories);

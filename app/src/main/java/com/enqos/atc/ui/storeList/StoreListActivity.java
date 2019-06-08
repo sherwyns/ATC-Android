@@ -40,6 +40,9 @@ import com.enqos.atc.ui.myaccount.MyAccountActivity;
 import com.enqos.atc.ui.search.SearchFragment;
 import com.enqos.atc.utils.Constants;
 import com.enqos.atc.utils.SharedPreferenceManager;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 
@@ -49,7 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener, LocationListener {
+public class StoreListActivity extends BaseActivity implements FavoriteListener, StoreActivityListener, OnSuccessListener<Location> {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
@@ -73,11 +76,10 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     @Inject
     SharedPreferenceManager sharedPreferenceManager;
     private boolean isLogin;
-    private LocationManager locationManager;
     private ShopListFragment shopListFragment;
-    private boolean isLocationDetected = false;
     private int totalFilterCount;
     private boolean isBackPressed;
+    private FusedLocationProviderClient fusedLocationClient;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -85,10 +87,10 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onCreate(savedInstanceState);
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 1.0f, this);
+            fusedLocationClient.getLastLocation().addOnSuccessListener(this);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
@@ -316,7 +318,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
                     Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
                 }
             } else
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 1.0f, this);
+                fusedLocationClient.getLastLocation().addOnSuccessListener(this);
         }
     }
 
@@ -343,17 +345,6 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         return isBackPressed;
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        if (!isLocationDetected) {
-            title.setText(R.string.store_near_you);
-            isLocationDetected = true;
-            shopListFragment = ShopListFragment.newInstance("");
-            replaceFragment(R.id.content_frame, shopListFragment, false);
-        }
-    }
 
     @Override
     protected void onStop() {
@@ -361,14 +352,8 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
+    public void onSuccess(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
     }
 }

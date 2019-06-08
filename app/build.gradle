@@ -6,8 +6,8 @@ android {
         applicationId "com.enqos.atc"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 20
-        versionName "1.9.1"
+        versionCode 21
+        versionName "1.9.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -100,4 +100,5 @@ dependencies {
     implementation "com.facebook.android:facebook-login:$facebookVersion"
 
     implementation "com.google.android.gms:play-services-maps:$mapVersion"
+    implementation "com.google.android.gms:play-services-location:$mapVersion"
 }
