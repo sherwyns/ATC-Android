@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import com.enqos.atc.base.AtcApplication;
 import com.enqos.atc.data.response.ProductEntity;
 import com.enqos.atc.data.response.SearchResponse;
 import com.enqos.atc.data.response.StoreEntity;
+import com.enqos.atc.listener.RecyclerViewItemClickListner;
 import com.enqos.atc.listener.StoreActivityListener;
 import com.enqos.atc.ui.productdetail.ProductDetailFragment;
 import com.enqos.atc.ui.shoppage.StorePageAdapter;
@@ -41,35 +45,29 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class SearchFragment extends Fragment implements SearchView, AdapterView.OnItemClickListener {
+public class SearchFragment extends Fragment implements SearchView, RecyclerViewItemClickListener {
 
-    @BindView(R.id.gridview1)
-    GridView gridView1;
-    @BindView(R.id.gridview2)
-    GridView gridView2;
+    @BindView(R.id.nested_scrollview)
+    NestedScrollView nestedScrollView;
+    @BindView(R.id.recycler_view1)
+    RecyclerView recyclerView1;
+    @BindView(R.id.recycler_view2)
+    RecyclerView recyclerView2;
     @BindView(R.id.et_search)
     EditText etSearch;
-    @BindView(R.id.rl_store)
-    RelativeLayout rlStore;
-    @BindView(R.id.rl_product)
-    RelativeLayout rlProduct;
-    @BindView(R.id.arrow_store)
-    ImageView ivStoreArrow;
-    @BindView(R.id.arrow_product)
-    ImageView ivProductArrow;
+    @BindView(R.id.tv_product)
+    TextView tvProducts;
+    @BindView(R.id.tv_store)
+    TextView tvStores;
     @Inject
     SearchPresenter presenter;
     private Unbinder unbinder;
     private StoreActivityListener listener;
     private Timer timer;
-    private List<StoreEntity> stores = new ArrayList<>();
-    private List<ProductEntity> products = new ArrayList<>();
     private List<StoreEntity> allStores = new ArrayList<>();
     private List<ProductEntity> allProducts = new ArrayList<>();
-    private ShopListAdapter shopAdapter;
-    private StorePageAdapter productsAdapter;
-    private ArrayList<StoreEntity> tempStore;
-    private List<ProductEntity> tempProduct;
+    private SearchStoreAdapter shopAdapter;
+    private SearchProductAdapter productsAdapter;
 
 
     @Inject
@@ -84,13 +82,16 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_search_layout, container, false);
-
         unbinder = ButterKnife.bind(this, rootView);
         etSearch.addTextChangedListener(searchWatcher);
-        gridView1.setOnItemClickListener(this);
-        gridView2.setOnItemClickListener(this);
+        GridLayoutManager gridLayoutManager1 = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getActivity(), 2);
+        recyclerView1.setLayoutManager(gridLayoutManager1);
+        recyclerView2.setLayoutManager(gridLayoutManager2);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.dimen_10dp);
+        recyclerView1.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        recyclerView2.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         return rootView;
     }
 
@@ -110,7 +111,7 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
             listener.getToolbar().setVisibility(View.GONE);
             listener.changeHeader(R.drawable.ic_menu_black_24dp, getString(R.string.search), R.drawable.ic_filter_outline, true);
         }
-        if (!stores.isEmpty() || !products.isEmpty())
+        if (!allStores.isEmpty() || !allProducts.isEmpty())
             showSearch();
     }
 
@@ -125,21 +126,6 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
         unbinder.unbind();
     }
 
-
-    @OnClick({R.id.rl_store, R.id.rl_product})
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.rl_store:
-                if(allStores != null && allStores.size() > 3)
-                showMoreStore();
-                break;
-            case R.id.rl_product:
-                if(allProducts != null && allProducts.size() > 3)
-                showMoreProducts();
-                break;
-        }
-    }
 
     private TextWatcher searchWatcher = new TextWatcher() {
         @Override
@@ -178,50 +164,11 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
 
     }
 
-    private void showMoreStore() {
-        stores.clear();
-        if (gridView2.getVisibility() == View.VISIBLE) {
-
-            stores.addAll(allStores);
-            ivStoreArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-            rlProduct.setVisibility(View.GONE);
-            gridView2.setVisibility(View.GONE);
-        } else {
-
-
-            stores.addAll(tempStore);
-            ivStoreArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
-            rlProduct.setVisibility(View.VISIBLE);
-            gridView2.setVisibility(View.VISIBLE);
-        }
-        shopAdapter.notifyDataSetChanged();
-    }
-
-    private void showMoreProducts() {
-        products.clear();
-        if (gridView1.getVisibility() == View.VISIBLE) {
-
-            products.addAll(allProducts);
-            ivProductArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-            rlStore.setVisibility(View.GONE);
-            gridView1.setVisibility(View.GONE);
-        } else {
-
-            products.addAll(tempProduct);
-
-            ivProductArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
-            rlStore.setVisibility(View.VISIBLE);
-            gridView1.setVisibility(View.VISIBLE);
-        }
-        productsAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onError(String error) {
-        rlStore.setVisibility(View.GONE);
-        rlProduct.setVisibility(View.GONE);
-        stores.clear();
-        products.clear();
+        allStores.clear();
+        allStores.clear();
         if (shopAdapter != null)
             shopAdapter.notifyDataSetChanged();
         if (productsAdapter != null)
@@ -230,56 +177,26 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
 
     @Override
     public void searchResponse(SearchResponse searchResponse) {
-        stores.clear();
-        products.clear();
         allStores.clear();
         allProducts.clear();
-        tempStore = new ArrayList<>();
-        tempProduct = new ArrayList<>();
         allStores.addAll(searchResponse.getData().get(0).getStores());
         allProducts.addAll(searchResponse.getData().get(0).getProducts());
-        if (searchResponse.getData().get(0).getStores().size() > 3) {
-            for (int i = 0; i < 3; i++) {
-                tempStore.add(searchResponse.getData().get(0).getStores().get(i));
-            }
-        }
-        if (searchResponse.getData().get(0).getProducts().size() > 3) {
-            for (int i = 0; i < 3; i++) {
-                tempProduct.add(searchResponse.getData().get(0).getProducts().get(i));
-            }
-        }
-
-        if (!tempStore.isEmpty())
-            stores.addAll(tempStore);
+        if (allStores.isEmpty())
+            tvStores.setVisibility(View.GONE);
         else
-            stores.addAll(allStores);
-        if (!tempProduct.isEmpty())
-            products.addAll(tempProduct);
+            tvStores.setVisibility(View.VISIBLE);
+        if (allProducts.isEmpty())
+            tvProducts.setVisibility(View.GONE);
         else
-            products.addAll(allProducts);
-
-
-        if (!stores.isEmpty()) {
-            if (rlStore.getVisibility() == View.GONE)
-                rlStore.setVisibility(View.VISIBLE);
-        } else if (rlStore.getVisibility() == View.VISIBLE)
-            rlStore.setVisibility(View.GONE);
-
-
-        if (!products.isEmpty()) {
-            if (rlProduct.getVisibility() == View.GONE)
-                rlProduct.setVisibility(View.VISIBLE);
-        } else if (rlProduct.getVisibility() == View.VISIBLE)
-            rlProduct.setVisibility(View.GONE);
-
+            tvProducts.setVisibility(View.VISIBLE);
         if (shopAdapter == null) {
-            shopAdapter = new ShopListAdapter(getActivity(), stores);
-            gridView1.setAdapter(shopAdapter);
+            shopAdapter = new SearchStoreAdapter(allStores, this);
+            recyclerView1.setAdapter(shopAdapter);
         } else
             shopAdapter.notifyDataSetChanged();
         if (productsAdapter == null) {
-            productsAdapter = new StorePageAdapter(getActivity(), products);
-            gridView2.setAdapter(productsAdapter);
+            productsAdapter = new SearchProductAdapter(allProducts, this);
+            recyclerView2.setAdapter(productsAdapter);
         } else
             productsAdapter.notifyDataSetChanged();
 
@@ -287,33 +204,31 @@ public class SearchFragment extends Fragment implements SearchView, AdapterView.
 
     private void showSearch() {
 
-        shopAdapter = new ShopListAdapter(getActivity(), stores);
-        gridView1.setAdapter(shopAdapter);
+        shopAdapter = new SearchStoreAdapter(allStores, this);
+        recyclerView1.setAdapter(shopAdapter);
 
-        productsAdapter = new StorePageAdapter(getActivity(), products);
-        gridView2.setAdapter(productsAdapter);
+        productsAdapter = new SearchProductAdapter(allProducts, this);
+        recyclerView2.setAdapter(productsAdapter);
 
     }
 
+
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemClick(Object object) {
         if (listener != null)
             listener.getToolbar().setVisibility(View.VISIBLE);
-        switch (adapterView.getId()) {
-            case R.id.gridview1:
-                if (listener != null) {
-                    StorePageFragment storePageFragment = StorePageFragment.newInstance();
-                    storePageFragment.storeEntity = stores.get(i);
-                    listener.replaceFragment(storePageFragment);
-                }
-                break;
-            case R.id.gridview2:
-                ProductEntity product = products.get(i);
-                ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
-                productDetailFragment.productEntity = product;
-                productDetailFragment.isFromSearch = true;
-                listener.replaceFragment(productDetailFragment);
-                break;
+        if (object instanceof StoreEntity) {
+            if (listener != null) {
+                StorePageFragment storePageFragment = StorePageFragment.newInstance();
+                storePageFragment.storeEntity = (StoreEntity) object;
+                listener.replaceFragment(storePageFragment);
+            }
+        } else if (object instanceof ProductEntity) {
+            ProductEntity product = (ProductEntity) object;
+            ProductDetailFragment productDetailFragment = ProductDetailFragment.newInstance();
+            productDetailFragment.productEntity = product;
+            productDetailFragment.isFromSearch = true;
+            listener.replaceFragment(productDetailFragment);
         }
     }
 }

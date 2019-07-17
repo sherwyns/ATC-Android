@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F4F4F4">
@@ -34,99 +35,65 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nested_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/top_layout"
-        android:layout_margin="@dimen/dimen_10dp"
-        android:orientation="vertical">
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
-            android:id="@+id/rl_store"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_5dp"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_store"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:fontFamily="sans-serif"
-                android:letterSpacing="0.02"
+                android:layout_marginStart="@dimen/dimen_25dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:gravity="start"
                 android:text="@string/store"
-                android:textColor="#000000"
-                android:textSize="@dimen/font_12"
-                android:textStyle="normal" />
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/font_16"
+                android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/arrow_store"
-                android:layout_width="wrap_content"
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:tint="@android:color/darker_gray" />
-        </RelativeLayout>
-
-        <GridView
-            android:id="@+id/gridview1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dimen_10dp"
-            android:clipToPadding="false"
-            android:columnWidth="@dimen/dimen_120dp"
-            android:gravity="center"
-            android:horizontalSpacing="@dimen/dimen_10dp"
-            android:numColumns="2"
-            android:padding="@dimen/dimen_10dp"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="@dimen/dimen_10dp" />
-
-        <RelativeLayout
-            android:id="@+id/rl_product"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_5dp"
-            android:visibility="gone">
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:clipToPadding="false"
+                android:gravity="center"
+                android:padding="@dimen/dimen_10dp" />
 
             <TextView
                 android:id="@+id/tv_product"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:fontFamily="sans-serif"
-                android:letterSpacing="0.02"
-                android:text="@string/product"
-                android:textColor="#000000"
-                android:textSize="@dimen/font_12"
-                android:textStyle="normal" />
+                android:layout_marginStart="@dimen/dimen_25dp"
+                android:gravity="start"
+                android:text="@string/products"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/font_16"
+                android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/arrow_product"
-                android:layout_width="wrap_content"
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                android:tint="@android:color/darker_gray" />
-        </RelativeLayout>
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:clipToPadding="false"
+                android:gravity="center"
+                android:padding="@dimen/dimen_10dp" />
 
-        <GridView
-            android:id="@+id/gridview2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dimen_10dp"
-            android:layout_marginBottom="@dimen/dimen_10dp"
-            android:clipToPadding="false"
-            android:columnWidth="@dimen/dimen_120dp"
-            android:gravity="center"
-            android:horizontalSpacing="@dimen/dimen_10dp"
-            android:numColumns="2"
-            android:padding="@dimen/dimen_10dp"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="@dimen/dimen_10dp" />
-    </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

@@ -37,12 +37,12 @@ public class SplashActivity extends BaseActivity implements SplashView {
         super.onCreate(savedInstanceState);
         splashPresenter.attachView(this);
         logo = findViewById(R.id.splash_logo);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             new Handler().postDelayed(() -> splashPresenter.navigate(SplashActivity.this), 2000);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
+        }*/
 
 
     }

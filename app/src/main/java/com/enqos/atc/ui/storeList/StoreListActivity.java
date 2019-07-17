@@ -88,12 +88,11 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         storeListPresenter.attachView(this);
         ButterKnife.bind(this);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        else
             fusedLocationClient.getLastLocation().addOnSuccessListener(this);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        }
+
         initToolbar();
         isLogin = (boolean) sharedPreferenceManager.getPreferenceValue(SharedPreferenceManager.BOOLEAN, SharedPreferenceManager.IS_LOGIN);
     }
@@ -312,7 +311,7 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                     Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Please enable location to get nearby stores.", Toast.LENGTH_LONG).show();
@@ -353,7 +352,9 @@ public class StoreListActivity extends BaseActivity implements FavoriteListener,
 
     @Override
     public void onSuccess(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
+        if (location != null) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
     }
 }
